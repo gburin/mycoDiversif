@@ -104,7 +104,7 @@ plot_grid(mtdi.r0,
           labels = letters[1:4]
           )
 
-ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf", width = 11, height = 9)
+ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf", width = 11, height = 7)
 
 
 
