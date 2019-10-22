@@ -51,42 +51,46 @@ ggsave(filename = "./output/figs/magsand_stem_nolabel.pdf")
 mtdi.r0 <-
     ggplot(data = na.omit(family.data.gen.valid)) +
     geom_point(aes(x = shannon, y = r.e0), size = 2) +
-    geom_abline(data = data.frame(int = coef(lm.valid.r0)[1], sl = coef(lm.valid.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
-    geom_abline(data = data.frame(int = coef(mod.valid.r0)[1], sl = coef(mod.valid.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(lm.valid.r0)[1], sl = coef(lm.valid.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.valid.r0)[1], sl = coef(mod.valid.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
     labs(x = "Mycorrhizae Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
     #xlim(0, 1) +
-    theme(legend.position = "top") +
-    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"))
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    theme_cowplot() +
+    theme(legend.position = "top")
 
 mtdi.r09 <-
     ggplot(data = na.omit(family.data.gen.valid)) +
-    geom_point(aes(x = shannon, y = r.e09), size = 2) +
-    geom_abline(data = data.frame(int = coef(lm.valid.r09)[1], sl = coef(lm.valid.r09)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
-    geom_abline(data = data.frame(int = coef(mod.valid.r09)[1], sl = coef(mod.valid.r09)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    geom_point(aes(x = shannon, y = r.e0), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.valid.r09)[1], sl = coef(lm.valid.r09)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.valid.r09)[1], sl = coef(mod.valid.r09)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
     labs(x = "Mycorrhizae Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
     #xlim(0, 1) +
-    theme(legend.position = "top") +
-    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"))
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    theme_cowplot() +
+    theme(legend.position = "top")
 
 
 stem.age.sh <-
     ggplot(data = na.omit(family.data.gen.valid)) +
     geom_point(aes(x = shannon, y = stem.age), size = 2) +
-    geom_abline(data = data.frame(int = coef(lm.valid.age.sh)[1], sl = coef(lm.valid.age.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5) +
-    geom_abline(data = data.frame(int = coef(pgls.valid.age.sh)[1], sl = coef(pgls.valid.age.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, ,colour = col), linetype = "dashed", size = 1.5) +
-    labs(x = "Mycorrhizal Type Diversity Index", y = "Family Age", col = element_blank()) +
+    geom_abline(data = data.frame(int = coef(pgls.valid.age.sh)[1], sl = coef(pgls.valid.age.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, ,colour = col),  size = 1.5) +
+    geom_abline(data = data.frame(int = coef(lm.valid.age.sh)[1], sl = coef(lm.valid.age.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "Family Age", colour = "Model Type") +
     #xlim(0, 1) +
-    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS")) +
-    theme(legend.position = "top")
+    scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model"))+
+    theme_cowplot() +
+    theme(legend.position = "top") 
 
 rich.sh <-
     ggplot(data = na.omit(family.data.gen.valid)) +
     geom_point(aes(x = shannon, y = rich), size = 2) +
-    geom_abline(data = data.frame(int = coef(lm.valid.rich.sh)[1], sl = coef(lm.valid.rich.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5) +
-    geom_abline(data = data.frame(int = coef(pgls.valid.rich.sh)[1], sl = coef(pgls.valid.rich.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, ,colour = col), linetype = "dashed", size = 1.5) +
-    labs(x = "Mycorrhizal Type Diversity Index", y = "Species Richness", col = element_blank()) +
+    geom_abline(data = data.frame(int = coef(pgls.valid.rich.sh)[1], sl = coef(pgls.valid.rich.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, ,colour = col), size = 1.5) +
+    geom_abline(data = data.frame(int = coef(lm.valid.rich.sh)[1], sl = coef(lm.valid.rich.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "Species Richness", colour = "Model Type") +
     #xlim(0, 1) +
-    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS")) +
+    scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model")) +
+    theme_cowplot() +
     theme(legend.position = "top")
 
 
@@ -100,7 +104,7 @@ plot_grid(mtdi.r0,
           labels = letters[1:4]
           )
 
-ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf")
+ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf", width = 11, height = 9)
 
 
 
