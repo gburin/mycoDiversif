@@ -5,6 +5,7 @@ library("geiger")
 library("phytools")
 library("foreach")
 library("doMC")
+library("plyr")
 
 ## Importing data
 family.data.gen <- read.csv("./data/family_data_genus_classif.csv", stringsAsFactors = FALSE, row.names = NULL)
@@ -26,56 +27,62 @@ fulltree.vasc <- read.tree("./data/Vascular_Plants_rooted.dated.tre")
 registerDoMC(50)
 
 ## Generating dummy data frame to replace with sampled data - Original type was assigned to each cell proportional to the number of species per type in the original dataset
-sampled.datasets <- foreach(i = 1:50) %dopar% {
-expanded.data <- data.frame(
-    family = rep(family.data.gen$family, times = apply(round(family.data.gen[, 3:7]), 1, sum)),
-    orig.type = unlist(apply(family.data.gen[, 3:7], 1, function(x){rep(gsub("rich.sh.", "", names(x)), times = round(x))})),
-    stringsAsFactors = FALSE
-)
 
-## Sampling cells that will be changed
-sp.to.change <- sort(sample(1:nrow(expanded.data), ceiling(0.2 * nrow(expanded.data))))
-
-expanded.data$new.type <- NA
-expanded.data$new.type[-sp.to.change] <- as.character(expanded.data$orig.type[-sp.to.change])
-
-## Substituting sampled lines for new type (excluding original type)
-for(i in 1:length(sp.to.change)){
-    print(paste(i, "of", length(sp.to.change), sep = " "))
-    expanded.data$new.type[sp.to.change[i]] <- sample(unique(expanded.data$orig.type)[-which(unique(expanded.data$orig.type) == expanded.data$orig.type[sp.to.change[i]])], 1)
-}
-
-data.sampled <- data.frame(
-    family = unique(expanded.data$family),
-    type = aggregate(expanded.data$new.type, by = list(expanded.data$family), FUN = table)$x
+myco.sampling <- function(x){
+    expanded.data <- data.frame(
+        family = rep(family.data.gen$family, times = apply(round(family.data.gen[, 3:7]), 1, sum)),
+        orig.type = unlist(apply(family.data.gen[, 3:7], 1, function(x){rep(gsub("rich.sh.", "", names(x)), times = round(x))})),
+        stringsAsFactors = FALSE
     )
 
-names(data.sampled) <- c("family", "AM", "EM", "ER", "NM", "OM")
+    ## Sampling cells that will be changed
+    sp.to.change <- sort(sample(1:nrow(expanded.data), ceiling(0.2 * nrow(expanded.data))))
 
-data.sampled <- cbind(data.sampled, data.sampled[, 2:6]/apply(data.sampled[,2:6], 1, sum))
-names(data.sampled)[7:11] <- c("AM.perc", "EM.perc", "ER.perc", "NM.perc", "OM.perc")
+    expanded.data$new.type <- NA
+    expanded.data$new.type[-sp.to.change] <- as.character(expanded.data$orig.type[-sp.to.change])
 
-mico.classificator <- function(x, thresh = 0.5){
-    if(any(sapply(x, is.nan))){
-        return("UNK")
-    } else if(any(x == 1)){
-        return(gsub(".valid", "", gsub(".perc", "", names(x)[which(x == 1)])))
-    } else if(sum(x > thresh) != 0){
-        return(gsub(".valid", "", gsub(".perc", "", names(x)[which.max(x)])))
-    } else {
-        return("MIX")
+    ## Substituting sampled lines for new type (excluding original type)
+    for(i in 1:length(sp.to.change)){
+        print(paste(i, "of", length(sp.to.change), sep = " "))
+        expanded.data$new.type[sp.to.change[i]] <- sample(unique(expanded.data$orig.type)[-which(unique(expanded.data$orig.type) == expanded.data$orig.type[sp.to.change[i]])], 1)
     }
+
+    data.sampled <- data.frame(
+        family = unique(expanded.data$family),
+        type = aggregate(expanded.data$new.type, by = list(expanded.data$family), FUN = table)$x
+    )
+
+    names(data.sampled) <- c("family", "AM", "EM", "ER", "NM", "OM")
+
+    data.sampled <- cbind(data.sampled, data.sampled[, 2:6]/apply(data.sampled[,2:6], 1, sum))
+    names(data.sampled)[7:11] <- c("AM.perc", "EM.perc", "ER.perc", "NM.perc", "OM.perc")
+
+    mico.classificator <- function(x, thresh = 0.5){
+        if(any(sapply(x, is.nan))){
+            return("UNK")
+        } else if(any(x == 1)){
+            return(gsub(".valid", "", gsub(".perc", "", names(x)[which(x == 1)])))
+        } else if(sum(x > thresh) != 0){
+            return(gsub(".valid", "", gsub(".perc", "", names(x)[which.max(x)])))
+        } else {
+            return("MIX")
+        }
+    }
+
+    data.sampled$type.50 <- apply(data.sampled[, 7:11], 1, mico.classificator, thresh = 0.5)
+    data.sampled$type.60 <- apply(data.sampled[, 7:11], 1, mico.classificator, thresh = 0.6)
+    data.sampled$type.80 <- apply(data.sampled[, 7:11], 1, mico.classificator, thresh = 0.8)
+    data.sampled$type.100 <- apply(data.sampled[, 7:11], 1, mico.classificator, thresh = 0.999999)
+
+    data.sampled$shannon <- vegan::diversity(data.sampled[, 2:6])
+    data.sampled$r.e0 <- family.data.gen$r.e0[match(data.sampled$family, family.data.gen$family)]
+    data.sampled$r.e09 <- family.data.gen$r.e09[match(data.sampled$family, family.data.gen$family)]
+    return(data.sampled)
 }
 
-data.sampled$type.50 <- apply(data.sampled[, 7:11], 1, mico.classificator, thresh = 0.5)
-data.sampled$type.60 <- apply(data.sampled[, 7:11], 1, mico.classificator, thresh = 0.6)
-data.sampled$type.80 <- apply(data.sampled[, 7:11], 1, mico.classificator, thresh = 0.8)
-data.sampled$type.100 <- apply(data.sampled[, 7:11], 1, mico.classificator, thresh = 0.999999)
+sampled.datasets <- llply(as.list(1:50), .fun = myco.sampling, .parallel = TRUE)
 
-data.sampled$shannon <- vegan::diversity(data.sampled[, 2:6])
-data.sampled$r.e0 <- family.data.gen$r.e0[match(data.sampled$family, family.data.gen$family)]
-data.sampled$r.e09 <- family.data.gen$r.e09[match(data.sampled$family, family.data.gen$family)]
-}
+save(sampled.datasets, file = "./output/sampled_datasets_20perc.RData")
 
 tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, data.sampled$family))])
 data.pgls <- comparative.data(tree.pruned, data.sampled, names.col = "family")
