@@ -32,7 +32,6 @@ genus.soudz.sh$AM[which(genus.soudz$mico == "EcM-AM")] <- genus.soudz.sh$AM[whic
 genus.soudz.sh$EM[which(genus.soudz$mico == "EcM-AM")] <- genus.soudz.sh$EM[which(genus.soudz$mico == "EcM-AM")] + (0.5 * genus.soudz$richness[which(genus.soudz$mico == "EcM-AM")])
 
 genus.soudz.sh$NM[which(genus.soudz$mico == "NM-AM")] <- genus.soudz.sh$NM[which(genus.soudz$mico == "NM-AM")] + (0.5 * genus.soudz$richness[which(genus.soudz$mico == "NM-AM")])
-genus.soudz.sh$NM[which(genus.soudz$mico == "nM" | genus.soudz$mico == "NM")] <- genus.soudz.sh$NM[which(genus.soudz$mico == "nM" | genus.soudz$mico == "NM")] + (0.5 * genus.soudz$richness[which(genus.soudz$mico == "nM" | genus.soudz$mico == "NM")])
 
 rich.per.type.sh <- dcast(aggregate(melt(genus.soudz.sh)$value, by = list(melt(genus.soudz.sh)$family, melt(genus.soudz.sh)$variable), FUN = sum), Group.1 ~ Group.2)
 

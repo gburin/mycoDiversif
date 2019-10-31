@@ -95,6 +95,7 @@ family.data.gen$pgls.r0 <- fitted(mod.r0)[,1][match(family.data.gen$family, name
 family.data.gen$pgls.r05 <- fitted(mod.r05)[,1][match(family.data.gen$family, names(fitted(mod.r05)[,1]))]
 family.data.gen$pgls.r09 <- fitted(mod.r09)[,1][match(family.data.gen$family, names(fitted(mod.r09)[,1]))]
 
+save.image(file = "./output/suppdata_genus_full.RData")
 
 
 ######################
@@ -203,6 +204,7 @@ pgls.rich.sh <- caper::pgls(global.rich ~ shannon, data = data.pgls, lambda = "M
 lm.stem.age.sh <- lm(stem.age ~ shannon, data = family.data.clean)
 lm.rich.sh <- lm(global.rich ~ shannon, data = family.data.clean)
 
+save.image("./output/suppdata_species_noremarks.RData")
 
 
 
@@ -313,3 +315,5 @@ pgls.rich.sh.rem <- caper::pgls(global.rich ~ shannon, data = data.pgls.rem, lam
 
 lm.stem.age.sh.rem <- lm(stem.age ~ shannon, data = family.data.clean.rem)
 lm.rich.sh.rem <- lm(global.rich ~ shannon, data = family.data.clean.rem)
+
+save.image("./output/suppdata_species_withremarks.RData")
