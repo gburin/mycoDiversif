@@ -16,11 +16,9 @@ header-includes:
 
 ```{r echo = FALSE}
 
-setwd("../")
-source("./R/supplementary_analysis.R")
-setwd("./manuscript/")
 knitr::opts_chunk$set(echo = FALSE, fig.width = 11, fig.height = 9, warning = FALSE, message = FALSE, fig.pos = 'H')
 library("kableExtra")
+load("../output/suppdata_genus_full.RData")
 
 ```
 
@@ -133,9 +131,8 @@ plot_grid(mtdi.r0,
 ```{r}
 
 ## This step is a bit slow, but it is mandatory for the next sections, to avoid problems with object names
-setwd("../")
-source("./R/main_analysis.R")
-setwd("./manuscript/")
+rm(list = ls())
+load("../output/main_results.RData")
 
 ```
 
@@ -193,9 +190,8 @@ kable_styling(kable(x = as.data.frame(phyaov.r09$Pt), format = "latex", caption 
 ```{r}
 
 ## This step is a bit slow, but it is mandatory for the next sections, to avoid problems with object names - apologies for doing it twice, but it was easier for me than fixing all scripts :-p
-setwd("../")
-source("./R/supplementary_analysis.R")
-setwd("./manuscript/")
+rm(list = ls())
+load("../output/suppdata_species_noremarks.RData")
 
 ```
 
@@ -302,6 +298,14 @@ plot_grid(raw.r0,
 ```
 
 ## More inclusive database - including species with any remark
+
+```{r}
+
+## This step is a bit slow, but it is mandatory for the next sections, to avoid problems with object names - apologies for doing it twice, but it was easier for me than fixing all scripts :-p
+rm(list = ls())
+load("../output/suppdata_species_withremarks.RData")
+
+```
 
 ### Boxplots
 
