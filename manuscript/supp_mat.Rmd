@@ -1,0 +1,404 @@
+---
+title: "Supplementary Material - Mujica et al."
+output:
+  pdf_document:
+    toc: false
+    fig_caption: true
+    latex_engine: lualatex
+    number_sections: true
+header-includes:
+  - \usepackage{longtable}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \floatplacement{table}{H}
+  - \floatplacement{verbatim}{H}
+---
+
+```{r echo = FALSE}
+
+setwd("../")
+source("./R/supplementary_analysis.R")
+setwd("./manuscript/")
+knitr::opts_chunk$set(echo = FALSE, fig.width = 11, fig.height = 9, warning = FALSE, message = FALSE, fig.pos = 'H')
+library("kableExtra")
+
+```
+
+# Adding randomly 20% of misassignment of mycorrhizal type
+
+# Analysis per genera including all families
+
+## Boxplots
+
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+
+family.data.gen$type.50 <- as.character(family.data.gen$type.50)
+family.data.gen$type.60 <- as.character(family.data.gen$type.60)
+family.data.gen$type.80 <- as.character(family.data.gen$type.80)
+family.data.gen$type.100 <- as.character(family.data.gen$type.100)
+
+box.r0 <-
+    ggplot(data = family.data.gen[-which(is.na(family.data.gen$r.e0)),]) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none") +
+    scale_colour_brewer(palette = "Set1") +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09 <-
+    ggplot(data = family.data.gen[-which(is.na(family.data.gen$r.e09)),]) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none") +
+    scale_colour_brewer(palette = "Set1") +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+
+plot_grid(box.r0,
+          box.r09,
+          nrow = 2,
+          align = 'v',
+          labels = c("a", "b")
+          )
+
+```
+
+## Scatterplots
+
+```{r fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with ε (relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+
+## Scatter - MTDI vs. Net Diversification
+mtdi.r0 <-
+    ggplot(data = na.omit(family.data.gen)) +
+    geom_point(aes(x = shannon, y = r.e0), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.r0)[1], sl = coef(lm.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.r0)[1], sl = coef(mod.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    labs(x = "Mycorrhizal Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    #xlim(0, 1) +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+mtdi.r09 <-
+    ggplot(data = na.omit(family.data.gen)) +
+    geom_point(aes(x = shannon, y = r.e0), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.r09)[1], sl = coef(lm.r09)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.r09)[1], sl = coef(mod.r09)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    labs(x = "Mycorrhizal Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    #xlim(0, 1) +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+
+stem.age.sh <-
+    ggplot(data = na.omit(family.data.gen)) +
+    geom_point(aes(x = shannon, y = stem.age), size = 2) +
+    geom_abline(data = data.frame(int = coef(pgls.age.sh)[1], sl = coef(pgls.age.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, ,colour = col),  size = 1.5) +
+    geom_abline(data = data.frame(int = coef(lm.age.sh)[1], sl = coef(lm.age.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "Family Age", colour = "Model Type") +
+    #xlim(0, 1) +
+    scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model"))+
+    theme_cowplot() +
+    theme(legend.position = "top") 
+
+rich.sh <-
+    ggplot(data = na.omit(family.data.gen)) +
+    geom_point(aes(x = shannon, y = rich), size = 2) +
+    geom_abline(data = data.frame(int = coef(pgls.rich.sh)[1], sl = coef(pgls.rich.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, ,colour = col), size = 1.5) +
+    geom_abline(data = data.frame(int = coef(lm.rich.sh)[1], sl = coef(lm.rich.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "Species Richness", colour = "Model Type") +
+    #xlim(0, 1) +
+    scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model")) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+
+plot_grid(mtdi.r0,
+          stem.age.sh,
+          mtdi.r09,
+          rich.sh,
+          ncol = 2,
+          align = 'hv',
+          axis = 'tlbr',
+          labels = letters[1:4]
+          )
+
+```
+
+# Different thresholds for main mycorrhizal type
+
+```{r}
+
+## This step is a bit slow, but it is mandatory for the next sections, to avoid problems with object names
+setwd("../")
+source("./R/main_analysis.R")
+setwd("./manuscript/")
+
+```
+
+## Family classification based on different thresholds
+
+```{r}
+
+kable_styling(kable(x = setNames(family.data.gen[, c("family", "type.50", "type.60", "type.80", "type.100")], c("Family", "0.5", "0.6", "0.8", "1")), format = "latex", caption = "Mycorrhizal type assigned to each family based on 4 different percentage thresholds (50, 60, 80 and 100)", longtable = TRUE), latex_options = "HOLD_position")
+
+```
+
+# Phylogenetic signal of diversification rates, age, and richness
+
+```{r}
+
+kable_styling(kable(x = data.frame(Variable = c("r (epsilon = 0)", "r (epsilon = 0.9)", "Stem Age", "Richness"),
+                                   Lambda = c(summary(phylosig.r0)$param[2],
+                                   summary(phylosig.r09)$param[2],
+                                   summary(phylosig.age)$param[2],
+                                   summary(phylosig.rich)$param[2]
+                                   )),
+                    format = "latex", caption = "Phylogenetic signal of the four response variables"), latex_options = "HOLD_position"
+              )
+
+```
+
+# Phylogenetic ANOVA 
+
+## Summary statistics
+
+```{r}
+
+kable_styling(kable(x = data.frame(epsilon = c(0, 0.9),
+                                   F = c(phyaov.r0$F, phyaov.r09$F),
+                                   pvalue = c(phyaov.r0$Pf, phyaov.r09$Pf)
+                                   ), format = "latex", caption = "phyANOVA summary statistics for both values of epsilon"), latex_options = "HOLD_position")
+
+```
+
+## Posthoc tests
+
+```{r}
+
+kable_styling(kable(x = as.data.frame(phyaov.r0$Pt), format = "latex", caption = "Pairwise Corrected p-values for epsilon = 0"), latex_options = "HOLD_position")
+
+```
+
+```{r}
+
+kable_styling(kable(x = as.data.frame(phyaov.r09$Pt), format = "latex", caption = "Pairwise Corrected p-values for epsilon = 0.9"), latex_options = "HOLD_position")
+
+```
+
+
+```{r}
+
+## This step is a bit slow, but it is mandatory for the next sections, to avoid problems with object names - apologies for doing it twice, but it was easier for me than fixing all scripts :-p
+setwd("../")
+source("./R/supplementary_analysis.R")
+setwd("./manuscript/")
+
+```
+
+# Species-level database
+
+## Clean database - excluding species with any remark
+
+### Boxplots
+
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+
+family.data.clean$type.50 <- as.character(family.data.clean$type.50)
+family.data.clean$type.60 <- as.character(family.data.clean$type.60)
+family.data.clean$type.80 <- as.character(family.data.clean$type.80)
+family.data.clean$type.100 <- as.character(family.data.clean$type.100)
+
+box.r0 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none") +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none") +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+
+plot_grid(box.r0,
+          box.r09,
+          nrow = 2,
+          align = 'v',
+          labels = c("a", "b")
+          )
+
+```
+
+### Scatterplots
+
+```{r fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with ε (relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+
+raw.r0 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = shannon, y = r.e0.stem), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.r0)[1], sl = coef(lm.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.r0)[1], sl = coef(mod.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    labs(x = "Mycorrhizae Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    #xlim(0, 1) +
+    theme_cowplot() +
+    theme(legend.position = "top") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"))
+
+raw.r09 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = shannon, y = r.e09.stem), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.r09)[1], sl = coef(lm.r09)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.r09)[1], sl = coef(mod.r09)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    labs(x = "Mycorrhizae Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    #xlim(0, 1) +
+    theme_cowplot() +
+    theme(legend.position = "top") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"))
+
+stem.age.sh <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = shannon, y = stem.age), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.stem.age.sh)[1], sl = coef(lm.stem.age.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5) +
+    geom_abline(data = data.frame(int = coef(pgls.stem.age.sh)[1], sl = coef(pgls.stem.age.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, ,colour = col), linetype = "dashed", size = 1.5) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "Family Age", col = element_blank()) +
+    #xlim(0, 1) +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS")) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+rich.sh <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = shannon, y = global.rich), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.rich.sh)[1], sl = coef(lm.rich.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5) +
+    geom_abline(data = data.frame(int = coef(pgls.rich.sh)[1], sl = coef(pgls.rich.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, ,colour = col), linetype = "dashed", size = 1.5) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "Species Richness", col = element_blank()) +
+    #xlim(0, 1) +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS")) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+
+plot_grid(raw.r0,
+          stem.age.sh,
+          raw.r09,
+          rich.sh,
+          ncol = 2,
+          align = 'hv',
+          axis = 'tlbr',
+          labels = letters[1:4]
+          )
+
+```
+
+## More inclusive database - including species with any remark
+
+### Boxplots
+
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+
+family.data.clean.rem$type.50 <- as.character(family.data.clean.rem$type.50)
+family.data.clean.rem$type.60 <- as.character(family.data.clean.rem$type.60)
+family.data.clean.rem$type.80 <- as.character(family.data.clean.rem$type.80)
+family.data.clean.rem$type.100 <- as.character(family.data.clean.rem$type.100)
+
+box.r0.rem <-
+    ggplot(data = na.omit(family.data.clean.rem)) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none") +
+    scale_colour_manual(values = brewer.pal(5, "Set1")) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.rem <-
+    ggplot(data = na.omit(family.data.clean.rem)) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none") +
+    scale_colour_manual(values = brewer.pal(5, "Set1")) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+
+plot_grid(box.r0.rem,
+          box.r09.rem,
+          nrow = 2,
+          align = 'v',
+          labels = c("a", "b")
+          )
+
+
+
+```
+
+### Scatterplots
+
+```{r fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with ε (relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+
+raw.r0.rem <-
+    ggplot(data = na.omit(family.data.clean.rem)) +
+    geom_point(aes(x = shannon, y = r.e0.stem), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.r0.rem)[1], sl = coef(lm.r0.rem)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.r0.rem)[1], sl = coef(mod.r0.rem)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    labs(x = "Mycorrhizae Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    #xlim(0, 1) +
+    theme_cowplot() +
+    theme(legend.position = "top") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"))
+
+raw.r09.rem <-
+    ggplot(data = na.omit(family.data.clean.rem)) +
+    geom_point(aes(x = shannon, y = r.e09.stem), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.r09.rem)[1], sl = coef(lm.r09.rem)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.r09.rem)[1], sl = coef(mod.r09.rem)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+    labs(x = "Mycorrhizae Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    #xlim(0, 1) +
+    theme_cowplot() +
+    theme(legend.position = "top") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"))
+
+stem.age.sh.rem <-
+    ggplot(data = na.omit(family.data.clean.rem)) +
+    geom_point(aes(x = shannon, y = stem.age), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.stem.age.sh.rem)[1], sl = coef(lm.stem.age.sh.rem)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5) +
+    geom_abline(data = data.frame(int = coef(pgls.stem.age.sh.rem)[1], sl = coef(pgls.stem.age.sh.rem)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, ,colour = col), linetype = "dashed", size = 1.5) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "Family Age", col = element_blank()) +
+    #xlim(0, 1) +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS")) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+rich.sh.rem <-
+    ggplot(data = na.omit(family.data.clean.rem)) +
+    geom_point(aes(x = shannon, y = global.rich), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.rich.sh.rem)[1], sl = coef(lm.rich.sh.rem)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5) +
+    geom_abline(data = data.frame(int = coef(pgls.rich.sh.rem)[1], sl = coef(pgls.rich.sh.rem)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, ,colour = col), linetype = "dashed", size = 1.5) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "Species Richness", col = element_blank()) +
+    #xlim(0, 1) +
+    theme_cowplot() +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS")) +
+    theme(legend.position = "top")
+
+
+plot_grid(raw.r0.rem,
+          stem.age.sh.rem,
+          raw.r09.rem,
+          rich.sh.rem,
+          ncol = 2,
+          align = 'hv',
+          axis = 'tlbr',
+          labels = letters[1:4]
+          )
+
+```

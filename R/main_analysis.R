@@ -14,7 +14,6 @@ library("ggrepel")
 family.data.gen <- read.csv("./data/family_data_genus_classif.csv", stringsAsFactors = FALSE, row.names = NULL)
 family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
 family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
-family.data.gen$perc.sp.unk <- family.data.gen$UNK/family.data.gen$rich
 
 age.data <- read.csv("./data/data_all_families.csv", sep = ";")
 
@@ -24,11 +23,7 @@ fulltree$node.label <- NULL
 fulltree.vasc <- read.tree("./data/Vascular_Plants_rooted.dated.tre")
 
 ## Removing families with unknown mycorrhizal type
-family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
-
-## Checking which families have less than 5% or 8spp in the dataset
-which(family.data.gen$perc.sp.unk > 0.95)
-which((family.data.gen$rich - family.data.gen$UNK) <= 8)
+family.data.gen <- family.data.gen[-which(family.data.gen$UNK.raw.perc == 1),]
 
 family.data.gen$stem.age <- age.data$stem.age[match(family.data.gen$family, age.data$familia)]
 family.data.gen$r.e0 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0)
@@ -37,62 +32,61 @@ family.data.gen$r.e09 <- bd.ms(time = family.data.gen$stem.age, n = family.data.
 
 family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
 
+## write.table(family.data.gen, file = "./data/family_data_genus_final.csv", sep = ",", quote = FALSE, row.names = FALSE)
+
 family.data.gen <- family.data.gen[-match(c("Orchidaceae", "Ericaceae"), family.data.gen$family),]
 
-## Checking representativeness of each family
-
-sum(family.data.gen$NA.perc > 0.95)
-sum((family.data.gen$rich - family.data.gen$UNK) < 8)
-
-min(((family.data.gen$rich - family.data.gen$UNK)/family.data.gen$rich))
+## min(((family.data.gen$rich - family.data.gen$UNK)/family.data.gen$rich))
 
 ## We will not remove any family due to poor sampling since all families have either at least 58.3% of total richness or a minimum of 8 species sampled
 
-family.data.gen.valid <- family.data.gen
-family.data.gen.valid$shannon.valid <- vegan::diversity(family.data.gen.valid[, c(8, 9, 10, 12, 13)])
+tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, family.data.gen$family))])
+data.pgls <- comparative.data(tree.pruned, family.data.gen[family.data.gen$MIX.raw.perc < 0.99,], names.col = "family")
 
-tree.pruned.valid <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, family.data.gen.valid$family))])
-data.pgls.valid <- comparative.data(tree.pruned.valid, family.data.gen.valid, names.col = "family")
+phylosig.r0 <- pgls(r.e0 ~ 1, data = data.pgls, lambda = "ML")
+phylosig.r05 <- pgls(r.e05 ~ 1, data = data.pgls, lambda = "ML")
+phylosig.r09 <- pgls(r.e09 ~ 1, data = data.pgls, lambda = "ML")
+phylosig.rich <- pgls(rich ~ 1, data = data.pgls, lambda = "ML")
+phylosig.age <- pgls(stem.age ~ 1, data = data.pgls, lambda = "ML")
 
-phylosig.valid.r0 <- pgls(r.e0 ~ 1, data = data.pgls.valid, lambda = "ML")
-phylosig.valid.r05 <- pgls(r.e05 ~ 1, data = data.pgls.valid, lambda = "ML")
-phylosig.valid.r09 <- pgls(r.e09 ~ 1, data = data.pgls.valid, lambda = "ML")
+## Fitting PGLS excluding families with > 95% MIX
+mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r0)$param[2], NULL))
+mod.r05 <- caper::pgls(r.e05 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r05)$param[2], NULL))
+mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r09)$param[2], NULL))
 
-## Fitting PGLS
-mod.valid.r0 <- caper::pgls(r.e0 ~ shannon.valid, data = data.pgls.valid, lambda = setNames(summary(phylosig.valid.r0)$param[2], NULL))
-mod.valid.r05 <- caper::pgls(r.e05 ~ shannon.valid, data = data.pgls.valid, lambda = setNames(summary(phylosig.valid.r05)$param[2], NULL))
-mod.valid.r09 <- caper::pgls(r.e09 ~ shannon.valid, data = data.pgls.valid, lambda = setNames(summary(phylosig.valid.r09)$param[2], NULL))
+## Fitting standard linear models excluding families with > 95% MIX
+lm.r0 <- lm(r.e0 ~ shannon, data = family.data.gen[family.data.gen$MIX.raw.perc < 0.99,])
+lm.r05 <- lm(r.e05 ~ shannon, data = family.data.gen[family.data.gen$MIX.raw.perc < 0.99,])
+lm.r09 <- lm(r.e09 ~ shannon, data = family.data.gen[family.data.gen$MIX.raw.perc < 0.99,])
 
-## Fitting standard linear models
-lm.valid.r0 <- lm(r.e0 ~ shannon.valid, data = family.data.gen.valid)
-lm.valid.r05 <- lm(r.e05 ~ shannon.valid, data = family.data.gen.valid)
-lm.valid.r09 <- lm(r.e09 ~ shannon.valid, data = family.data.gen.valid)
+## phylANOVA excluding families with > 95% MIX
+data.aov <- family.data.gen[-which(is.na(match(family.data.gen$family, fulltree$tip.label))), ]
+data.aov <- data.aov[-which(is.na(data.aov$r.e0)),]
+data.aov <- data.aov[which(data.aov$MIX.raw.perc < 0.99), ]
+data.aov <- data.aov[-which(data.aov$type.60 == "ER"), ]
 
-## phylANOVA
-data.aov.valid <- family.data.gen.valid[-which(is.na(match(family.data.gen.valid$family, fulltree$tip.label))), ]
-data.aov.valid <- data.aov.valid[-which(data.aov.valid$type.50 == "ER"), ]
-data.aov.valid <- data.aov.valid[-which(is.na(data.aov.valid$r.e0)),]
 
-phyaov.valid.r0 <- phylANOVA(drop.tip(tree.pruned.valid, tip = tree.pruned.valid$tip.label[which(is.na(match(tree.pruned.valid$tip.label, data.aov.valid$family)))]), x = setNames(data.aov.valid$type.60.valid, data.aov.valid$family), y = setNames(data.aov.valid$r.e0, data.aov.valid$family))
-phyaov.valid.r05 <- phylANOVA(drop.tip(tree.pruned.valid, tip = tree.pruned.valid$tip.label[which(is.na(match(tree.pruned.valid$tip.label, data.aov.valid$family)))]), x = setNames(data.aov.valid$type.60.valid, data.aov.valid$family), y = setNames(data.aov.valid$r.e05, data.aov.valid$family))
-phyaov.valid.r09 <- phylANOVA(drop.tip(tree.pruned.valid, tip = tree.pruned.valid$tip.label[which(is.na(match(tree.pruned.valid$tip.label, data.aov.valid$family)))]), x = setNames(data.aov.valid$type.60.valid, data.aov.valid$family), y = setNames(data.aov.valid$r.e09, data.aov.valid$family))
+phyaov.r0 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r05 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e05, data.aov$family))
+phyaov.r09 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
 
 
 ## Age vs rich
-pgls.valid.age.sh <- caper::pgls(stem.age ~ shannon.valid, data = data.pgls.valid, lambda = "ML")
-pgls.valid.rich.sh <- caper::pgls(rich ~ shannon.valid, data = data.pgls.valid, lambda = "ML")
+pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.age)$param[2], NULL))
+pgls.rich.sh <- caper::pgls(rich ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.rich)$param[2], NULL))
 
-lm.valid.age.sh <- lm(stem.age ~ shannon.valid, data = family.data.gen.valid)
-lm.valid.rich.sh <- lm(rich ~ shannon.valid, data = family.data.gen.valid)
+lm.age.sh <- lm(stem.age ~ shannon, data = family.data.gen)
+lm.rich.sh <- lm(rich ~ shannon, data = family.data.gen)
 
 
 ## Appending results to original data frame for plotting
-family.data.gen.valid$lm.valid.r0[which(!is.na(family.data.gen.valid$r.e0))] <- fitted(lm.valid.r0)
-family.data.gen.valid$lm.valid.r05[which(!is.na(family.data.gen.valid$r.e0))] <- fitted(lm.valid.r05)
-family.data.gen.valid$lm.valid.r09[which(!is.na(family.data.gen.valid$r.e0))] <- fitted(lm.valid.r09)
+family.data.gen <- family.data.gen[family.data.gen$MIX.raw.perc < 0.99, ]
+family.data.gen$lm.r0[which(!is.na(family.data.gen$r.e0))] <- fitted(lm.r0)
+family.data.gen$lm.r05[which(!is.na(family.data.gen$r.e0))] <- fitted(lm.r05)
+family.data.gen$lm.r09[which(!is.na(family.data.gen$r.e0))] <- fitted(lm.r09)
 
-family.data.gen.valid$pgls.r0 <- fitted(mod.valid.r0)[,1][match(family.data.gen.valid$family, names(fitted(mod.valid.r0)[,1]))]
-family.data.gen.valid$pgls.r05 <- fitted(mod.valid.r05)[,1][match(family.data.gen.valid$family, names(fitted(mod.valid.r05)[,1]))]
-family.data.gen.valid$pgls.r09 <- fitted(mod.valid.r09)[,1][match(family.data.gen.valid$family, names(fitted(mod.valid.r09)[,1]))]
+family.data.gen$pgls.r0 <- fitted(mod.r0)[,1][match(family.data.gen$family, names(fitted(mod.r0)[,1]))]
+family.data.gen$pgls.r05 <- fitted(mod.r05)[,1][match(family.data.gen$family, names(fitted(mod.r05)[,1]))]
+family.data.gen$pgls.r09 <- fitted(mod.r09)[,1][match(family.data.gen$family, names(fitted(mod.r09)[,1]))]
 
 

@@ -1,0 +1,1045 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Supplementary Material - Mujica et al.},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Supplementary Material - Mujica et al.}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+\usepackage{longtable}
+\usepackage{float}
+\floatplacement{figure}{H}
+\floatplacement{table}{H}
+\floatplacement{verbatim}{H}
+
+\begin{document}
+\maketitle
+
+\hypertarget{adding-randomly-20-of-misassignment-of-mycorrhizal-type}{%
+\section{Adding randomly 20\% of misassignment of mycorrhizal
+type}\label{adding-randomly-20-of-misassignment-of-mycorrhizal-type}}
+
+\hypertarget{analysis-per-genera-including-all-families}{%
+\section{Analysis per genera including all
+families}\label{analysis-per-genera-including-all-families}}
+
+\hypertarget{boxplots}{%
+\subsection{Boxplots}\label{boxplots}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-2-1.pdf}
+\caption{Relationship between mycorrhizal type and diversification
+rates. a) diversification rate estimated with ε (relative extinction
+fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM:
+Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX
+(families with no dominance of any specific mycorrhizal association).
+The size of the points indicates the Mycorrhizal Type Diversity Index
+value for each lineage, indicating a predominance of larger indices with
+higher diversification rates.}
+\end{figure}
+
+\hypertarget{scatterplots}{%
+\subsection{Scatterplots}\label{scatterplots}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-3-1.pdf}
+\caption{Scatterplots showing the relationship between mycorrhizal
+diversity index and diversification rates (a and c), species richness
+(b) and age family (d). Diversification rates were estimated with ε
+(relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and
+blue lines indicate the results of a linear model and a phylogenetic
+generalized least squares (PGLS) fit, respectively.}
+\end{figure}
+
+\hypertarget{different-thresholds-for-main-mycorrhizal-type}{%
+\section{Different thresholds for main mycorrhizal
+type}\label{different-thresholds-for-main-mycorrhizal-type}}
+
+\hypertarget{family-classification-based-on-different-thresholds}{%
+\subsection{Family classification based on different
+thresholds}\label{family-classification-based-on-different-thresholds}}
+
+\begin{longtable}{l|l|l|l|l|l}
+\caption{\label{tab:unnamed-chunk-5}Mycorrhizal type assigned to each family based on 4 different percentage thresholds (50, 60, 80 and 100)}\\
+\hline
+  & Family & 0.5 & 0.6 & 0.8 & 1\\
+\hline
+1 & Acanthaceae & AM & AM & MIX & MIX\\
+\hline
+2 & Achariaceae & AM & AM & AM & AM\\
+\hline
+5 & Actinidiaceae & AM & AM & AM & AM\\
+\hline
+6 & Adoxaceae & AM & AM & AM & MIX\\
+\hline
+7 & Aextoxicaceae & AM & AM & AM & AM\\
+\hline
+8 & Aizoaceae & NM & MIX & MIX & MIX\\
+\hline
+9 & Akaniaceae & AM & AM & AM & AM\\
+\hline
+11 & Alseuosmiaceae & AM & AM & AM & AM\\
+\hline
+12 & Alstroemeriaceae & AM & AM & AM & AM\\
+\hline
+13 & Altingiaceae & AM & AM & AM & AM\\
+\hline
+14 & Amaranthaceae & NM & MIX & MIX & MIX\\
+\hline
+15 & Amaryllidaceae & AM & AM & AM & MIX\\
+\hline
+16 & Amborellaceae & AM & AM & AM & AM\\
+\hline
+18 & Anacardiaceae & AM & AM & AM & AM\\
+\hline
+20 & Ancistrocladaceae & AM & AM & AM & AM\\
+\hline
+21 & Anisophylleaceae & AM & AM & AM & AM\\
+\hline
+22 & Annonaceae & AM & AM & AM & AM\\
+\hline
+24 & Aphloiaceae & AM & AM & AM & AM\\
+\hline
+25 & Apiaceae & AM & AM & AM & MIX\\
+\hline
+26 & Apocynaceae & AM & AM & AM & MIX\\
+\hline
+27 & Apodanthaceae & NM & NM & NM & NM\\
+\hline
+28 & Aponogetonaceae & MIX & MIX & MIX & MIX\\
+\hline
+29 & Aquifoliaceae & AM & AM & AM & AM\\
+\hline
+30 & Araceae & AM & MIX & MIX & MIX\\
+\hline
+31 & Araliaceae & AM & AM & AM & MIX\\
+\hline
+32 & Araucariaceae & AM & AM & AM & AM\\
+\hline
+33 & Arecaceae & AM & AM & AM & MIX\\
+\hline
+34 & Argophyllaceae & AM & AM & AM & AM\\
+\hline
+35 & Aristolochiaceae & AM & AM & MIX & MIX\\
+\hline
+36 & Asparagaceae & AM & AM & AM & MIX\\
+\hline
+37 & Asteliaceae & AM & AM & AM & AM\\
+\hline
+39 & Atherospermataceae & AM & AM & AM & AM\\
+\hline
+40 & Austrobaileyaceae & AM & AM & AM & AM\\
+\hline
+41 & Balanopaceae & AM & AM & AM & AM\\
+\hline
+42 & Balanophoraceae & NM & NM & NM & NM\\
+\hline
+43 & Balsaminaceae & AM & AM & AM & AM\\
+\hline
+45 & Barbeyaceae & AM & AM & AM & AM\\
+\hline
+46 & Basellaceae & AM & AM & AM & AM\\
+\hline
+48 & Begoniaceae & AM & AM & AM & AM\\
+\hline
+49 & Berberidaceae & AM & AM & AM & AM\\
+\hline
+51 & Betulaceae & EM & EM & EM & EM\\
+\hline
+52 & Biebersteiniaceae & AM & AM & AM & AM\\
+\hline
+53 & Bignoniaceae & AM & AM & AM & MIX\\
+\hline
+54 & Bixaceae & AM & AM & AM & AM\\
+\hline
+55 & Blandfordiaceae & AM & AM & AM & AM\\
+\hline
+56 & Bonnetiaceae & AM & AM & AM & AM\\
+\hline
+57 & Boraginaceae & AM & AM & MIX & MIX\\
+\hline
+58 & Boryaceae & AM & AM & AM & AM\\
+\hline
+59 & Brassicaceae & NM & NM & NM & NM\\
+\hline
+60 & Bromeliaceae & NM & NM & MIX & MIX\\
+\hline
+61 & Brunelliaceae & AM & AM & AM & AM\\
+\hline
+62 & Bruniaceae & AM & AM & AM & AM\\
+\hline
+63 & Burmanniaceae & AM & AM & AM & AM\\
+\hline
+64 & Burseraceae & AM & AM & AM & MIX\\
+\hline
+65 & Butomaceae & NM & NM & NM & NM\\
+\hline
+66 & Buxaceae & AM & AM & AM & AM\\
+\hline
+67 & Byblidaceae & NM & NM & NM & NM\\
+\hline
+68 & Cabombaceae & NM & NM & NM & NM\\
+\hline
+69 & Cactaceae & AM & AM & AM & MIX\\
+\hline
+70 & Calceolariaceae & AM & AM & AM & AM\\
+\hline
+71 & Calophyllaceae & AM & AM & AM & AM\\
+\hline
+72 & Calycanthaceae & AM & AM & AM & AM\\
+\hline
+73 & Calyceraceae & AM & AM & AM & AM\\
+\hline
+74 & Campanulaceae & AM & AM & AM & MIX\\
+\hline
+75 & Campynemataceae & AM & AM & AM & AM\\
+\hline
+76 & Canellaceae & AM & AM & AM & AM\\
+\hline
+77 & Cannabaceae & AM & AM & AM & AM\\
+\hline
+78 & Cannaceae & AM & AM & AM & AM\\
+\hline
+79 & Capparaceae & AM & AM & MIX & MIX\\
+\hline
+80 & Caprifoliaceae & AM & AM & AM & AM\\
+\hline
+81 & Cardiopteridaceae & AM & AM & AM & AM\\
+\hline
+82 & Caricaceae & AM & AM & AM & AM\\
+\hline
+83 & Carlemanniaceae & AM & AM & AM & AM\\
+\hline
+84 & Caryocaraceae & AM & AM & AM & AM\\
+\hline
+85 & Caryophyllaceae & NM & NM & MIX & MIX\\
+\hline
+86 & Casuarinaceae & AM & MIX & MIX & MIX\\
+\hline
+87 & Celastraceae & AM & AM & AM & MIX\\
+\hline
+89 & Cephalotaceae & NM & NM & NM & NM\\
+\hline
+90 & Ceratophyllaceae & NM & NM & NM & NM\\
+\hline
+91 & Cercidiphyllaceae & AM & AM & AM & AM\\
+\hline
+92 & Chloranthaceae & AM & AM & AM & AM\\
+\hline
+93 & Chrysobalanaceae & AM & AM & AM & AM\\
+\hline
+94 & Circaeasteraceae & AM & AM & AM & AM\\
+\hline
+95 & Cistaceae & EM & EM & EM & EM\\
+\hline
+96 & Cleomaceae & AM & MIX & MIX & MIX\\
+\hline
+97 & Clethraceae & AM & AM & AM & AM\\
+\hline
+98 & Clusiaceae & AM & AM & AM & AM\\
+\hline
+99 & Colchicaceae & AM & AM & AM & AM\\
+\hline
+100 & Columelliaceae & AM & AM & AM & AM\\
+\hline
+101 & Combretaceae & AM & AM & AM & AM\\
+\hline
+102 & Commelinaceae & NM & MIX & MIX & MIX\\
+\hline
+103 & Asteraceae & AM & AM & AM & MIX\\
+\hline
+104 & Connaraceae & AM & AM & AM & AM\\
+\hline
+105 & Convolvulaceae & AM & AM & MIX & MIX\\
+\hline
+106 & Coriariaceae & AM & AM & AM & AM\\
+\hline
+107 & Cornaceae & AM & AM & AM & AM\\
+\hline
+108 & Corsiaceae & AM & AM & AM & AM\\
+\hline
+109 & Corynocarpaceae & AM & AM & AM & AM\\
+\hline
+110 & Costaceae & AM & AM & AM & AM\\
+\hline
+111 & Crassulaceae & NM & NM & MIX & MIX\\
+\hline
+113 & Ctenolophonaceae & AM & AM & AM & AM\\
+\hline
+114 & Cucurbitaceae & AM & AM & AM & AM\\
+\hline
+115 & Cunoniaceae & AM & AM & AM & MIX\\
+\hline
+116 & Cupressaceae & AM & AM & AM & AM\\
+\hline
+117 & Curtisiaceae & AM & AM & AM & AM\\
+\hline
+118 & Cycadaceae & AM & AM & AM & AM\\
+\hline
+119 & Cyclanthaceae & NM & NM & MIX & MIX\\
+\hline
+120 & Cymodoceaceae & NM & NM & NM & NM\\
+\hline
+121 & Cynomoriaceae & NM & NM & NM & NM\\
+\hline
+122 & Cyperaceae & NM & MIX & MIX & MIX\\
+\hline
+123 & Cyrillaceae & AM & AM & AM & AM\\
+\hline
+124 & Cytinaceae & AM & AM & AM & AM\\
+\hline
+125 & Daphniphyllaceae & AM & AM & AM & AM\\
+\hline
+127 & Datiscaceae & AM & AM & AM & AM\\
+\hline
+128 & Degeneriaceae & AM & AM & AM & AM\\
+\hline
+129 & Diapensiaceae & ER & ER & ER & ER\\
+\hline
+130 & Dichapetalaceae & AM & AM & AM & AM\\
+\hline
+132 & Dilleniaceae & AM & AM & AM & AM\\
+\hline
+134 & Dioscoreaceae & AM & AM & AM & AM\\
+\hline
+135 & Dipentodontaceae & AM & AM & AM & AM\\
+\hline
+136 & Dipterocarpaceae & EM & EM & EM & EM\\
+\hline
+137 & Dirachmaceae & AM & AM & AM & AM\\
+\hline
+138 & Doryanthaceae & AM & AM & AM & AM\\
+\hline
+139 & Droseraceae & NM & NM & NM & NM\\
+\hline
+140 & Drosophyllaceae & NM & NM & NM & NM\\
+\hline
+141 & Ebenaceae & AM & AM & AM & AM\\
+\hline
+142 & Ecdeiocoleaceae & AM & AM & AM & AM\\
+\hline
+143 & Elaeagnaceae & AM & AM & AM & AM\\
+\hline
+144 & Elaeocarpaceae & AM & AM & AM & AM\\
+\hline
+145 & Elatinaceae & NM & NM & MIX & MIX\\
+\hline
+146 & Emblingiaceae & NM & NM & NM & NM\\
+\hline
+147 & Ephedraceae & AM & AM & AM & AM\\
+\hline
+149 & Eriocaulaceae & AM & AM & AM & MIX\\
+\hline
+150 & Erythroxylaceae & AM & AM & AM & AM\\
+\hline
+151 & Escalloniaceae & AM & AM & AM & AM\\
+\hline
+152 & Eucommiaceae & AM & AM & AM & AM\\
+\hline
+153 & Euphorbiaceae & AM & AM & AM & MIX\\
+\hline
+154 & Euphroniaceae & AM & AM & AM & AM\\
+\hline
+155 & Eupomatiaceae & AM & AM & AM & AM\\
+\hline
+156 & Eupteleaceae & AM & AM & AM & AM\\
+\hline
+157 & Fagaceae & EM & EM & EM & EM\\
+\hline
+158 & Flagellariaceae & AM & AM & AM & AM\\
+\hline
+159 & Fouquieriaceae & AM & AM & AM & AM\\
+\hline
+160 & Frankeniaceae & NM & NM & NM & NM\\
+\hline
+161 & Garryaceae & AM & AM & AM & AM\\
+\hline
+163 & Gelsemiaceae & AM & AM & AM & AM\\
+\hline
+164 & Gentianaceae & AM & AM & AM & MIX\\
+\hline
+165 & Geraniaceae & AM & AM & AM & AM\\
+\hline
+167 & Gesneriaceae & AM & AM & AM & AM\\
+\hline
+168 & Ginkgoaceae & AM & AM & AM & AM\\
+\hline
+170 & Gnetaceae & EM & EM & EM & EM\\
+\hline
+171 & Gomortegaceae & AM & AM & AM & AM\\
+\hline
+172 & Goodeniaceae & AM & MIX & MIX & MIX\\
+\hline
+173 & Goupiaceae & AM & AM & AM & AM\\
+\hline
+174 & Grossulariaceae & AM & AM & AM & AM\\
+\hline
+175 & Grubbiaceae & AM & AM & AM & AM\\
+\hline
+176 & Gunneraceae & AM & AM & AM & AM\\
+\hline
+177 & Gyrostemonaceae & NM & NM & NM & NM\\
+\hline
+178 & Haemodoraceae & NM & NM & NM & NM\\
+\hline
+179 & Halophytaceae & NM & NM & NM & NM\\
+\hline
+180 & Haloragaceae & AM & AM & MIX & MIX\\
+\hline
+181 & Hamamelidaceae & AM & AM & AM & AM\\
+\hline
+182 & Hanguanaceae & AM & AM & AM & AM\\
+\hline
+183 & Haptanthaceae & AM & AM & AM & AM\\
+\hline
+184 & Heliconiaceae & AM & AM & AM & AM\\
+\hline
+185 & Helwingiaceae & AM & AM & AM & AM\\
+\hline
+186 & Hernandiaceae & AM & AM & AM & AM\\
+\hline
+187 & Himantandraceae & AM & AM & AM & AM\\
+\hline
+188 & Huaceae & AM & AM & AM & AM\\
+\hline
+189 & Humiriaceae & AM & AM & AM & AM\\
+\hline
+191 & Hydnoraceae & AM & AM & AM & AM\\
+\hline
+192 & Hydrangeaceae & AM & AM & AM & MIX\\
+\hline
+193 & Hydrocharitaceae & NM & MIX & MIX & MIX\\
+\hline
+196 & Hypericaceae & AM & AM & AM & AM\\
+\hline
+197 & Hypoxidaceae & AM & AM & AM & AM\\
+\hline
+198 & Icacinaceae & AM & AM & AM & AM\\
+\hline
+199 & Iridaceae & AM & AM & AM & MIX\\
+\hline
+200 & Irvingiaceae & AM & AM & AM & AM\\
+\hline
+201 & Iteaceae & AM & AM & AM & AM\\
+\hline
+202 & Ixioliriaceae & AM & AM & AM & AM\\
+\hline
+203 & Ixonanthaceae & AM & AM & AM & AM\\
+\hline
+204 & Joinvilleaceae & AM & AM & AM & AM\\
+\hline
+205 & Juglandaceae & EM & MIX & MIX & MIX\\
+\hline
+207 & Juncaginaceae & NM & NM & NM & MIX\\
+\hline
+208 & Kirkiaceae & AM & AM & AM & AM\\
+\hline
+209 & Koeberliniaceae & NM & NM & NM & NM\\
+\hline
+210 & Krameriaceae & AM & AM & AM & AM\\
+\hline
+211 & Lacistemataceae & AM & AM & AM & AM\\
+\hline
+212 & Lactoridaceae & AM & AM & AM & AM\\
+\hline
+213 & Lamiaceae & AM & AM & AM & MIX\\
+\hline
+214 & Lanariaceae & AM & AM & AM & AM\\
+\hline
+215 & Lardizabalaceae & AM & AM & AM & AM\\
+\hline
+216 & Lauraceae & AM & AM & AM & MIX\\
+\hline
+217 & Lecythidaceae & AM & AM & AM & MIX\\
+\hline
+218 & Fabaceae & AM & AM & AM & MIX\\
+\hline
+219 & Lentibulariaceae & NM & NM & MIX & MIX\\
+\hline
+220 & Lepidobotryaceae & AM & AM & AM & AM\\
+\hline
+221 & Liliaceae & AM & AM & AM & AM\\
+\hline
+223 & Limnanthaceae & NM & NM & NM & NM\\
+\hline
+224 & Linaceae & AM & AM & AM & AM\\
+\hline
+225 & Linderniaceae & NM & MIX & MIX & MIX\\
+\hline
+226 & Loasaceae & NM & NM & NM & MIX\\
+\hline
+227 & Loganiaceae & AM & AM & AM & AM\\
+\hline
+228 & Loranthaceae & NM & NM & NM & NM\\
+\hline
+229 & Lowiaceae & AM & AM & AM & AM\\
+\hline
+230 & Lythraceae & AM & AM & AM & MIX\\
+\hline
+231 & Magnoliaceae & AM & AM & AM & AM\\
+\hline
+232 & Malpighiaceae & AM & AM & AM & AM\\
+\hline
+233 & Malvaceae & AM & AM & AM & MIX\\
+\hline
+234 & Marantaceae & AM & AM & MIX & MIX\\
+\hline
+235 & Marcgraviaceae & AM & AM & AM & AM\\
+\hline
+236 & Martyniaceae & AM & AM & AM & AM\\
+\hline
+238 & Melanthiaceae & AM & AM & AM & AM\\
+\hline
+239 & Melastomataceae & AM & AM & AM & AM\\
+\hline
+240 & Meliaceae & AM & AM & AM & AM\\
+\hline
+241 & Melianthaceae & AM & AM & AM & AM\\
+\hline
+242 & Menispermaceae & AM & AM & AM & AM\\
+\hline
+243 & Menyanthaceae & NM & MIX & MIX & MIX\\
+\hline
+245 & Misodendraceae & NM & NM & NM & NM\\
+\hline
+246 & Mitrastemonaceae & NM & NM & NM & NM\\
+\hline
+247 & Molluginaceae & NM & NM & MIX & MIX\\
+\hline
+248 & Monimiaceae & AM & AM & AM & AM\\
+\hline
+249 & Montiaceae & AM & AM & MIX & MIX\\
+\hline
+250 & Montiniaceae & AM & AM & AM & AM\\
+\hline
+251 & Moraceae & AM & AM & AM & MIX\\
+\hline
+252 & Moringaceae & AM & AM & AM & AM\\
+\hline
+253 & Muntingiaceae & AM & AM & AM & AM\\
+\hline
+254 & Musaceae & AM & AM & AM & AM\\
+\hline
+255 & Myodocarpaceae & AM & AM & AM & AM\\
+\hline
+256 & Myricaceae & AM & AM & MIX & MIX\\
+\hline
+257 & Myristicaceae & AM & AM & AM & AM\\
+\hline
+258 & Myrothamnaceae & AM & AM & AM & AM\\
+\hline
+259 & Myrtaceae & AM & AM & AM & MIX\\
+\hline
+260 & Nartheciaceae & AM & AM & AM & MIX\\
+\hline
+261 & Nelumbonaceae & NM & NM & NM & NM\\
+\hline
+263 & Neuradaceae & AM & AM & AM & AM\\
+\hline
+264 & Nitrariaceae & AM & AM & AM & AM\\
+\hline
+265 & Nothofagaceae & EM & EM & EM & EM\\
+\hline
+266 & Nyctaginaceae & MIX & MIX & MIX & MIX\\
+\hline
+267 & Nymphaeaceae & NM & NM & MIX & MIX\\
+\hline
+268 & Ochnaceae & AM & AM & MIX & MIX\\
+\hline
+269 & Olacaceae & AM & AM & AM & MIX\\
+\hline
+270 & Oleaceae & AM & AM & AM & AM\\
+\hline
+271 & Onagraceae & AM & AM & AM & MIX\\
+\hline
+272 & Oncothecaceae & AM & AM & AM & AM\\
+\hline
+275 & Orobanchaceae & NM & NM & MIX & MIX\\
+\hline
+276 & Oxalidaceae & AM & AM & AM & AM\\
+\hline
+277 & Paeoniaceae & AM & AM & AM & AM\\
+\hline
+278 & Pandaceae & AM & AM & AM & AM\\
+\hline
+279 & Pandanaceae & AM & AM & MIX & MIX\\
+\hline
+280 & Papaveraceae & NM & MIX & MIX & MIX\\
+\hline
+281 & Paracryphiaceae & AM & AM & AM & AM\\
+\hline
+282 & Passifloraceae & AM & AM & AM & AM\\
+\hline
+283 & Paulowniaceae & AM & AM & MIX & MIX\\
+\hline
+284 & Pedaliaceae & AM & AM & MIX & MIX\\
+\hline
+285 & Penaeaceae & AM & AM & AM & AM\\
+\hline
+286 & Pentadiplandraceae & NM & NM & NM & NM\\
+\hline
+287 & Pentaphragmataceae & AM & AM & AM & AM\\
+\hline
+288 & Pentaphylacaceae & AM & AM & AM & AM\\
+\hline
+290 & Peridiscaceae & AM & AM & AM & AM\\
+\hline
+291 & Petermanniaceae & AM & AM & AM & AM\\
+\hline
+292 & Petrosaviaceae & AM & AM & AM & AM\\
+\hline
+293 & Philesiaceae & AM & AM & AM & AM\\
+\hline
+294 & Philydraceae & AM & AM & AM & AM\\
+\hline
+295 & Phrymaceae & AM & AM & AM & AM\\
+\hline
+296 & Phyllanthaceae & AM & AM & AM & MIX\\
+\hline
+297 & Phyllonomaceae & AM & AM & AM & AM\\
+\hline
+299 & Phytolaccaceae & NM & NM & MIX & MIX\\
+\hline
+300 & Picramniaceae & AM & AM & AM & AM\\
+\hline
+301 & Picrodendraceae & AM & AM & AM & AM\\
+\hline
+302 & Pinaceae & EM & EM & EM & EM\\
+\hline
+303 & Piperaceae & AM & MIX & MIX & MIX\\
+\hline
+304 & Pittosporaceae & AM & AM & AM & AM\\
+\hline
+305 & Plantaginaceae & AM & AM & MIX & MIX\\
+\hline
+306 & Platanaceae & AM & AM & AM & AM\\
+\hline
+307 & Plocospermataceae & AM & AM & AM & AM\\
+\hline
+308 & Plumbaginaceae & NM & MIX & MIX & MIX\\
+\hline
+309 & Poaceae & AM & AM & AM & MIX\\
+\hline
+310 & Podocarpaceae & AM & AM & AM & AM\\
+\hline
+311 & Podostemaceae & NM & NM & NM & NM\\
+\hline
+312 & Polemoniaceae & AM & AM & AM & MIX\\
+\hline
+313 & Polygalaceae & AM & AM & AM & AM\\
+\hline
+314 & Polygonaceae & MIX & MIX & MIX & MIX\\
+\hline
+316 & Portulacaceae & NM & NM & MIX & MIX\\
+\hline
+317 & Posidoniaceae & NM & NM & NM & NM\\
+\hline
+318 & Potamogetonaceae & NM & NM & NM & MIX\\
+\hline
+319 & Primulaceae & AM & AM & AM & AM\\
+\hline
+320 & Proteaceae & NM & NM & NM & MIX\\
+\hline
+321 & Putranjivaceae & AM & AM & AM & AM\\
+\hline
+322 & Quillajaceae & AM & AM & AM & AM\\
+\hline
+323 & Rafflesiaceae & NM & NM & NM & NM\\
+\hline
+324 & Ranunculaceae & AM & AM & AM & MIX\\
+\hline
+325 & Rapateaceae & AM & AM & AM & AM\\
+\hline
+326 & Resedaceae & NM & NM & NM & NM\\
+\hline
+327 & Restionaceae & NM & MIX & MIX & MIX\\
+\hline
+329 & Rhamnaceae & AM & AM & AM & MIX\\
+\hline
+330 & Rhipogonaceae & AM & AM & AM & AM\\
+\hline
+331 & Rhizophoraceae & AM & MIX & MIX & MIX\\
+\hline
+332 & Roridulaceae & NM & NM & NM & NM\\
+\hline
+333 & Rosaceae & AM & AM & AM & MIX\\
+\hline
+334 & Rousseaceae & AM & AM & AM & AM\\
+\hline
+335 & Rubiaceae & AM & AM & AM & MIX\\
+\hline
+337 & Rutaceae & AM & AM & AM & MIX\\
+\hline
+338 & Sabiaceae & AM & AM & AM & AM\\
+\hline
+339 & Salicaceae & AM & AM & MIX & MIX\\
+\hline
+340 & Salvadoraceae & NM & NM & MIX & MIX\\
+\hline
+341 & Santalaceae & NM & MIX & MIX & MIX\\
+\hline
+342 & Sapindaceae & AM & AM & AM & AM\\
+\hline
+343 & Sapotaceae & AM & AM & AM & MIX\\
+\hline
+344 & Sarcobataceae & NM & NM & NM & NM\\
+\hline
+345 & Sarcolaenaceae & EM & EM & EM & EM\\
+\hline
+346 & Sarraceniaceae & NM & NM & NM & NM\\
+\hline
+347 & Saururaceae & AM & AM & AM & AM\\
+\hline
+348 & Saxifragaceae & NM & MIX & MIX & MIX\\
+\hline
+350 & Schisandraceae & AM & AM & AM & AM\\
+\hline
+351 & Schlegeliaceae & AM & AM & AM & AM\\
+\hline
+352 & Schoepfiaceae & AM & AM & AM & AM\\
+\hline
+353 & Sciadopityaceae & AM & AM & AM & AM\\
+\hline
+354 & Scrophulariaceae & AM & AM & AM & MIX\\
+\hline
+356 & Simaroubaceae & AM & AM & AM & AM\\
+\hline
+357 & Simmondsiaceae & AM & AM & AM & AM\\
+\hline
+358 & Siparunaceae & AM & AM & AM & AM\\
+\hline
+359 & Sladeniaceae & AM & AM & AM & AM\\
+\hline
+360 & Smilacaceae & AM & AM & AM & AM\\
+\hline
+361 & Solanaceae & AM & AM & AM & AM\\
+\hline
+362 & Sphaerosepalaceae & AM & AM & AM & AM\\
+\hline
+363 & Sphenocleaceae & NM & NM & NM & NM\\
+\hline
+364 & Stachyuraceae & AM & AM & AM & AM\\
+\hline
+365 & Staphyleaceae & AM & AM & AM & AM\\
+\hline
+366 & Stegnospermataceae & AM & AM & AM & AM\\
+\hline
+367 & Stemonaceae & AM & AM & AM & AM\\
+\hline
+368 & Stemonuraceae & AM & AM & AM & AM\\
+\hline
+369 & Stilbaceae & AM & AM & AM & AM\\
+\hline
+371 & Strelitziaceae & AM & AM & AM & AM\\
+\hline
+372 & Stylidiaceae & AM & AM & AM & AM\\
+\hline
+373 & Styracaceae & AM & AM & AM & AM\\
+\hline
+374 & Surianaceae & AM & AM & AM & AM\\
+\hline
+375 & Symplocaceae & AM & AM & AM & AM\\
+\hline
+378 & Tapisciaceae & AM & AM & AM & AM\\
+\hline
+379 & Taxaceae & AM & AM & AM & AM\\
+\hline
+380 & Tecophilaeaceae & AM & AM & AM & AM\\
+\hline
+381 & Tetrachondraceae & AM & AM & AM & AM\\
+\hline
+382 & Tetramelaceae & AM & AM & AM & AM\\
+\hline
+383 & Tetrameristaceae & AM & AM & AM & AM\\
+\hline
+384 & Theaceae & AM & AM & AM & AM\\
+\hline
+385 & Thurniaceae & AM & AM & AM & AM\\
+\hline
+386 & Thymelaeaceae & AM & AM & AM & MIX\\
+\hline
+387 & Ticodendraceae & EM & EM & EM & EM\\
+\hline
+388 & Tofieldiaceae & AM & AM & MIX & MIX\\
+\hline
+389 & Torricelliaceae & AM & AM & AM & AM\\
+\hline
+391 & Trigoniaceae & AM & AM & AM & AM\\
+\hline
+392 & Triuridaceae & AM & AM & AM & AM\\
+\hline
+393 & Trochodendraceae & AM & AM & AM & AM\\
+\hline
+394 & Tropaeolaceae & AM & AM & AM & AM\\
+\hline
+396 & Ulmaceae & AM & AM & AM & AM\\
+\hline
+397 & Urticaceae & AM & MIX & MIX & MIX\\
+\hline
+398 & Vahliaceae & AM & AM & AM & AM\\
+\hline
+399 & Velloziaceae & AM & AM & AM & AM\\
+\hline
+400 & Verbenaceae & AM & AM & AM & AM\\
+\hline
+401 & Violaceae & AM & AM & AM & AM\\
+\hline
+402 & Vitaceae & AM & AM & AM & AM\\
+\hline
+403 & Vivianiaceae & AM & AM & AM & AM\\
+\hline
+404 & Vochysiaceae & AM & AM & AM & AM\\
+\hline
+405 & Welwitschiaceae & AM & AM & AM & AM\\
+\hline
+406 & Winteraceae & AM & AM & AM & AM\\
+\hline
+407 & Xanthorrhoeaceae & AM & AM & AM & AM\\
+\hline
+408 & Xeronemataceae & AM & AM & AM & AM\\
+\hline
+410 & Zamiaceae & AM & AM & AM & AM\\
+\hline
+411 & Zingiberaceae & AM & AM & AM & AM\\
+\hline
+412 & Zosteraceae & NM & NM & NM & NM\\
+\hline
+413 & Zygophyllaceae & AM & AM & MIX & MIX\\
+\hline
+\end{longtable}
+
+\hypertarget{phylogenetic-signal-of-diversification-rates-age-and-richness}{%
+\section{Phylogenetic signal of diversification rates, age, and
+richness}\label{phylogenetic-signal-of-diversification-rates-age-and-richness}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-6}Phylogenetic signal of the four response variables}
+\centering
+\begin{tabular}{l|r}
+\hline
+Variable & Lambda\\
+\hline
+r (epsilon = 0) & 0.4681621\\
+\hline
+r (epsilon = 0.9) & 0.3510291\\
+\hline
+Stem Age & 1.0000000\\
+\hline
+Richness & 0.0000010\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{phylogenetic-anova}{%
+\section{Phylogenetic ANOVA}\label{phylogenetic-anova}}
+
+\hypertarget{summary-statistics}{%
+\subsection{Summary statistics}\label{summary-statistics}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-7}phyANOVA summary statistics for both values of epsilon}
+\centering
+\begin{tabular}{r|r|r}
+\hline
+epsilon & F & pvalue\\
+\hline
+0.0 & 6.151844 & 0.017\\
+\hline
+0.9 & 5.974891 & 0.021\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{posthoc-tests}{%
+\subsection{Posthoc tests}\label{posthoc-tests}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-8}Pairwise Corrected p-values for epsilon = 0}
+\centering
+\begin{tabular}{l|r|r|r|r}
+\hline
+  & AM & EM & MIX & NM\\
+\hline
+AM & 1.000 & 1 & 0.006 & 1.00\\
+\hline
+EM & 1.000 & 1 & 1.000 & 1.00\\
+\hline
+MIX & 0.006 & 1 & 1.000 & 0.01\\
+\hline
+NM & 1.000 & 1 & 0.010 & 1.00\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-9}Pairwise Corrected p-values for epsilon = 0.9}
+\centering
+\begin{tabular}{l|r|r|r|r}
+\hline
+  & AM & EM & MIX & NM\\
+\hline
+AM & 1.00 & 1.000 & 0.010 & 1.000\\
+\hline
+EM & 1.00 & 1.000 & 0.976 & 1.000\\
+\hline
+MIX & 0.01 & 0.976 & 1.000 & 0.006\\
+\hline
+NM & 1.00 & 1.000 & 0.006 & 1.000\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{species-level-database}{%
+\section{Species-level database}\label{species-level-database}}
+
+\hypertarget{clean-database---excluding-species-with-any-remark}{%
+\subsection{Clean database - excluding species with any
+remark}\label{clean-database---excluding-species-with-any-remark}}
+
+\hypertarget{boxplots-1}{%
+\subsubsection{Boxplots}\label{boxplots-1}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-11-1.pdf}
+\caption{Relationship between mycorrhizal type and diversification
+rates. a) diversification rate estimated with ε (relative extinction
+fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM:
+Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX
+(families with no dominance of any specific mycorrhizal association).
+The size of the points indicates the Mycorrhizal Type Diversity Index
+value for each lineage, indicating a predominance of larger indices with
+higher diversification rates.}
+\end{figure}
+
+\hypertarget{scatterplots-1}{%
+\subsubsection{Scatterplots}\label{scatterplots-1}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-12-1.pdf}
+\caption{Scatterplots showing the relationship between mycorrhizal
+diversity index and diversification rates (a and c), species richness
+(b) and age family (d). Diversification rates were estimated with ε
+(relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and
+blue lines indicate the results of a linear model and a phylogenetic
+generalized least squares (PGLS) fit, respectively.}
+\end{figure}
+
+\hypertarget{more-inclusive-database---including-species-with-any-remark}{%
+\subsection{More inclusive database - including species with any
+remark}\label{more-inclusive-database---including-species-with-any-remark}}
+
+\hypertarget{boxplots-2}{%
+\subsubsection{Boxplots}\label{boxplots-2}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-13-1.pdf}
+\caption{Relationship between mycorrhizal type and diversification
+rates. a) diversification rate estimated with ε (relative extinction
+fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM:
+Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX
+(families with no dominance of any specific mycorrhizal association).
+The size of the points indicates the Mycorrhizal Type Diversity Index
+value for each lineage, indicating a predominance of larger indices with
+higher diversification rates.}
+\end{figure}
+
+\hypertarget{scatterplots-2}{%
+\subsubsection{Scatterplots}\label{scatterplots-2}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-14-1.pdf}
+\caption{Scatterplots showing the relationship between mycorrhizal
+diversity index and diversification rates (a and c), species richness
+(b) and age family (d). Diversification rates were estimated with ε
+(relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and
+blue lines indicate the results of a linear model and a phylogenetic
+generalized least squares (PGLS) fit, respectively.}
+\end{figure}
+
+
+\end{document}

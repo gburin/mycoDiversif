@@ -58,6 +58,7 @@ fulldata <- read.csv("./data/family_data_genus_classif.csv")
 rownames(fulldata) <- fulldata$family
 
 cleandata <- fulldata[which(!is.na(match(rownames(fulldata), tree$tip.label))),]
+cleandata <- cleandata[cleandata$MIX.perc < 0.95,]
 cleandata$stem.age <- age.data$stem.age[match(cleandata$family, age.data$familia)]
 cleandata$stem.age[cleandata$family == "Cornaceae"] <- tree$edge.length[2 * which(tree$tip.label == "Cornaceae") + 1]
 cleandata$stem.age[cleandata$family == "Schlegeliaceae"] <- tree$edge.length[2 * which(tree$tip.label == "Schlegeliaceae") + 1]
@@ -67,7 +68,7 @@ cleandata$r.e09 <- geiger::bd.ms(time = cleandata$stem.age, n = cleandata$rich, 
 
 df.rates <- cleandata[, c("r.e0", "r.e09")]
 df.myc <- setNames(cleandata[, c(22, 23, 26)], c("AM", "EM", "NM"))
-df.shan <- data.frame(MTDI = as.numeric(vegan::diversity(cleandata[, c(8, 9, 10, 12, 13)])))
+df.shan <- data.frame(MTDI = as.numeric(vegan::diversity(cleandata[, 3:7])))
 rownames(df.shan) <- rownames(df.myc)
 
 df.myc <- df.myc[-which(is.na(df.myc$AM)),]
