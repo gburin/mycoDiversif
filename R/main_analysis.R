@@ -59,24 +59,47 @@ lm.r0 <- lm(r.e0 ~ shannon, data = family.data.gen[family.data.gen$MIX.raw.perc 
 lm.r05 <- lm(r.e05 ~ shannon, data = family.data.gen[family.data.gen$MIX.raw.perc != 1,])
 lm.r09 <- lm(r.e09 ~ shannon, data = family.data.gen[family.data.gen$MIX.raw.perc != 1,])
 
+
 ## phylANOVA excluding families with != 100% MIX
 data.aov <- family.data.gen[-which(is.na(match(family.data.gen$family, fulltree$tip.label))), ]
 data.aov <- data.aov[-which(is.na(data.aov$r.e0)),]
 data.aov <- data.aov[which(data.aov$MIX.raw.perc != 1), ]
-data.aov <- data.aov[-which(data.aov$type.60 == "ER"), ]
+data.aov <- data.aov[-which(data.aov$type.50 == "ER"), ]
 
-phyaov.r0 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
-phyaov.r05 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e05, data.aov$family))
-phyaov.r09 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+## Thresholds
+### 50%
+phyaov.r0.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r09.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+
+### 60%
+phyaov.r0.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r09.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+
+### 80%
+phyaov.r0.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r09.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+
+### 100%
+phyaov.r0.100 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.100, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r09.100 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.100, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
 
 ## ANOVA excluding families with != 100% MIX
-aov.r0 <- aov(r.e0 ~ type.60, data = data.aov)
-aov.r05 <- aov(r.e05 ~ type.60, data = data.aov)
-aov.r09 <- aov(r.e09 ~ type.60, data = data.aov)
+## Thresholds
+### 50%
+aov.r0.50 <- aov(r.e0 ~ type.50, data = data.aov)
+aov.r09.50 <- aov(r.e09 ~ type.50, data = data.aov)
 
-TukeyHSD(aov.r0)
-TukeyHSD(aov.r05)
-TukeyHSD(aov.r09)
+### 60%
+aov.r0.60 <- aov(r.e0 ~ type.60, data = data.aov)
+aov.r09.60 <- aov(r.e09 ~ type.60, data = data.aov)
+
+### 80%
+aov.r0.80 <- aov(r.e0 ~ type.80, data = data.aov)
+aov.r09.80 <- aov(r.e09 ~ type.80, data = data.aov)
+
+### 100%
+aov.r0.100 <- aov(r.e0 ~ type.100, data = data.aov)
+aov.r09.100 <- aov(r.e09 ~ type.100, data = data.aov)
 
 ## Age vs rich
 pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.age)$param[2], NULL))

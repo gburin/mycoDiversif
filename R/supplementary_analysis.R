@@ -47,7 +47,6 @@ sum((family.data.gen$rich - family.data.gen$UNK) < 8)
 
 ## We will not remove any family due to poor sampling since all families have either at least 58.3% of total richness or a minimum of 8 species sampled
 
-family.data.gen <- family.data.gen
 family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
 
 tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, family.data.gen$family))])
@@ -71,12 +70,46 @@ lm.r09 <- lm(r.e09 ~ shannon, data = family.data.gen)
 
 ## phylANOVA
 data.aov <- family.data.gen[-which(is.na(match(family.data.gen$family, fulltree$tip.label))), ]
-data.aov <- data.aov[-which(data.aov$type.50 == "ER"), ]
+data.aov <- data.aov[data.aov$type.50 != "ER", ]
+data.aov <- data.aov[data.aov$type.60 != "ER", ]
+data.aov <- data.aov[data.aov$type.80 != "ER", ]
+data.aov <- data.aov[data.aov$type.100 != "ER", ]
 data.aov <- data.aov[-which(is.na(data.aov$r.e0)),]
 
-phyaov.r0 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
-phyaov.r05 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e05, data.aov$family))
-phyaov.r09 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+## Thresholds
+### 50%
+phyaov.r0.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r09.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+
+### 60%
+phyaov.r0.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r09.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+
+### 80%
+phyaov.r0.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r09.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+
+### 100%
+phyaov.r0.100 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.100, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
+phyaov.r09.100 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.100, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
+
+## ANOVA excluding families with != 100% MIX
+## Thresholds
+### 50%
+aov.r0.50 <- aov(r.e0 ~ type.50, data = data.aov)
+aov.r09.50 <- aov(r.e09 ~ type.50, data = data.aov)
+
+### 60%
+aov.r0.60 <- aov(r.e0 ~ type.60, data = data.aov)
+aov.r09.60 <- aov(r.e09 ~ type.60, data = data.aov)
+
+### 80%
+aov.r0.80 <- aov(r.e0 ~ type.80, data = data.aov)
+aov.r09.80 <- aov(r.e09 ~ type.80, data = data.aov)
+
+### 100%
+aov.r0.100 <- aov(r.e0 ~ type.100, data = data.aov)
+aov.r09.100 <- aov(r.e09 ~ type.100, data = data.aov)
 
 ## Age vs rich
 pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.age)$param[2], NULL))
@@ -98,10 +131,12 @@ family.data.gen$pgls.r09 <- fitted(mod.r09)[,1][match(family.data.gen$family, na
 save.image(file = "./output/suppdata_genus_full.RData")
 
 
+
+
 ######################
 ##Analysis per species
 ######################
-
+rm(list = ls())
 family.data <- read.csv("./data/family_data_full.csv", stringsAsFactors = FALSE)
 
 ## Filtering for families with more than 5% or 8 species
@@ -132,34 +167,6 @@ family.data.clean$shannon <- vegan::diversity(family.data.clean[, c(4, 5, 6, 8, 
 ## Preparing data for PGLS
 data.pgls <- comparative.data(tree.pruned, family.data.clean[, -16], names.col = "family")
 
-## Testing for correlation between Stem age and Species Richness (both considering or not the phylogenetic structure)
-
-stem.rich.phylo <- pgls(global.rich ~ stem.age, data = data.pgls, lambda = "ML")
-stem.rich.std <- lm(global.rich ~ stem.age, data = family.data.clean)
-
-
-stem.age.vasc <- max(branching.times(fulltree.vasc)) - findMRCA(fulltree.vasc, c(fulltree.vasc$tip.label[621:622]), type = "height")
-
-r.vasc.stem.r0 <- bd.ms(time = stem.age.vasc, n = sum(family.data$global.rich), crown = FALSE, epsilon = 0)
-r.vasc.stem.r05 <- bd.ms(time = stem.age.vasc, n = sum(family.data$global.rich), crown = FALSE, epsilon = 0.5)
-r.vasc.stem.r0.9 <- bd.ms(time = stem.age.vasc, n = sum(family.data$global.rich), crown = FALSE, epsilon = 0.9)
-
-
-### Calculating the the 95% confidence intervals of species richness based on global r, epsilon and time for vascular plants.
-
-## Stem age
-### Generating table for plotting
-
-limits.vasc.stem <- data.frame(
-    time = seq(1, 300, by = 1),
-    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r0, epsilon = 0)),
-    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r05, epsilon = 0.5)),
-    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r0.9, epsilon = 0.9))
-    )
-names(limits.vasc.stem) <- c("age", "lb.0", "ub.0", "lb.05", "ub.05", "lb.09", "ub.09")
-
-
-
 ## Calculating Pagel's lambda for each epsilon value
 phylosig.r0 <- pgls(r.e0.stem ~ 1, data = data.pgls, lambda = "ML")
 phylosig.r05 <- pgls(r.e05.stem ~ 1, data = data.pgls, lambda = "ML")
@@ -177,14 +184,45 @@ lm.r09 <- lm(r.e09.stem ~ shannon, data = family.data.clean)
 
 ## phylANOVA
 data.aov <- family.data.clean[-which(is.na(match(family.data.clean$family, tree.pruned$tip.label))), ]
-phyaov.r0 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0.stem, data.aov$family))
-phyaov.r05 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e05.stem, data.aov$family))
-phyaov.r09 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09.stem, data.aov$family))
+data.aov <- data.aov[data.aov$type.50 != "ER", ]
+data.aov <- data.aov[data.aov$type.60 != "ER", ]
+data.aov <- data.aov[data.aov$type.80 != "ER", ]
+data.aov <- data.aov[data.aov$type.100 != "ER", ]
+
+
+### Threshold 50%
+phyaov.r0.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$r.e0.stem, data.aov$family))
+phyaov.r09.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$r.e09.stem, data.aov$family))
+
+### Threshold 60%
+phyaov.r0.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0.stem, data.aov$family))
+phyaov.r09.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09.stem, data.aov$family))
+
+### Threshold 80%
+phyaov.r0.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$r.e0.stem, data.aov$family))
+phyaov.r09.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$r.e09.stem, data.aov$family))
+
+### Threshold 100%
+phyaov.r0.100 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.100, data.aov$family), y = setNames(data.aov$r.e0.stem, data.aov$family))
+phyaov.r09.100 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.100, data.aov$family), y = setNames(data.aov$r.e09.stem, data.aov$family))
 
 ## Parametric ANOVA
-aov.r0 <- aov(r.e0.stem ~ type.60, data = family.data.clean)
-aov.r05 <- aov(r.e05.stem ~ type.60, data = family.data.clean)
-aov.r09 <- aov(r.e09.stem ~ type.60, data = family.data.clean)
+
+### Threshold 50%
+aov.r0.50 <- aov(r.e0.stem ~ type.50, data = family.data.clean)
+aov.r09.50 <- aov(r.e09.stem ~ type.50, data = family.data.clean)
+
+### Threshold 60%
+aov.r0.60 <- aov(r.e0.stem ~ type.60, data = family.data.clean)
+aov.r09.60 <- aov(r.e09.stem ~ type.60, data = family.data.clean)
+
+### Threshold 80%
+aov.r0.80 <- aov(r.e0.stem ~ type.80, data = family.data.clean)
+aov.r09.80 <- aov(r.e09.stem ~ type.80, data = family.data.clean)
+
+### Threshold 100%
+aov.r0.100 <- aov(r.e0.stem ~ type.100, data = family.data.clean)
+aov.r09.100 <- aov(r.e09.stem ~ type.100, data = family.data.clean)
 
 ## Appending results to original data frame for plotting
 family.data.clean$lm.r0 <- fitted(lm.r0)
@@ -215,6 +253,7 @@ save.image("./output/suppdata_species_noremarks.RData")
 ##Analysis per species using records with remarks 'probably XX'
 ######################
 
+rm(list = ls())
 family.data.rem <- read.csv("./data/family_data_full_incl_remarks.csv", stringsAsFactors = FALSE)
 
 ## Filtering for families with more than 5% or 8 species
@@ -245,32 +284,6 @@ family.data.clean.rem$shannon <- vegan::diversity(family.data.clean.rem[, c(4, 5
 ## Preparing data for PGLS
 data.pgls.rem <- comparative.data(tree.pruned, family.data.clean.rem, names.col = "family")
 
-## Testing for correlation between Stem age and Species Richness (both considering or not the phylogenetic structure)
-
-stem.rich.phylo.rem <- pgls(global.rich ~ stem.age, data = data.pgls.rem, lambda = "ML")
-
-stem.rich.std.rem <- lm(global.rich ~ stem.age, data = family.data.clean.rem)
-
-
-r.vasc.stem.r0.rem <- bd.ms(time = stem.age.vasc, n = sum(family.data$global.rich), crown = FALSE, epsilon = 0)
-r.vasc.stem.r05.rem <- bd.ms(time = stem.age.vasc, n = sum(family.data$global.rich), crown = FALSE, epsilon = 0.5)
-r.vasc.stem.r0.9.rem <- bd.ms(time = stem.age.vasc, n = sum(family.data$global.rich), crown = FALSE, epsilon = 0.9)
-
-
-### Calculating the the 95% confidence intervals of species richness based on global r, epsilon and time for vascular plants.
-
-## Stem age
-### Generating table for plotting
-
-limits.vasc.stem.rem <- data.frame(
-    time = seq(1, 300, by = 1),
-    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r0.rem, epsilon = 0)),
-    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r05.rem, epsilon = 0.5)),
-    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r0.9.rem, epsilon = 0.9))
-    )
-names(limits.vasc.stem.rem) <- c("age", "lb.0", "ub.0", "lb.05", "ub.05", "lb.09", "ub.09")
-
-
 
 ## Calculating Pagel's lambda for each epsilon value
 phylosig.r0.rem <- pgls(r.e0.stem ~ 1, data = data.pgls.rem, lambda = "ML")
@@ -278,34 +291,67 @@ phylosig.r05.rem <- pgls(r.e05.stem ~ 1, data = data.pgls.rem, lambda = "ML")
 phylosig.r09.rem <- pgls(r.e09.stem ~ 1, data = data.pgls.rem, lambda = "ML")
 
 ## Fitting PGLS
-mod.r0.rem <- caper::pgls(r.e0.stem ~ shannon, data = data.pgls.rem, lambda = setNames(summary(phylosig.r0)$param[2], NULL))
-mod.r05.rem <- caper::pgls(r.e05.stem ~ shannon, data = data.pgls.rem, lambda = setNames(summary(phylosig.r05)$param[2], NULL))
-mod.r09.rem <- caper::pgls(r.e09.stem ~ shannon, data = data.pgls.rem, lambda = setNames(summary(phylosig.r09)$param[2], NULL))
+mod.r0.rem <- caper::pgls(r.e0.stem ~ shannon, data = data.pgls.rem, lambda = setNames(summary(phylosig.r0.rem)$param[2], NULL))
+mod.r05.rem <- caper::pgls(r.e05.stem ~ shannon, data = data.pgls.rem, lambda = setNames(summary(phylosig.r05.rem)$param[2], NULL))
+mod.r09.rem <- caper::pgls(r.e09.stem ~ shannon, data = data.pgls.rem, lambda = setNames(summary(phylosig.r09.rem)$param[2], NULL))
 
 ## Fitting standard linear models
 lm.r0.rem <- lm(r.e0.stem ~ shannon, data = family.data.clean.rem)
 lm.r05.rem <- lm(r.e05.stem ~ shannon, data = family.data.clean.rem)
 lm.r09.rem <- lm(r.e09.stem ~ shannon, data = family.data.clean.rem)
 
+
+
 ## phylANOVA
 data.aov.rem <- family.data.clean.rem[-which(is.na(match(family.data.clean.rem$family, tree.pruned$tip.label))), ]
-phyaov.r0.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0.stem, data.aov$family))
-phyaov.r05.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e05.stem, data.aov$family))
-phyaov.r09.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov$family))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09.stem, data.aov$family))
+data.aov.rem <- data.aov.rem[data.aov.rem$type.50 != "ER", ]
+data.aov.rem <- data.aov.rem[data.aov.rem$type.60 != "ER", ]
+data.aov.rem <- data.aov.rem[data.aov.rem$type.80 != "ER", ]
+data.aov.rem <- data.aov.rem[data.aov.rem$type.100 != "ER", ]
+
+### Threshold 50%
+phyaov.r0.50.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov.rem$family))]), x = setNames(data.aov.rem$type.50, data.aov.rem$family), y = setNames(data.aov.rem$r.e0.stem, data.aov.rem$family))
+phyaov.r09.50.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov.rem$family))]), x = setNames(data.aov.rem$type.50, data.aov.rem$family), y = setNames(data.aov.rem$r.e09.stem, data.aov.rem$family))
+
+### Threshold 60%
+phyaov.r0.60.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov.rem$family))]), x = setNames(data.aov.rem$type.60, data.aov.rem$family), y = setNames(data.aov.rem$r.e0.stem, data.aov.rem$family))
+phyaov.r09.60.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov.rem$family))]), x = setNames(data.aov.rem$type.60, data.aov.rem$family), y = setNames(data.aov.rem$r.e09.stem, data.aov.rem$family))
+
+### Threshold 80%
+phyaov.r0.80.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov.rem$family))]), x = setNames(data.aov.rem$type.80, data.aov.rem$family), y = setNames(data.aov.rem$r.e0.stem, data.aov.rem$family))
+phyaov.r09.80.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov.rem$family))]), x = setNames(data.aov.rem$type.80, data.aov.rem$family), y = setNames(data.aov.rem$r.e09.stem, data.aov.rem$family))
+
+### Threshold 100%
+phyaov.r0.100.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov.rem$family))]), x = setNames(data.aov.rem$type.100, data.aov.rem$family), y = setNames(data.aov.rem$r.e0.stem, data.aov.rem$family))
+phyaov.r09.100.rem <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[is.na(match(tree.pruned$tip.label, data.aov.rem$family))]), x = setNames(data.aov.rem$type.100, data.aov.rem$family), y = setNames(data.aov.rem$r.e09.stem, data.aov.rem$family))
 
 ## Parametric ANOVA
-aov.r0.rem <- aov(r.e0.stem ~ type.60, data = family.data.clean.rem)
-aov.r05.rem <- aov(r.e05.stem ~ type.60, data = family.data.clean.rem)
-aov.r09.rem <- aov(r.e09.stem ~ type.60, data = family.data.clean.rem)
+
+### Threshold 50%
+aov.r0.50.rem <- aov(r.e0.stem ~ type.50, data = family.data.clean.rem)
+aov.r09.50.rem <- aov(r.e09.stem ~ type.50, data = family.data.clean.rem)
+
+### Threshold 60%
+aov.r0.60.rem <- aov(r.e0.stem ~ type.60, data = family.data.clean.rem)
+aov.r09.60.rem <- aov(r.e09.stem ~ type.60, data = family.data.clean.rem)
+
+### Threshold 80%
+aov.r0.80.rem <- aov(r.e0.stem ~ type.80, data = family.data.clean.rem)
+aov.r09.80.rem <- aov(r.e09.stem ~ type.80, data = family.data.clean.rem)
+
+### Threshold 100%
+aov.r0.100.rem <- aov(r.e0.stem ~ type.100, data = family.data.clean.rem)
+aov.r09.100.rem <- aov(r.e09.stem ~ type.100, data = family.data.clean.rem)
+
 
 ## Appending results to original data frame for plotting
 family.data.clean.rem$lm.r0[which(!is.na(family.data.clean.rem$r.e0.stem))] <- fitted(lm.r0.rem)
 family.data.clean.rem$lm.r05[which(!is.na(family.data.clean.rem$r.e05.stem))] <- fitted(lm.r05.rem)
 family.data.clean.rem$lm.r09[which(!is.na(family.data.clean.rem$r.e09.stem))] <- fitted(lm.r09.rem)
 
-family.data.clean.rem$pgls.r0 <- fitted(mod.r0)[,1][match(family.data.clean.rem$family, names(fitted(mod.r0.rem)[,1]))]
-family.data.clean.rem$pgls.r05 <- fitted(mod.r05)[,1][match(family.data.clean.rem$family, names(fitted(mod.r05.rem)[,1]))]
-family.data.clean.rem$pgls.r09 <- fitted(mod.r09)[,1][match(family.data.clean.rem$family, names(fitted(mod.r09.rem)[,1]))]
+family.data.clean.rem$pgls.r0 <- fitted(mod.r0.rem)[,1][match(family.data.clean.rem$family, names(fitted(mod.r0.rem)[,1]))]
+family.data.clean.rem$pgls.r05 <- fitted(mod.r05.rem)[,1][match(family.data.clean.rem$family, names(fitted(mod.r05.rem)[,1]))]
+family.data.clean.rem$pgls.r09 <- fitted(mod.r09.rem)[,1][match(family.data.clean.rem$family, names(fitted(mod.r09.rem)[,1]))]
 
 
 ## Age and Richness as a function of Shannon index 
