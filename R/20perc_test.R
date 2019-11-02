@@ -84,25 +84,3 @@ sampled.datasets <- llply(as.list(1:50), .fun = myco.sampling, .parallel = TRUE)
 
 save(sampled.datasets, file = "./output/sampled_datasets_20perc.RData")
 
-tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, data.sampled$family))])
-data.pgls <- comparative.data(tree.pruned, data.sampled, names.col = "family")
-
-phylosig.r0 <- pgls(r.e0 ~ 1, data = data.pgls, lambda = "ML")
-phylosig.r09 <- pgls(r.e09 ~ 1, data = data.pgls, lambda = "ML")
-
-## PGLS
-mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r0)$param[2], NULL))
-mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r0)$param[2], NULL))
-
-## LM
-lm.r0 <- lm(r.e0 ~ shannon, data = data.sampled)
-lm.r09 <- lm(r.e09 ~ shannon, data = data.sampled)
-
-## phyANOVA
-data.aov <- data.sampled[-which(is.na(match(data.sampled$family, fulltree$tip.label))), ]
-data.aov <- data.aov[-which(is.na(data.aov$r.e0)),]
-data.aov <- data.aov[-which(data.aov$type.60 == "ER"), ]
-
-phyaov.r0 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e0, data.aov$family))
-phyaov.r09 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$r.e09, data.aov$family))
-

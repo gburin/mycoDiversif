@@ -19,6 +19,7 @@ header-includes:
 knitr::opts_chunk$set(echo = FALSE, fig.width = 11, fig.height = 9, warning = FALSE, message = FALSE, fig.pos = 'H')
 library("kableExtra")
 library("pander")
+library("cowplot")
 rm(list = ls())
 load("../output/main_results.RData")
 
@@ -1383,3 +1384,97 @@ kable_styling(kable(x = data.frame(epsilon = c(0, 0.9),
 
 # Adding randomly 20% of misassignment of mycorrhizal type
 
+```{r}
+
+rm(list = ls())
+load("../output/results_20perc.RData")
+
+```
+
+## Regressions
+
+```{r fig.cap = "Distribution of (A) p-values and (B) R² values for the same analyses of the main paper, but using all 50 replicate datasets with mycorrhizal types for 20% of species randomly sampled. Dashed vertical lines represent the corresponding empirical value from the main analysis."}
+
+main.data.reg <- data.frame(
+    epsilon = c(0, 0.9, 0, 0.9),
+    model = c("PGLS", "PGLS", "LM", "LM"),
+    pvalue = c(2.336e-12, 7.124e-13, 5.908e-15, 5.464e-15),
+    R2 = c(0.1251, 0.1307, 0.1524, 0.1527)
+)
+
+pvalue.20perc.reg <-
+    ggplot(data = pvalue.reg) +
+    geom_histogram(aes(x = log10(pvalue), y = ..density.., fill = model), alpha = 0.3, colour = "white") +
+    geom_density(aes(x = log10(pvalue), colour = model, fill = model), alpha = 0.3) +
+    geom_vline(data = main.data.reg, aes(xintercept = log10(pvalue), group = model), colour = "black", linetype = "dashed") +
+    facet_grid(model ~ epsilon) +
+    scale_colour_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
+    scale_fill_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
+    labs(x = "R²", y = "Density") +
+    theme_cowplot() +
+    theme(legend.position = "none")
+
+pvalue.20perc.r2 <-
+    ggplot(data = pvalue.reg) +
+    geom_histogram(aes(x = R2, y = ..density.., fill = model), alpha = 0.3, colour = "white") +
+    geom_density(aes(x = R2, fill = model, colour = model), alpha = 0.3) +
+    geom_vline(data = main.data.reg, aes(xintercept = R2, group = model), colour = "black", linetype = "dashed") +
+    facet_grid(model ~ epsilon) +
+    scale_colour_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
+    scale_fill_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
+    labs(x = "R²", y = "Density") +
+    theme_cowplot() +
+    theme(legend.position = "none")
+
+plot_grid(pvalue.20perc.reg,
+          pvalue.20perc.r2,
+          ncol = 2,
+          align = 'h',
+          labels = LETTERS[1:2]
+          )
+
+```
+
+\pagebreak
+
+## ANOVAs
+
+```{r fig.height = 13, fig.cap = "Distribution of p-values of (A) epsilon = 0 and (B) epsilon = 0.9 for the both phylogenetic and standard ANOVA, but using all 50 replicate datasets with mycorrhizal types for 20% of species randomly sampled. Dashed vertical lines represent the corresponding empirical value from the main analysis."}
+
+main.data.aov <- data.frame(
+    threshold = rep(c(50, 60, 80, 100), 2),
+    model = rep(c("phy", "std"), each = 4),
+    pvalue.r0 = c(0.089, 0.013, 0.001, 0.001),
+    pvalue.r09 = c(0.162, 0.007, 0.001, 0.001)
+    )
+
+pvalue.20perc.aov.r0 <-
+    ggplot(data = pvalue.aov) +
+    geom_histogram(aes(x = pvalue.r0, y = ..density.., fill = model), alpha = 0.3, colour = "white") +
+    geom_vline(data = main.data.aov, aes(xintercept = pvalue.r0, group = model), colour = "black", linetype = "dashed") +
+    facet_grid(threshold ~ model) +
+    scale_colour_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
+    scale_fill_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
+    labs(x = "R²", y = "Density") +
+    theme_cowplot() +
+    theme(legend.position = "none")
+
+pvalue.20perc.aov.r09 <-
+    ggplot(data = pvalue.aov) +
+    geom_histogram(aes(x = pvalue.r09, y = ..density.., fill = model), alpha = 0.3, colour = "white") +
+    geom_vline(data = main.data.aov, aes(xintercept = pvalue.r09, group = model), colour = "black", linetype = "dashed") +
+    facet_grid(threshold ~ model) +
+    scale_colour_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
+    scale_fill_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
+    labs(x = "R²", y = "Density") +
+    theme_cowplot() +
+    theme(legend.position = "none")
+
+plot_grid(pvalue.20perc.aov.r0,
+          pvalue.20perc.aov.r09,
+          ncol = 2,
+          align = 'h',
+          labels = LETTERS[1:2]
+          )
+
+```
