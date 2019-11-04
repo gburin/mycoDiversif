@@ -85,599 +85,49 @@
 \floatplacement{figure}{H}
 \floatplacement{table}{H}
 \floatplacement{verbatim}{H}
+\newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
 
 \begin{document}
 \maketitle
 
-\hypertarget{phylogenetic-signal-of-mycorrhizal-types}{%
-\section{Phylogenetic signal of Mycorrhizal
-types}\label{phylogenetic-signal-of-mycorrhizal-types}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-2}P-values for test of phylogenetic signal (D) of each mycorrhizal type. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{r|l|l|l|l|l}
-\hline
-Threshold & model & AM & EM & MIX & NM\\
-\hline
-50 & random & \textbf{0} & \textbf{0} & 0.842 & \textbf{0}\\
-\hline
-50 & BM & 0.899 & 0.969 & \textbf{0.043} & 0.832\\
-\hline
-60 & random & \textbf{0} & \textbf{0} & \textbf{0.031} & \textbf{0}\\
-\hline
-60 & BM & 0.88 & 0.949 & 0.215 & 0.852\\
-\hline
-80 & random & \textbf{0} & \textbf{0} & \textbf{0} & \textbf{0}\\
-\hline
-80 & BM & 0.821 & 0.956 & 0.228 & 0.747\\
-\hline
-100 & random & \textbf{0} & \textbf{0} & 0.247 & \textbf{0}\\
-\hline
-100 & BM & 0.083 & 0.958 & \textbf{0} & 0.643\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{analysis-per-genera-excluding-100-mix-families}{%
-\section{Analysis per genera excluding 100\% MIX
-families}\label{analysis-per-genera-excluding-100-mix-families}}
-
-\hypertarget{boxplots}{%
-\subsection{Boxplots}\label{boxplots}}
-
-\hypertarget{threshold-50}{%
-\subsubsection{Threshold 50\%}\label{threshold-50}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-3-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\hypertarget{threshold-60}{%
-\subsubsection{Threshold 60\%}\label{threshold-60}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-4-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\hypertarget{threshold-80}{%
-\subsubsection{Threshold 80\%}\label{threshold-80}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-5-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\hypertarget{threshold-100}{%
-\subsubsection{Threshold 100\%}\label{threshold-100}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-6-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\pagebreak
-
-\hypertarget{summary-statistics}{%
-\subsection{Summary statistics}\label{summary-statistics}}
-
-\hypertarget{phyanova}{%
-\subsubsection{phyANOVA}\label{phyanova}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-7}Summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{r|l|l|l|l}
-\hline
-Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
-\hline
-50 & 3.996 & 0.089 & 3.147 & 0.162\\
-\hline
-60 & 7.255 & \textbf{0.013} & 7.35 & \textbf{0.007}\\
-\hline
-80 & 14.181 & \textbf{0.001} & 13.177 & \textbf{0.001}\\
-\hline
-100 & 44.007 & \textbf{0.001} & 52.476 & \textbf{0.001}\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{standard-anova}{%
-\subsubsection{Standard ANOVA}\label{standard-anova}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-8}summary statistics for standard ANOVA for both values of epsilon. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{r|l|l|l|l}
-\hline
-Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
-\hline
-50 & 3.996 & \textbf{0.008} & 3.147 & \textbf{0.025}\\
-\hline
-60 & 7.255 & \textbf{0} & 7.35 & \textbf{0}\\
-\hline
-80 & 14.181 & \textbf{0} & 13.177 & \textbf{0}\\
-\hline
-100 & 44.007 & \textbf{0} & 52.476 & \textbf{0}\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{posthoc-tests}{%
-\subsection{Posthoc tests}\label{posthoc-tests}}
-
-\hypertarget{phyanova-1}{%
-\subsubsection{phyANOVA}\label{phyanova-1}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-9}Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{r|l|l|l|l|l|l|l|l|l}
-\hline
-Threshold & Mycorrhizal.Type & AM.r0 & EM.r0 & MIX.r0 & NM.r0 & AM.r09 & EM.r09 & MIX.r09 & NM.r09\\
-\hline
-50 & AM & 1 & 0.858 & \textbf{0.042} & 0.747 & 1 & 1 & \textbf{0.048} & 1\\
-\hline
-50 & EM & 0.858 & 1 & 0.716 & 0.858 & 1 & 1 & 0.62 & 1\\
-\hline
-50 & MIX & \textbf{0.042} & 0.716 & 1 & \textbf{0.042} & \textbf{0.048} & 0.62 & 1 & \textbf{0.048}\\
-\hline
-50 & NM & 0.747 & 0.858 & \textbf{0.042} & 1 & 1 & 1 & \textbf{0.048} & 1\\
-\hline
-60 & AM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.006} & 1\\
-\hline
-60 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 0.952 & 1\\
-\hline
-60 & MIX & \textbf{0.006} & 1 & 1 & \textbf{0.006} & \textbf{0.006} & 0.952 & 1 & \textbf{0.006}\\
-\hline
-60 & NM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.006} & 1\\
-\hline
-80 & AM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.006} & 1\\
-\hline
-80 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-\hline
-80 & MIX & \textbf{0.006} & 1 & 1 & \textbf{0.006} & \textbf{0.006} & 1 & 1 & \textbf{0.006}\\
-\hline
-80 & NM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.006} & 1\\
-\hline
-100 & AM & 1 & 0.552 & \textbf{0.006} & 0.868 & 1 & 0.567 & \textbf{0.006} & 0.627\\
-\hline
-100 & EM & 0.552 & 1 & 0.552 & 0.552 & 0.567 & 1 & 0.468 & 0.567\\
-\hline
-100 & MIX & \textbf{0.006} & 0.552 & 1 & \textbf{0.006} & \textbf{0.006} & 0.468 & 1 & \textbf{0.006}\\
-\hline
-100 & NM & 0.868 & 0.552 & \textbf{0.006} & 1 & 0.627 & 0.567 & \textbf{0.006} & 1\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{standard-anova-1}{%
-\subsubsection{Standard ANOVA}\label{standard-anova-1}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-10}Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{l|l|l|l|l|l|l|l|l}
-\hline
-Types & 50.r0 & 60.r0 & 80.r0 & 100.r0 & 50.r09 & 60.r09 & 80.r09 & 100.r09\\
-\hline
-EM-AM & 0.6181 & 6.86e-01 & 5.80e-01 & 1.54e-01 & 0.8536 & 8.66e-01 & 7.94e-01 & 0.2459\\
-\hline
-MIX-AM & \textbf{0.0175} & 4.19e-05 & 8.91e-09 & \textbf{0.00e+00} & \textbf{0.0253} & 4.66e-05 & 7.23e-08 & \textbf{0.0000}\\
-\hline
-NM-AM & 0.3644 & 1.00e+00 & 7.83e-01 & 9.97e-01 & 0.6635 & 9.40e-01 & 4.56e-01 & 0.9239\\
-\hline
-MIX-EM & 0.3148 & 4.92e-01 & 4.83e-01 & 2.51e-01 & 0.2476 & 3.30e-01 & 3.79e-01 & 0.0745\\
-\hline
-NM-EM & 0.9704 & 7.53e-01 & 3.74e-01 & 1.98e-01 & 0.9934 & 7.65e-01 & 4.09e-01 & 0.1964\\
-\hline
-NM-MIX & 0.0897 & 1.50e-03 & 4.83e-06 & 7.96e-10 & 0.0834 & 3.13e-04 & 1.98e-06 & \textbf{0.0000}\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{phylogenetic-signal-of-diversification-rates-age-and-richness}{%
-\subsection{Phylogenetic signal of diversification rates, age, and
-richness}\label{phylogenetic-signal-of-diversification-rates-age-and-richness}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-11}Phylogenetic signal of the four response variables.}
-\centering
-\begin{tabular}{l|r}
-\hline
-Variable & Lambda\\
-\hline
-r.e0 & 0.475\\
-\hline
-r.e09 & 0.358\\
-\hline
-Stem.Age & 1.000\\
-\hline
-Richness & 0.000\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{analysis-per-genera-including-all-families}{%
-\section{Analysis per genera including all
-families}\label{analysis-per-genera-including-all-families}}
-
-\hypertarget{boxplots-1}{%
-\subsection{Boxplots}\label{boxplots-1}}
-
-\hypertarget{threshold-50-1}{%
-\subsubsection{Threshold 50\%}\label{threshold-50-1}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-13-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\hypertarget{threshold-60-1}{%
-\subsubsection{Threshold 60\%}\label{threshold-60-1}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-14-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\hypertarget{threshold-80-1}{%
-\subsubsection{Threshold 80\%}\label{threshold-80-1}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-15-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\hypertarget{threshold-100-1}{%
-\subsubsection{Threshold 100\%}\label{threshold-100-1}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-16-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\pagebreak
-
-\hypertarget{summary-statistics-1}{%
-\subsection{Summary statistics}\label{summary-statistics-1}}
-
-\hypertarget{phyanova-2}{%
-\subsubsection{phyANOVA}\label{phyanova-2}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-17}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{l|l|l|l|l}
-\hline
-Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
-\hline
-50 & 1.295 & 0.631 & 0.696 & 0.825\\
-\hline
-60 & 2.842 & 0.244 & 2.153 & 0.402\\
-\hline
-80 & 8.598 & \textbf{0.005} & 7.033 & \textbf{0.022}\\
-\hline
-100 & 33.621 & \textbf{0.001} & 37.429 & \textbf{0.001}\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{standard-anova-2}{%
-\subsubsection{Standard ANOVA}\label{standard-anova-2}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-18}summary statistics for standard ANOVA for both values of epsilon. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{l|l|l|l|l}
-\hline
-Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
-\hline
-50 & 1.295 & 0.276 & 0.696 & 0.555\\
-\hline
-60 & 2.842 & \textbf{0.038} & 2.153 & 0.093\\
-\hline
-80 & 8.598 & \textbf{0} & 7.033 & \textbf{0}\\
-\hline
-100 & 33.621 & \textbf{0} & 37.429 & \textbf{0}\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{posthoc-tests-1}{%
-\subsection{Posthoc tests}\label{posthoc-tests-1}}
-
-\hypertarget{phyanova-3}{%
-\subsubsection{phyANOVA}\label{phyanova-3}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-19}Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{r|l|l|l|l|l|l|l|l|l}
-\hline
-Threshold & Mycorrhizal.Type & AM.r0 & EM.r0 & MIX.r0 & NM.r0 & AM.r09 & EM.r09 & MIX.r09 & NM.r09\\
-\hline
-50 & AM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-\hline
-50 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-\hline
-50 & MIX & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-\hline
-50 & NM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-\hline
-60 & AM & 1 & 1 & 0.355 & 1 & 1 & 1 & 0.665 & 1\\
-\hline
-60 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-\hline
-60 & MIX & 0.355 & 1 & 1 & 0.33 & 0.665 & 1 & 1 & 0.348\\
-\hline
-60 & NM & 1 & 1 & 0.33 & 1 & 1 & 1 & 0.348 & 1\\
-\hline
-80 & AM & 1 & 1 & \textbf{0.01} & 1 & 1 & 1 & \textbf{0.03} & 1\\
-\hline
-80 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-\hline
-80 & MIX & \textbf{0.01} & 1 & 1 & \textbf{0.006} & \textbf{0.03} & 1 & 1 & \textbf{0.018}\\
-\hline
-80 & NM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.018} & 1\\
-\hline
-100 & AM & 1 & 0.64 & \textbf{0.006} & 0.878 & 1 & 0.796 & \textbf{0.006} & 0.796\\
-\hline
-100 & EM & 0.64 & 1 & 0.864 & 0.64 & 0.796 & 1 & 0.796 & 0.796\\
-\hline
-100 & MIX & \textbf{0.006} & 0.864 & 1 & \textbf{0.006} & \textbf{0.006} & 0.796 & 1 & \textbf{0.006}\\
-\hline
-100 & NM & 0.878 & 0.64 & \textbf{0.006} & 1 & 0.796 & 0.796 & \textbf{0.006} & 1\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{standard-anova-3}{%
-\subsubsection{Standard ANOVA}\label{standard-anova-3}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-20}Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{l|l|l|l|l|l|l|l|l}
-\hline
-Pairs & 50.r0 & 60.r0 & 80.r0 & 100.r0 & 50.r09 & 60.r09 & 80.r09 & 100.r09\\
-\hline
-EM.AM & 0.616 & 0.689 & 5.87e-01 & 1.71e-01 & 0.852 & 0.869 & 0.799788 & 2.78e-01\\
-\hline
-MIX.AM & 0.988 & \textbf{0.032} & 2.12e-05 & \textbf{0.00e+00} & 0.986 & 0.103 & \textbf{0.000379} & \textbf{0.00e+00}\\
-\hline
-NM.AM & 0.362 & 1.000 & 7.87e-01 & 9.97e-01 & 0.661 & 0.941 & 0.466891 & 9.31e-01\\
-\hline
-MIX.EM & 0.833 & 0.998 & 9.37e-01 & 6.20e-01 & 0.815 & 0.991 & 0.909145 & 3.67e-01\\
-\hline
-NM.EM & 0.970 & 0.755 & 3.82e-01 & 2.16e-01 & 0.993 & 0.769 & 0.419083 & 2.26e-01\\
-\hline
-NM.MIX & 0.907 & 0.186 & 9.22e-04 & 2.98e-07 & 0.763 & 0.139 & \textbf{0.000825} & 8.54e-09\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{scatterplots}{%
-\subsection{Scatterplots}\label{scatterplots}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-21-1.pdf}
-\caption{Scatterplots showing the relationship between mycorrhizal
-diversity index and diversification rates (a and c), species richness
-(b) and age family (d). Diversification rates were estimated with
-epsilon = 0 (a) and with epsilon = 0.9 (c). The red and blue lines
-indicate the results of a linear model and a phylogenetic generalized
-least squares (PGLS) fit, respectively.}
-\end{figure}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-22}Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{r|l|l|l|l}
-\hline
-epsilon & pvalue.PGLS & R2.PGLS & pvalue.LM & R2.LM\\
-\hline
-0.0 & \textbf{4.637e-08} & 0.07343 & \textbf{6.325e-10} & 0.09319\\
-\hline
-0.9 & \textbf{6.858e-08} & 0.07157 & \textbf{4.512e-09} & 0.08402\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{family-classification-based-on-different-thresholds}{%
-\section{Family classification based on different
-thresholds}\label{family-classification-based-on-different-thresholds}}
-
-\begin{table}[H]
-
-\caption{\label{tab:unnamed-chunk-23}Mycorrhizal type assigned to each family based on 4 different percentage thresholds (50, 60, 80 and 100). Significant values are highlighted in bold.}
-\centering
-\begin{tabular}{l|r|r|r|r|r}
-\hline
-Threshold & AM & EM & ER & MIX & NM\\
-\hline
-50 & 296 & 10 & 1 & 23 & 60\\
-\hline
-60 & 289 & 9 & 1 & 45 & 46\\
-\hline
-80 & 273 & 9 & 1 & 70 & 37\\
-\hline
-100 & 231 & 9 & 1 & 116 & 33\\
-\hline
-\end{tabular}
-\end{table}
-
-\pagebreak
-
-\hypertarget{species-level-database}{%
-\section{Species-level database}\label{species-level-database}}
+\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}
+
+\hypertarget{analyses-with-the-species-level-database}{%
+\section{Analyses with the Species-level
+database}\label{analyses-with-the-species-level-database}}
 
 \hypertarget{clean-database---excluding-species-with-any-remark}{%
 \subsection{Clean database - excluding species with any
 remark}\label{clean-database---excluding-species-with-any-remark}}
 
-\hypertarget{boxplots-2}{%
-\subsubsection{Boxplots}\label{boxplots-2}}
-
-\hypertarget{threshold-50-2}{%
-\paragraph{Threshold 50\%}\label{threshold-50-2}}
+\hypertarget{boxplots-using-the-clean-species-level-database}{%
+\subsubsection{Boxplots using the clean species-level
+database}\label{boxplots-using-the-clean-species-level-database}}
 
 \begin{figure}
 \centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-25-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-3-1.pdf}
+\caption{Relationship between mycorrhizal type and diversification rates
+using the thresholds (a) 50\%, (b) 60\%, (c) 80\% and (d) 100\% for MIX
+state assignment. Each panel shows diversification rate estimated with
+epsilon = 0 (upper) and diversification rate estimated with epsilon =
+0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM:
+non-mycorrhizal and MIX (families with no dominance of any specific
+mycorrhizal association). The size of the points indicates the
+Mycorrhizal Type Diversity Index value for each lineage, indicating a
+predominance of larger indices with higher diversification rates.}
 \end{figure}
 
-\pagebreak
+\hypertarget{summary-statistics-using-clean-species-level-database}{%
+\subsubsection{Summary statistics using clean species-level
+database}\label{summary-statistics-using-clean-species-level-database}}
 
-\hypertarget{threshold-60-2}{%
-\paragraph{Threshold 60\%}\label{threshold-60-2}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-26-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\pagebreak
-
-\hypertarget{threshold-80-2}{%
-\paragraph{Threshold 80\%}\label{threshold-80-2}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-27-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\pagebreak
-
-\hypertarget{threshold-100-2}{%
-\paragraph{Threshold 100\%}\label{threshold-100-2}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-28-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\pagebreak
-
-\hypertarget{summary-statistics-2}{%
-\subsection{Summary statistics}\label{summary-statistics-2}}
-
-\hypertarget{phyanova-4}{%
-\subsubsection{phyANOVA}\label{phyanova-4}}
+\hypertarget{phyanova}{%
+\paragraph{phyANOVA}\label{phyanova}}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-29}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-4}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{r|l|l|l|l}
 \hline
@@ -694,12 +144,12 @@ Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
 \end{tabular}
 \end{table}
 
-\hypertarget{standard-anova-4}{%
-\subsubsection{Standard ANOVA}\label{standard-anova-4}}
+\hypertarget{standard-anova}{%
+\paragraph{Standard ANOVA}\label{standard-anova}}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-30}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-5}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{r|l|l|l|l}
 \hline
@@ -716,15 +166,16 @@ Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
 \end{tabular}
 \end{table}
 
-\hypertarget{posthoc-tests-2}{%
-\subsection{Posthoc tests}\label{posthoc-tests-2}}
+\hypertarget{posthoc-tests-using-clean-species-level-database}{%
+\subsubsection{Posthoc tests using clean species-level
+database}\label{posthoc-tests-using-clean-species-level-database}}
 
-\hypertarget{phyanova-5}{%
-\subsubsection{phyANOVA}\label{phyanova-5}}
+\hypertarget{phyanova-1}{%
+\paragraph{phyANOVA}\label{phyanova-1}}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-31}Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-6}Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{r|l|l|l|l|l|l|l|l|l}
 \hline
@@ -765,49 +216,48 @@ Threshold & Mycorrhizal.Type & AM.r0 & EM.r0 & MIX.r0 & NM.r0 & AM.r09 & EM.r09 
 \end{tabular}
 \end{table}
 
-\hypertarget{standard-anova-5}{%
-\subsubsection{Standard ANOVA}\label{standard-anova-5}}
+\hypertarget{standard-anova-1}{%
+\paragraph{Standard ANOVA}\label{standard-anova-1}}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-32}Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-7}Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{l|l|l|l|l|l|l|l|l}
 \hline
 Types & 50.r0 & 60.r0 & 80.r0 & 100.r0 & 50.r09 & 60.r09 & 80.r09 & 100.r09\\
 \hline
-EM.AM & 0.964 & 0.992 & 0.9851 & 6.13e-01 & 0.993 & 1.000 & 1.0000 & 7.80e-01\\
+EM.AM & 0.964 & 0.992 & 0.985 & 0.613 & 0.993 & 1 & 1 & 0.78\\
 \hline
-MIX.AM & 0.995 & 0.146 & \textbf{0.0120} & 1.75e-13 & 0.858 & 0.348 & \textbf{0.0358} & 1.22e-13\\
+MIX.AM & 0.995 & 0.146 & \textbf{0.012} & \textbf{0} & 0.858 & 0.348 & \textbf{0.036} & \textbf{0}\\
 \hline
-NM.AM & 0.776 & 0.938 & 0.9112 & 8.08e-01 & 0.831 & 0.974 & 0.7779 & 6.26e-01\\
+NM.AM & 0.776 & 0.938 & 0.911 & 0.808 & 0.831 & 0.974 & 0.778 & 0.626\\
 \hline
-MIX.EM & 0.954 & 0.769 & 0.7037 & 2.37e-01 & 0.866 & 0.768 & 0.6219 & 1.06e-01\\
+MIX.EM & 0.954 & 0.769 & 0.704 & 0.237 & 0.866 & 0.768 & 0.622 & 0.106\\
 \hline
-NM.EM & 1.000 & 1.000 & 0.8968 & 4.11e-01 & 0.996 & 0.993 & 0.9273 & 4.04e-01\\
+NM.EM & 1 & 1 & 0.897 & 0.411 & 0.996 & 0.993 & 0.927 & 0.404\\
 \hline
-NM.MIX & 0.892 & 0.632 & 0.0896 & 3.04e-04 & 0.663 & 0.780 & 0.0810 & 5.05e-05\\
+NM.MIX & 0.892 & 0.632 & 0.09 & \textbf{0} & 0.663 & 0.78 & 0.081 & \textbf{0}\\
 \hline
 \end{tabular}
 \end{table}
 
-\hypertarget{scatterplots-1}{%
-\subsubsection{Scatterplots}\label{scatterplots-1}}
+\hypertarget{scatterplots}{%
+\subsubsection{Scatterplots}\label{scatterplots}}
 
 \begin{figure}
 \centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-33-1.pdf}
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-8-1.pdf}
 \caption{Scatterplots showing the relationship between mycorrhizal
-diversity index and diversification rates (a and c), species richness
-(b) and age family (d). Diversification rates were estimated with
-epsilon = 0 (a) and with epsilon = 0.9 (c). The red and blue lines
-indicate the results of a linear model and a phylogenetic generalized
-least squares (PGLS) fit, respectively.}
+diversity index and diversification rates. Diversification rates were
+estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and
+blue lines indicate the results of a linear model and a phylogenetic
+generalized least squares (PGLS) fit, respectively.}
 \end{figure}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-34}Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-9}Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{r|l|l|l|l}
 \hline
@@ -820,96 +270,38 @@ epsilon & pvalue.PGLS & R2.PGLS & pvalue.LM & R2.LM\\
 \end{tabular}
 \end{table}
 
-\pagebreak
+\hypertarget{full-species-level-database---including-species-with-any-remark}{%
+\subsection{Full species-level database - including species with any
+remark}\label{full-species-level-database---including-species-with-any-remark}}
 
-\hypertarget{more-inclusive-database---including-species-with-any-remark}{%
-\subsection{More inclusive database - including species with any
-remark}\label{more-inclusive-database---including-species-with-any-remark}}
-
-\hypertarget{boxplots-3}{%
-\subsubsection{Boxplots}\label{boxplots-3}}
-
-\hypertarget{threshold-50-3}{%
-\paragraph{Threshold 50\%}\label{threshold-50-3}}
+\hypertarget{boxplots-using-full-species-level-database}{%
+\subsubsection{Boxplots using full species-level
+database}\label{boxplots-using-full-species-level-database}}
 
 \begin{figure}
 \centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-36-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-11-1.pdf}
+\caption{Relationship between mycorrhizal type and diversification rates
+using the thresholds (a) 50\%, (b) 60\%, (c) 80\% and (d) 100\% for MIX
+state assignment. Each panel shows diversification rate estimated with
+epsilon = 0 (upper) and diversification rate estimated with epsilon =
+0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM:
+non-mycorrhizal and MIX (families with no dominance of any specific
+mycorrhizal association). The size of the points indicates the
+Mycorrhizal Type Diversity Index value for each lineage, indicating a
+predominance of larger indices with higher diversification rates.}
 \end{figure}
 
-\pagebreak
+\hypertarget{summary-statistics-using-full-species-level-database}{%
+\subsubsection{Summary statistics using full species-level
+database}\label{summary-statistics-using-full-species-level-database}}
 
-\hypertarget{threshold-60-3}{%
-\paragraph{Threshold 60\%}\label{threshold-60-3}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-37-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\pagebreak
-
-\hypertarget{threshold-80-3}{%
-\paragraph{Threshold 80\%}\label{threshold-80-3}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-38-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\pagebreak
-
-\hypertarget{threshold-100-3}{%
-\paragraph{Threshold 100\%}\label{threshold-100-3}}
-
-\begin{figure}
-\centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-39-1.pdf}
-\caption{Relationship between mycorrhizal type and diversification
-rates. a) diversification rate estimated with epsilon = 0 and b)
-diversification rate estimated with epsilon = 0.9. AM: Arbuscular
-mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
-with no dominance of any specific mycorrhizal association). The size of
-the points indicates the Mycorrhizal Type Diversity Index value for each
-lineage, indicating a predominance of larger indices with higher
-diversification rates.}
-\end{figure}
-
-\pagebreak
-
-\hypertarget{summary-statistics-3}{%
-\subsection{Summary statistics}\label{summary-statistics-3}}
-
-\hypertarget{phyanova-6}{%
-\subsubsection{phyANOVA}\label{phyanova-6}}
+\hypertarget{phyanova-2}{%
+\paragraph{phyANOVA}\label{phyanova-2}}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-40}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-12}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{r|l|l|l|l}
 \hline
@@ -926,12 +318,12 @@ Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
 \end{tabular}
 \end{table}
 
-\hypertarget{standard-anova-6}{%
-\subsubsection{Standard ANOVA}\label{standard-anova-6}}
+\hypertarget{standard-anova-2}{%
+\paragraph{Standard ANOVA}\label{standard-anova-2}}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-41}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-13}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{r|l|l|l|l}
 \hline
@@ -948,15 +340,16 @@ Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
 \end{tabular}
 \end{table}
 
-\hypertarget{posthoc-tests-3}{%
-\subsection{Posthoc tests}\label{posthoc-tests-3}}
+\hypertarget{posthoc-tests-using-full-species-level-database}{%
+\subsubsection{Posthoc tests using full species-level
+database}\label{posthoc-tests-using-full-species-level-database}}
 
-\hypertarget{phyanova-7}{%
-\subsubsection{phyANOVA}\label{phyanova-7}}
+\hypertarget{phyanova-3}{%
+\paragraph{phyANOVA}\label{phyanova-3}}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-42}Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-14}Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{r|l|l|l|l|l|l|l|l|l}
 \hline
@@ -997,57 +390,56 @@ Threshold & Mycorrhizal.Type & AM.r0 & EM.r0 & MIX.r0 & NM.r0 & AM.r09 & EM.r09 
 \end{tabular}
 \end{table}
 
-\hypertarget{standard-anova-7}{%
-\subsubsection{Standard ANOVA}\label{standard-anova-7}}
+\hypertarget{standard-anova-3}{%
+\paragraph{Standard ANOVA}\label{standard-anova-3}}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-43}Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-15}Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{l|l|l|l|l|l|l|l|l}
 \hline
 Types & 50.r0 & 60.r0 & 80.r0 & 100.r0 & 50.r09 & 60.r09 & 80.r09 & 100.r09\\
 \hline
-EM.AM & 0.990633512621064 & 0.999066929741497 & 0.936868722793265 & 0.0668031153063937 & 0.998335123093735 & 0.999999999960855 & 0.990488217263384 & 0.0842606334652538\\
+EM.AM & 0.991 & 0.999 & 0.937 & 0.067 & 0.998 & 1 & 0.99 & 0.084\\
 \hline
-ER.AM & 0.59167799644029 & 0.620128699697407 & 0.807809909603096 & 0.999999925753053 & 0.562438984577371 & 0.589820382596277 & 0.783330000390012 & 0.999998779314144\\
+ER.AM & 0.592 & 0.62 & 0.808 & 1 & 0.562 & 0.59 & 0.783 & 1\\
 \hline
-MIX.AM & 0.97044469654804 & 0.804996823389842 & \textbf{9.60945215688902e-06} & \textbf{1.74860126378462e-13} & 0.905942929446393 & 0.873700790534451 & \textbf{1.37389519561104e-05} & \textbf{1.45772283133283e-13}\\
+MIX.AM & 0.97 & 0.805 & \textbf{0} & \textbf{0} & 0.906 & 0.874 & \textbf{0} & \textbf{0}\\
 \hline
-NM.AM & 0.763273359186079 & 0.958094280569642 & 0.995627685586714 & 0.99997971946529 & 0.849762630865895 & 0.994541887438811 & 0.967977423942333 & 0.997587516127018\\
+NM.AM & 0.763 & 0.958 & 0.996 & 1 & 0.85 & 0.995 & 0.968 & 0.998\\
 \hline
-ER.EM & 0.5610997307869 & 0.66332560965376 & 0.648683491922557 & 0.526651493003217 & 0.593050347828937 & 0.723495826301868 & 0.735381524309898 & 0.601450526839577\\
+ER.EM & 0.561 & 0.663 & 0.649 & 0.527 & 0.593 & 0.723 & 0.735 & 0.601\\
 \hline
-MIX.EM & 0.936742971903572 & 0.995914486646062 & 0.778479187518824 & 0.674060482082851 & 0.928597622187703 & 0.985811513764652 & 0.608411920052696 & 0.363617963156534\\
+MIX.EM & 0.937 & 0.996 & 0.778 & 0.674 & 0.929 & 0.986 & 0.608 & 0.364\\
 \hline
-NM.EM & 0.997055565542504 & 0.999251070850478 & 0.934538146708019 & 0.582634773582996 & 0.995691997146975 & 0.999061418905608 & 0.928144377636534 & 0.484593518086408\\
+NM.EM & 0.997 & 0.999 & 0.935 & 0.583 & 0.996 & 0.999 & 0.928 & 0.485\\
 \hline
-MIX.ER & 0.837524033937929 & 0.406862494515189 & 0.119528054154455 & 0.0500780239809808 & 0.86981652750533 & 0.412694315925131 & 0.112711410601226 & \textbf{0.0289095204882316}\\
+MIX.ER & 0.838 & 0.407 & 0.12 & 0.05 & 0.87 & 0.413 & 0.113 & \textbf{0.029}\\
 \hline
-NM.ER & 0.351610960585478 & 0.50056469596149 & 0.979022885971943 & 0.999997287202152 & 0.36786832259415 & 0.56072240034374 & 0.992967230684627 & 0.99861336919152\\
+NM.ER & 0.352 & 0.501 & 0.979 & 1 & 0.368 & 0.561 & 0.993 & 0.999\\
 \hline
-NM.MIX & 0.68358892614127 & 0.999943164896553 & 0.358349766894571 & 0.102452943553732 & 0.637221057222632 & 0.998717948726249 & 0.236883416673992 & \textbf{0.0303829491519374}\\
+NM.MIX & 0.684 & 1 & 0.358 & 0.102 & 0.637 & 0.999 & 0.237 & \textbf{0.03}\\
 \hline
 \end{tabular}
 \end{table}
 
-\hypertarget{scatterplots-2}{%
-\subsubsection{Scatterplots}\label{scatterplots-2}}
+\hypertarget{scatterplots-1}{%
+\subsubsection{Scatterplots}\label{scatterplots-1}}
 
 \begin{figure}
 \centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-44-1.pdf}
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-16-1.pdf}
 \caption{Scatterplots showing the relationship between mycorrhizal
-diversity index and diversification rates (a and c), species richness
-(b) and age family (d). Diversification rates were estimated with
-epsilon = 0 (a) and with epsilon = 0.9 (c). The red and blue lines
-indicate the results of a linear model and a phylogenetic generalized
-least squares (PGLS) fit, respectively.}
+diversity index and diversification rates. Diversification rates were
+estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and
+blue lines indicate the results of a linear model and a phylogenetic
+generalized least squares (PGLS) fit, respectively.}
 \end{figure}
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-45}Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.}
+\caption{\label{tab:unnamed-chunk-17}Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.}
 \centering
 \begin{tabular}{r|l|l|l|l}
 \hline
@@ -1069,28 +461,417 @@ type}\label{adding-randomly-20-of-misassignment-of-mycorrhizal-type}}
 
 \begin{figure}
 \centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-47-1.pdf}
-\caption{Distribution of (A) p-values and (B) R² values for the same
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-19-1.pdf}
+\caption{Distribution of (a) p-values and (b) R² values for the same
 analyses of the main paper, but using all 50 replicate datasets with
 mycorrhizal types for 20\% of species randomly sampled. Dashed vertical
 lines represent the corresponding empirical value from the main
 analysis.}
 \end{figure}
 
-\pagebreak
-
 \hypertarget{anovas}{%
 \subsection{ANOVAs}\label{anovas}}
 
 \begin{figure}
 \centering
-\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-48-1.pdf}
-\caption{Distribution of p-values of (A) epsilon = 0 and (B) epsilon =
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-20-1.pdf}
+\caption{Distribution of p-values of (a) epsilon = 0 and (b) epsilon =
 0.9 for the both phylogenetic and standard ANOVA, but using all 50
 replicate datasets with mycorrhizal types for 20\% of species randomly
 sampled. Dashed vertical lines represent the corresponding empirical
 value from the main analysis.}
 \end{figure}
+
+\hypertarget{analyses-with-the-genus-level-database}{%
+\section{Analyses with the genus-level
+database}\label{analyses-with-the-genus-level-database}}
+
+\hypertarget{analysis-per-genera-excluding-100-mix-families}{%
+\subsection{Analysis per genera excluding 100\% MIX
+families}\label{analysis-per-genera-excluding-100-mix-families}}
+
+\hypertarget{boxplots-using-clean-genus-level-database}{%
+\subsubsection{Boxplots using clean genus-level
+database}\label{boxplots-using-clean-genus-level-database}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-22-1.pdf}
+\caption{Relationship between mycorrhizal type and diversification
+rates. a) diversification rate estimated with epsilon = 0 and b)
+diversification rate estimated with epsilon = 0.9. AM: Arbuscular
+mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families
+with no dominance of any specific mycorrhizal association). The size of
+the points indicates the Mycorrhizal Type Diversity Index value for each
+lineage, indicating a predominance of larger indices with higher
+diversification rates.}
+\end{figure}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-23}Mycorrhizal type assigned to each family based on 4 different percentage thresholds (50, 60, 80 and 100). Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{l|r|r|r|r|r}
+\hline
+Threshold & AM & EM & ER & MIX & NM\\
+\hline
+50 & 293 & 10 & 1 & 5 & 56\\
+\hline
+60 & 286 & 9 & 1 & 27 & 42\\
+\hline
+80 & 270 & 9 & 1 & 52 & 33\\
+\hline
+100 & 228 & 9 & 1 & 98 & 29\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{summary-statistics-using-clean-genus-level-database}{%
+\subsubsection{Summary statistics using clean genus-level
+database}\label{summary-statistics-using-clean-genus-level-database}}
+
+\hypertarget{phyanova-4}{%
+\paragraph{phyANOVA}\label{phyanova-4}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-24}Summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{r|l|l|l|l}
+\hline
+Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
+\hline
+50 & 3.996 & 0.089 & 3.147 & 0.162\\
+\hline
+60 & 7.255 & \textbf{0.013} & 7.35 & \textbf{0.007}\\
+\hline
+80 & 14.181 & \textbf{0.001} & 13.177 & \textbf{0.001}\\
+\hline
+100 & 44.007 & \textbf{0.001} & 52.476 & \textbf{0.001}\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{standard-anova-4}{%
+\paragraph{Standard ANOVA}\label{standard-anova-4}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-25}summary statistics for standard ANOVA for both values of epsilon. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{r|l|l|l|l}
+\hline
+Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
+\hline
+50 & 3.996 & \textbf{0.008} & 3.147 & \textbf{0.025}\\
+\hline
+60 & 7.255 & \textbf{0} & 7.35 & \textbf{0}\\
+\hline
+80 & 14.181 & \textbf{0} & 13.177 & \textbf{0}\\
+\hline
+100 & 44.007 & \textbf{0} & 52.476 & \textbf{0}\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{posthoc-tests}{%
+\subsubsection{Posthoc tests}\label{posthoc-tests}}
+
+\hypertarget{phyanova-5}{%
+\paragraph{phyANOVA}\label{phyanova-5}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-26}Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{r|l|l|l|l|l|l|l|l|l}
+\hline
+Threshold & Mycorrhizal.Type & AM.r0 & EM.r0 & MIX.r0 & NM.r0 & AM.r09 & EM.r09 & MIX.r09 & NM.r09\\
+\hline
+50 & AM & 1 & 0.858 & \textbf{0.042} & 0.747 & 1 & 1 & \textbf{0.048} & 1\\
+\hline
+50 & EM & 0.858 & 1 & 0.716 & 0.858 & 1 & 1 & 0.62 & 1\\
+\hline
+50 & MIX & \textbf{0.042} & 0.716 & 1 & \textbf{0.042} & \textbf{0.048} & 0.62 & 1 & \textbf{0.048}\\
+\hline
+50 & NM & 0.747 & 0.858 & \textbf{0.042} & 1 & 1 & 1 & \textbf{0.048} & 1\\
+\hline
+60 & AM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.006} & 1\\
+\hline
+60 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 0.952 & 1\\
+\hline
+60 & MIX & \textbf{0.006} & 1 & 1 & \textbf{0.006} & \textbf{0.006} & 0.952 & 1 & \textbf{0.006}\\
+\hline
+60 & NM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.006} & 1\\
+\hline
+80 & AM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.006} & 1\\
+\hline
+80 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+80 & MIX & \textbf{0.006} & 1 & 1 & \textbf{0.006} & \textbf{0.006} & 1 & 1 & \textbf{0.006}\\
+\hline
+80 & NM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.006} & 1\\
+\hline
+100 & AM & 1 & 0.552 & \textbf{0.006} & 0.868 & 1 & 0.567 & \textbf{0.006} & 0.627\\
+\hline
+100 & EM & 0.552 & 1 & 0.552 & 0.552 & 0.567 & 1 & 0.468 & 0.567\\
+\hline
+100 & MIX & \textbf{0.006} & 0.552 & 1 & \textbf{0.006} & \textbf{0.006} & 0.468 & 1 & \textbf{0.006}\\
+\hline
+100 & NM & 0.868 & 0.552 & \textbf{0.006} & 1 & 0.627 & 0.567 & \textbf{0.006} & 1\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{standard-anova-5}{%
+\paragraph{Standard ANOVA}\label{standard-anova-5}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-27}Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{l|l|l|l|l|l|l|l|l}
+\hline
+Types & 50.r0 & 60.r0 & 80.r0 & 100.r0 & 50.r09 & 60.r09 & 80.r09 & 100.r09\\
+\hline
+EM-AM & 0.6181 & 6.86e-01 & 5.80e-01 & 1.54e-01 & 0.8536 & 8.66e-01 & 7.94e-01 & 0.2459\\
+\hline
+MIX-AM & \textbf{0.0175} & 4.19e-05 & 8.91e-09 & \textbf{0.00e+00} & \textbf{0.0253} & 4.66e-05 & 7.23e-08 & \textbf{0.0000}\\
+\hline
+NM-AM & 0.3644 & 1.00e+00 & 7.83e-01 & 9.97e-01 & 0.6635 & 9.40e-01 & 4.56e-01 & 0.9239\\
+\hline
+MIX-EM & 0.3148 & 4.92e-01 & 4.83e-01 & 2.51e-01 & 0.2476 & 3.30e-01 & 3.79e-01 & 0.0745\\
+\hline
+NM-EM & 0.9704 & 7.53e-01 & 3.74e-01 & 1.98e-01 & 0.9934 & 7.65e-01 & 4.09e-01 & 0.1964\\
+\hline
+NM-MIX & 0.0897 & 1.50e-03 & 4.83e-06 & 7.96e-10 & 0.0834 & 3.13e-04 & 1.98e-06 & \textbf{0.0000}\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{genus-level-full-database---including-all-families}{%
+\subsection{Genus-level full database - including all
+families}\label{genus-level-full-database---including-all-families}}
+
+\hypertarget{boxplots-using-genus-level-full-database}{%
+\subsubsection{Boxplots using genus-level full
+database}\label{boxplots-using-genus-level-full-database}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-29-1.pdf}
+\caption{Relationship between mycorrhizal type and diversification rates
+using the thresholds (a) 50\%, (b) 60\%, (c) 80\% and (d) 100\% for MIX
+state assignment. Each panel shows diversification rate estimated with
+epsilon = 0 (upper) and diversification rate estimated with epsilon =
+0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM:
+non-mycorrhizal and MIX (families with no dominance of any specific
+mycorrhizal association). The size of the points indicates the
+Mycorrhizal Type Diversity Index value for each lineage, indicating a
+predominance of larger indices with higher diversification rates.}
+\end{figure}
+
+\hypertarget{summary-statistics}{%
+\subsubsection{Summary statistics}\label{summary-statistics}}
+
+\hypertarget{phyanova-6}{%
+\paragraph{phyANOVA}\label{phyanova-6}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-30}summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{l|l|l|l|l}
+\hline
+Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
+\hline
+50 & 1.295 & 0.631 & 0.696 & 0.825\\
+\hline
+60 & 2.842 & 0.244 & 2.153 & 0.402\\
+\hline
+80 & 8.598 & \textbf{0.005} & 7.033 & \textbf{0.022}\\
+\hline
+100 & 33.621 & \textbf{0.001} & 37.429 & \textbf{0.001}\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{standard-anova-6}{%
+\paragraph{Standard ANOVA}\label{standard-anova-6}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-31}summary statistics for standard ANOVA for both values of epsilon. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{l|l|l|l|l}
+\hline
+Threshold & F.r0 & pvalue.r0 & F.r09 & pvalue.r09\\
+\hline
+50 & 1.295 & 0.276 & 0.696 & 0.555\\
+\hline
+60 & 2.842 & \textbf{0.038} & 2.153 & 0.093\\
+\hline
+80 & 8.598 & \textbf{0} & 7.033 & \textbf{0}\\
+\hline
+100 & 33.621 & \textbf{0} & 37.429 & \textbf{0}\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{posthoc-tests-using-genus-level-full-database}{%
+\subsubsection{Posthoc tests using genus-level full
+database}\label{posthoc-tests-using-genus-level-full-database}}
+
+\hypertarget{phyanova-7}{%
+\paragraph{phyANOVA}\label{phyanova-7}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-32}Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{r|l|l|l|l|l|l|l|l|l}
+\hline
+Threshold & Mycorrhizal.Type & AM.r0 & EM.r0 & MIX.r0 & NM.r0 & AM.r09 & EM.r09 & MIX.r09 & NM.r09\\
+\hline
+50 & AM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+50 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+50 & MIX & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+50 & NM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+60 & AM & 1 & 1 & 0.355 & 1 & 1 & 1 & 0.665 & 1\\
+\hline
+60 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+60 & MIX & 0.355 & 1 & 1 & 0.33 & 0.665 & 1 & 1 & 0.348\\
+\hline
+60 & NM & 1 & 1 & 0.33 & 1 & 1 & 1 & 0.348 & 1\\
+\hline
+80 & AM & 1 & 1 & \textbf{0.01} & 1 & 1 & 1 & \textbf{0.03} & 1\\
+\hline
+80 & EM & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+80 & MIX & \textbf{0.01} & 1 & 1 & \textbf{0.006} & \textbf{0.03} & 1 & 1 & \textbf{0.018}\\
+\hline
+80 & NM & 1 & 1 & \textbf{0.006} & 1 & 1 & 1 & \textbf{0.018} & 1\\
+\hline
+100 & AM & 1 & 0.64 & \textbf{0.006} & 0.878 & 1 & 0.796 & \textbf{0.006} & 0.796\\
+\hline
+100 & EM & 0.64 & 1 & 0.864 & 0.64 & 0.796 & 1 & 0.796 & 0.796\\
+\hline
+100 & MIX & \textbf{0.006} & 0.864 & 1 & \textbf{0.006} & \textbf{0.006} & 0.796 & 1 & \textbf{0.006}\\
+\hline
+100 & NM & 0.878 & 0.64 & \textbf{0.006} & 1 & 0.796 & 0.796 & \textbf{0.006} & 1\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{standard-anova-7}{%
+\paragraph{Standard ANOVA}\label{standard-anova-7}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-33}Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{l|l|l|l|l|l|l|l|l}
+\hline
+Pairs & 50.r0 & 60.r0 & 80.r0 & 100.r0 & 50.r09 & 60.r09 & 80.r09 & 100.r09\\
+\hline
+EM.AM & 0.616 & 0.689 & 5.87e-01 & 1.71e-01 & 0.852 & 0.869 & 0.799788 & 2.78e-01\\
+\hline
+MIX.AM & 0.988 & \textbf{0.032} & 2.12e-05 & \textbf{0.00e+00} & 0.986 & 0.103 & \textbf{0.000379} & \textbf{0.00e+00}\\
+\hline
+NM.AM & 0.362 & 1.000 & 7.87e-01 & 9.97e-01 & 0.661 & 0.941 & 0.466891 & 9.31e-01\\
+\hline
+MIX.EM & 0.833 & 0.998 & 9.37e-01 & 6.20e-01 & 0.815 & 0.991 & 0.909145 & 3.67e-01\\
+\hline
+NM.EM & 0.970 & 0.755 & 3.82e-01 & 2.16e-01 & 0.993 & 0.769 & 0.419083 & 2.26e-01\\
+\hline
+NM.MIX & 0.907 & 0.186 & 9.22e-04 & 2.98e-07 & 0.763 & 0.139 & \textbf{0.000825} & 8.54e-09\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{scatterplots-using-genus-level-full-database}{%
+\subsubsection{Scatterplots using genus-level full
+database}\label{scatterplots-using-genus-level-full-database}}
+
+\begin{figure}
+\centering
+\includegraphics{supp_mat_files/figure-latex/unnamed-chunk-34-1.pdf}
+\caption{Scatterplots showing the relationship between mycorrhizal
+diversity index and diversification rates. Diversification rates were
+estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and
+blue lines indicate the results of a linear model and a phylogenetic
+generalized least squares (PGLS) fit, respectively.}
+\end{figure}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-35}Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{r|l|l|l|l}
+\hline
+epsilon & pvalue.PGLS & R2.PGLS & pvalue.LM & R2.LM\\
+\hline
+0.0 & \textbf{4.637e-08} & 0.07343 & \textbf{6.325e-10} & 0.09319\\
+\hline
+0.9 & \textbf{6.858e-08} & 0.07157 & \textbf{4.512e-09} & 0.08402\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{phylogenetic-signal-of-diversification-rates-age-and-richness}{%
+\section{Phylogenetic signal of diversification rates, age, and
+richness}\label{phylogenetic-signal-of-diversification-rates-age-and-richness}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-37}P-values for test of phylogenetic signal (D) of each mycorrhizal type. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{r|l|l|l|l|l}
+\hline
+Threshold & model & AM & EM & MIX & NM\\
+\hline
+50 & random & \textbf{0} & \textbf{0} & 0.842 & \textbf{0}\\
+\hline
+50 & BM & 0.899 & 0.969 & \textbf{0.043} & 0.832\\
+\hline
+60 & random & \textbf{0} & \textbf{0} & \textbf{0.031} & \textbf{0}\\
+\hline
+60 & BM & 0.88 & 0.949 & 0.215 & 0.852\\
+\hline
+80 & random & \textbf{0} & \textbf{0} & \textbf{0} & \textbf{0}\\
+\hline
+80 & BM & 0.821 & 0.956 & 0.228 & 0.747\\
+\hline
+100 & random & \textbf{0} & \textbf{0} & 0.247 & \textbf{0}\\
+\hline
+100 & BM & 0.083 & 0.958 & \textbf{0} & 0.643\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-38}Phylogenetic signal of the four response variables. Significant values are highlighted in bold.}
+\centering
+\begin{tabular}{l|l}
+\hline
+Variable & Lambda\\
+\hline
+r.e0 & \textbf{0.475}\\
+\hline
+r.e09 & \textbf{0.358}\\
+\hline
+Stem.Age & \textbf{1}\\
+\hline
+Richness & 1e-06\\
+\hline
+\end{tabular}
+\end{table}
 
 
 \end{document}
