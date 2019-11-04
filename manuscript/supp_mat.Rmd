@@ -7,7 +7,6 @@ output:
     latex_engine: lualatex
     number_sections: true
 header-includes:
-  - \usepackage{longtable}
   - \usepackage{float}
   - \floatplacement{figure}{H}
   - \floatplacement{table}{H}
@@ -18,10 +17,14 @@ header-includes:
 
 knitr::opts_chunk$set(echo = FALSE, fig.width = 11, fig.height = 9, warning = FALSE, message = FALSE, fig.pos = 'H')
 library("kableExtra")
-library("pander")
+library("caper")
+library("tidyverse")
 library("cowplot")
+library("RColorBrewer")
 rm(list = ls())
 load("../output/main_results.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
+options(digits = 3)
 
 ```
 
@@ -82,8 +85,7 @@ d.em.100 <- phylo.d(data.phylo.d100, data.pgls$phy, names.col = family, binvar =
 d.mix.100 <- phylo.d(data.phylo.d100, data.pgls$phy, names.col = family, binvar = dummy.mix)
 d.nm.100 <- phylo.d(data.phylo.d100, data.pgls$phy, names.col = family, binvar = dummy.nm)
 
-kable_styling(kable(x =
-                        data.frame(
+phylod.table <- data.frame(
                             Threshold = rep(c(50, 60, 80, 100), each = 2),
                             model = rep(c("random", "BM"), times = 4),
                             AM = c(unlist(d.am.50[c("Pval1", "Pval0")]),
@@ -102,7 +104,11 @@ kable_styling(kable(x =
                                    unlist(d.nm.60[c("Pval1", "Pval0")]),
                                    unlist(d.nm.80[c("Pval1", "Pval0")]),
                                    unlist(d.nm.100[c("Pval1", "Pval0")]))
-                        ), format = "latex", caption = "P-values for test of phylogenetic signal (D) of each mycorrhizal type."), latex_options = "HOLD_position")
+)
+
+phylod.table[, 3:6] <- apply(phylod.table[, 3:6], 2, sig.formatter)
+
+kable_styling(kable(x = phylod.table, format = "latex", caption = "P-values for test of phylogenetic signal (D) of each mycorrhizal type. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -112,7 +118,7 @@ kable_styling(kable(x =
 
 ### Threshold 50%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -149,7 +155,7 @@ plot_grid(box.r0,
 
 ### Threshold 60%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -186,7 +192,7 @@ plot_grid(box.r0,
 
 ### Threshold 80%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -223,7 +229,7 @@ plot_grid(box.r0,
 
 ### Threshold 100%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -258,30 +264,36 @@ plot_grid(box.r0,
 
 ```
 
+\pagebreak
+
 ## Summary statistics
 
 ### phyANOVA
 
 ```{r}
 
-kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
-                                   F_r0 = c(phyaov.r0.50$F,
+phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                                   F.r0 = round(c(phyaov.r0.50$F,
                                             phyaov.r0.60$F,
                                             phyaov.r0.80$F,
-                                            phyaov.r0.100$F),
-                                   pvalue_r0 = c(phyaov.r0.50$Pf,
+                                            phyaov.r0.100$F), 3),
+                                   pvalue.r0 = round(c(phyaov.r0.50$Pf,
                                                  phyaov.r0.60$Pf,
                                                  phyaov.r0.80$Pf,
-                                                 phyaov.r0.100$Pf),
-                                   F_r09 = c(phyaov.r09.50$F,
+                                                 phyaov.r0.100$Pf), 3),
+                                   F.r09 = round(c(phyaov.r09.50$F,
                                             phyaov.r09.60$F,
                                             phyaov.r09.80$F,
-                                            phyaov.r09.100$F),
-                                   pvalue_r09 = c(phyaov.r09.50$Pf,
+                                            phyaov.r09.100$F), 3),
+                                   pvalue.r09 = round(c(phyaov.r09.50$Pf,
                                                  phyaov.r09.60$Pf,
                                                  phyaov.r09.80$Pf,
-                                                 phyaov.r09.100$Pf)
-                                   ), format = "latex", caption = "Summary statistics for phyANOVA for both values of epsilon"), latex_options = "HOLD_position")
+                                                 phyaov.r09.100$Pf), 3)
+                         )
+
+phyaov.sum[, 2:5] <- apply(phyaov.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = phyaov.sum, format = "latex", caption = "Summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -289,24 +301,28 @@ kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
 
 ```{r}
 
-kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
-                                   F_r0 = c(summary(aov.r0.50)[[1]]$F[1],
-                                            summary(aov.r0.60)[[1]]$F[1],
-                                            summary(aov.r0.80)[[1]]$F[1],
-                                            summary(aov.r0.100)[[1]]$F[1]),
-                                   pvalue_r0 = c(summary(aov.r0.50)[[1]]$P[1],
-                                                 summary(aov.r0.60)[[1]]$P[1],
-                                                 summary(aov.r0.80)[[1]]$P[1],
-                                                 summary(aov.r0.100)[[1]]$P[1]),
-                                   F_r09 = c(summary(aov.r09.50)[[1]]$F[1],
-                                            summary(aov.r09.60)[[1]]$F[1],
-                                            summary(aov.r09.80)[[1]]$F[1],
-                                            summary(aov.r09.100)[[1]]$F[1]),
-                                   pvalue_r09 = c(summary(aov.r09.50)[[1]]$P[1],
-                                                 summary(aov.r09.60)[[1]]$P[1],
-                                                 summary(aov.r09.80)[[1]]$P[1],
-                                                 summary(aov.r09.100)[[1]]$P[1])
-                                   ), format = "latex", caption = "summary statistics for standard ANOVA for both values of epsilon"), latex_options = "HOLD_position")
+aov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                      F.r0 = round(c(summary(aov.r0.50)[[1]]$F[1],
+                                     summary(aov.r0.60)[[1]]$F[1],
+                                     summary(aov.r0.80)[[1]]$F[1],
+                                     summary(aov.r0.100)[[1]]$F[1]), 3),
+                      pvalue.r0 = round(c(summary(aov.r0.50)[[1]]$P[1],
+                                          summary(aov.r0.60)[[1]]$P[1],
+                                          summary(aov.r0.80)[[1]]$P[1],
+                                          summary(aov.r0.100)[[1]]$P[1]), 3),
+                      F.r09 = round(c(summary(aov.r09.50)[[1]]$F[1],
+                                      summary(aov.r09.60)[[1]]$F[1],
+                                      summary(aov.r09.80)[[1]]$F[1],
+                                      summary(aov.r09.100)[[1]]$F[1]), 3),
+                      pvalue.r09 = round(c(summary(aov.r09.50)[[1]]$P[1],
+                                           summary(aov.r09.60)[[1]]$P[1],
+                                           summary(aov.r09.80)[[1]]$P[1],
+                                           summary(aov.r09.100)[[1]]$P[1]), 3)
+                      )
+
+aov.sum[, 2:5] <- apply(aov.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = aov.sum, format = "latex", caption = "summary statistics for standard ANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 ## Posthoc tests
@@ -327,11 +343,12 @@ sum.phyaov <- setNames(
                               phyaov.r09.60$Pt,
                               phyaov.r09.80$Pt,
                               phyaov.r09.100$Pt)
-                        ), nm = c("Threshold", "Mycorrhizal Type", "AM r0", "EM r0", "MIX r0", "NM r0", "AM r09", "EM r09", "MIX r09", "NM r09"))
+                        ), nm = c("Threshold", "Mycorrhizal.Type", "AM.r0", "EM.r0", "MIX.r0", "NM.r0", "AM.r09", "EM.r09", "MIX.r09", "NM.r09"))
 rownames(sum.phyaov) <- NULL
 
-kable_styling(kable(x = sum.phyaov,
-                    format = "latex", caption = "Pairwise Corrected p-values for phyANOVA", row.names = FALSE), latex_options = "HOLD_position")
+sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
+
+kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -350,10 +367,11 @@ sum.aov <- setNames(
         TukeyHSD(aov.r09.60)$type.60[,4],
         TukeyHSD(aov.r09.80)$type.80[,4],
         TukeyHSD(aov.r09.100)$type.100[,4]
-        ), nm = c("Types", "50% r0", "60% r0", "80% r0", "100% r0", "50% r09", "60% r09", "80% r09", "100% r09"))
+        ), nm = c("Types", "50.r0", "60.r0", "80.r0", "100.r0", "50.r09", "60.r09", "80.r09", "100.r09"))
 
-kable_styling(kable(x = sum.aov,
-                    format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA", row.names = FALSE), latex_options = "HOLD_position")
+sum.aov <- apply(sum.aov, 2, sig.formatter)
+
+kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -361,13 +379,13 @@ kable_styling(kable(x = sum.aov,
 
 ```{r}
 
-kable_styling(kable(x = data.frame(Variable = c("r (epsilon = 0)", "r (epsilon = 0.9)", "Stem Age", "Richness"),
+kable_styling(kable(x = data.frame(Variable = c("r.e0", "r.e09", "Stem.Age", "Richness"),
                                    Lambda = c(summary(phylosig.r0)$param[2],
                                    summary(phylosig.r09)$param[2],
                                    summary(phylosig.age)$param[2],
                                    summary(phylosig.rich)$param[2]
                                    )),
-                    format = "latex", caption = "Phylogenetic signal of the four response variables"), latex_options = "HOLD_position"
+                    format = "latex", caption = "Phylogenetic signal of the four response variables."), latex_options = "HOLD_position"
               )
 
 ```
@@ -379,6 +397,7 @@ kable_styling(kable(x = data.frame(Variable = c("r (epsilon = 0)", "r (epsilon =
 ## This step is mandatory to avoid problems with overlapping object names
 rm(list = ls())
 load("../output/suppdata_genus_full.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
 ```
 
@@ -386,7 +405,7 @@ load("../output/suppdata_genus_full.RData")
 
 ### Threshold 50%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -423,7 +442,7 @@ plot_grid(box.r0,
 
 ### Threshold 60%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -460,7 +479,7 @@ plot_grid(box.r0,
 
 ### Threshold 80%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -497,7 +516,7 @@ plot_grid(box.r0,
 
 ### Threshold 100%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -532,30 +551,36 @@ plot_grid(box.r0,
 
 ```
 
+\pagebreak
+
 ## Summary statistics
 
 ### phyANOVA
 
 ```{r}
 
-kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
-                                   F_r0 = c(phyaov.r0.50$F,
+phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                                   F.r0 = round(c(phyaov.r0.50$F,
                                             phyaov.r0.60$F,
                                             phyaov.r0.80$F,
-                                            phyaov.r0.100$F),
-                                   pvalue_r0 = c(phyaov.r0.50$Pf,
+                                            phyaov.r0.100$F), 3),
+                                   pvalue.r0 = round(c(phyaov.r0.50$Pf,
                                                  phyaov.r0.60$Pf,
                                                  phyaov.r0.80$Pf,
-                                                 phyaov.r0.100$Pf),
-                                   F_r09 = c(phyaov.r09.50$F,
+                                                 phyaov.r0.100$Pf), 3),
+                                   F.r09 = round(c(phyaov.r09.50$F,
                                             phyaov.r09.60$F,
                                             phyaov.r09.80$F,
-                                            phyaov.r09.100$F),
-                                   pvalue_r09 = c(phyaov.r09.50$Pf,
+                                            phyaov.r09.100$F), 3),
+                                   pvalue.r09 = round(c(phyaov.r09.50$Pf,
                                                  phyaov.r09.60$Pf,
                                                  phyaov.r09.80$Pf,
-                                                 phyaov.r09.100$Pf)
-                                   ), format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon"), latex_options = "HOLD_position")
+                                                 phyaov.r09.100$Pf), 3)
+                         )
+
+phyaov.sum <- apply(phyaov.sum, 2, sig.formatter)
+
+kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -563,25 +588,27 @@ kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
 
 ```{r}
 
-kable_styling(kable(x =
-                        data.frame(Threshold = c(50, 60, 80, 100),
-                                   F_r0 = c(summary(aov.r0.50)[[1]]$F[1],
-                                            summary(aov.r0.60)[[1]]$F[1],
-                                            summary(aov.r0.80)[[1]]$F[1],
-                                            summary(aov.r0.100)[[1]]$F[1]),
-                                   pvalue_r0 = c(summary(aov.r0.50)[[1]]$P[1],
-                                                 summary(aov.r0.60)[[1]]$P[1],
-                                                 summary(aov.r0.80)[[1]]$P[1],
-                                                 summary(aov.r0.100)[[1]]$P[1]),
-                                   F_r09 = c(summary(aov.r09.50)[[1]]$F[1],
-                                            summary(aov.r09.60)[[1]]$F[1],
-                                            summary(aov.r09.80)[[1]]$F[1],
-                                            summary(aov.r09.100)[[1]]$F[1]),
-                                   pvalue_r09 = c(summary(aov.r09.50)[[1]]$P[1],
-                                                 summary(aov.r09.60)[[1]]$P[1],
-                                                 summary(aov.r09.80)[[1]]$P[1],
-                                                 summary(aov.r09.100)[[1]]$P[1])
-                                   ), format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon"), latex_options = "HOLD_position")
+aov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                      F.r0 = round(c(summary(aov.r0.50)[[1]]$F[1],
+                                     summary(aov.r0.60)[[1]]$F[1],
+                                     summary(aov.r0.80)[[1]]$F[1],
+                                     summary(aov.r0.100)[[1]]$F[1]), 3),
+                      pvalue.r0 = round(c(summary(aov.r0.50)[[1]]$P[1],
+                                          summary(aov.r0.60)[[1]]$P[1],
+                                          summary(aov.r0.80)[[1]]$P[1],
+                                          summary(aov.r0.100)[[1]]$P[1]), 3),
+                      F.r09 = round(c(summary(aov.r09.50)[[1]]$F[1],
+                                      summary(aov.r09.60)[[1]]$F[1],
+                                      summary(aov.r09.80)[[1]]$F[1],
+                                      summary(aov.r09.100)[[1]]$F[1]), 3),
+                      pvalue.r09 = round(c(summary(aov.r09.50)[[1]]$P[1],
+                                           summary(aov.r09.60)[[1]]$P[1],
+                                           summary(aov.r09.80)[[1]]$P[1],
+                                           summary(aov.r09.100)[[1]]$P[1]), 3)
+                      )
+aov.sum <- apply(aov.sum, 2, sig.formatter)
+
+kable_styling(kable(x = aov.sum, format = "latex", caption = "summary statistics for standard ANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -603,11 +630,12 @@ sum.phyaov <- setNames(
                               phyaov.r09.60$Pt,
                               phyaov.r09.80$Pt,
                               phyaov.r09.100$Pt)
-                        ), nm = c("Threshold", "Mycorrhizal Type", "AM r0", "EM r0", "MIX r0", "NM r0", "AM r09", "EM r09", "MIX r09", "NM r09"))
+                        ), nm = c("Threshold", "Mycorrhizal.Type", "AM.r0", "EM.r0", "MIX.r0", "NM.r0", "AM.r09", "EM.r09", "MIX.r09", "NM.r09"))
 rownames(sum.phyaov) <- NULL
 
-kable_styling(kable(x = sum.phyaov,
-                    format = "latex", caption = "Pairwise Corrected p-values for phyANOVA", row.names = FALSE), latex_options = "HOLD_position")
+sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
+
+kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -617,7 +645,7 @@ kable_styling(kable(x = sum.phyaov,
 
 sum.aov <- setNames(
     data.frame(
-        pairs = names(TukeyHSD(aov.r0.50)$type.50[,4]),
+        pairs = gsub("-", ".", names(TukeyHSD(aov.r0.50)$type.50[,4]), fixed = TRUE),
         TukeyHSD(aov.r0.50)$type.50[,4],
         TukeyHSD(aov.r0.60)$type.60[,4],
         TukeyHSD(aov.r0.80)$type.80[,4],
@@ -626,16 +654,17 @@ sum.aov <- setNames(
         TukeyHSD(aov.r09.60)$type.60[,4],
         TukeyHSD(aov.r09.80)$type.80[,4],
         TukeyHSD(aov.r09.100)$type.100[,4]
-        ), nm = c("Pairs", "50% r0", "60% r0", "80% r0", "100% r0", "50% r09", "60% r09", "80% r09", "100% r09"))
+        ), nm = c("Pairs", "50.r0", "60.r0", "80.r0", "100.r0", "50.r09", "60.r09", "80.r09", "100.r09"))
 
-kable_styling(kable(x = sum.aov,
-                    format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA", row.names = FALSE), latex_options = "HOLD_position")
+sum.aov <- apply(sum.aov, 2, sig.formatter)
+
+kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
 ## Scatterplots
 
-```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with ε (relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
 
 ## Scatter - MTDI vs. Net Diversification
 mtdi.r0 <-
@@ -696,11 +725,15 @@ plot_grid(mtdi.r0,
 
 ```{r}
 
-kable_styling(kable(x = data.frame(epsilon = c(0, 0.9),
-                                   pvalue_PGLS = c(4.637e-08, 6.858e-08),
-                                   R2_PGLS = c(0.07343, 0.07157),
-                                   pvalue_LM = c(6.325e-10, 4.512e-09),
-                                   R2_LM = c(0.09319, 0.08402)), format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset.", longtable = TRUE), latex_options = "HOLD_position")
+reg.sum <- data.frame(epsilon = c(0, 0.9),
+                      pvalue.PGLS = c(4.637e-08, 6.858e-08),
+                      R2.PGLS = c(0.07343, 0.07157),
+                      pvalue.LM = c(6.325e-10, 4.512e-09),
+                      R2.LM = c(0.09319, 0.08402))
+
+reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -708,10 +741,19 @@ kable_styling(kable(x = data.frame(epsilon = c(0, 0.9),
 
 ```{r}
 
-kable_styling(kable(x = data.frame(Threshold = c("50%", "60%", "80%", "100%"),
-                                   rbind(table(family.data.gen$type.50), table(family.data.gen$type.60), table(family.data.gen$type.80), table(family.data.gen$type.100))), format = "latex", caption = "Mycorrhizal type assigned to each family based on 4 different percentage thresholds (50, 60, 80 and 100)", longtable = TRUE), latex_options = "HOLD_position")
+fam.class <- data.frame(Threshold = c("50", "60", "80", "100"),
+                        rbind(table(family.data.gen$type.50),
+                              table(family.data.gen$type.60),
+                              table(family.data.gen$type.80),
+                              table(family.data.gen$type.100)))
+
+# fam.class <- apply(fam.class, 2, sig.formatter)
+
+kable_styling(kable(x = fam.class, format = "latex", caption = "Mycorrhizal type assigned to each family based on 4 different percentage thresholds (50, 60, 80 and 100). Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
+
+\pagebreak
 
 # Species-level database
 
@@ -720,6 +762,7 @@ kable_styling(kable(x = data.frame(Threshold = c("50%", "60%", "80%", "100%"),
 ## This step is mandatory to avoid problems with overlapping object names
 rm(list = ls())
 load("../output/suppdata_species_noremarks.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
 ```
 
@@ -729,7 +772,7 @@ load("../output/suppdata_species_noremarks.RData")
 
 #### Threshold 50%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean$type.50 <- as.character(family.data.clean$type.50)
 family.data.clean$type.60 <- as.character(family.data.clean$type.60)
@@ -764,9 +807,11 @@ plot_grid(box.r0,
 
 ```
 
+\pagebreak
+
 #### Threshold 60%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean$type.50 <- as.character(family.data.clean$type.50)
 family.data.clean$type.60 <- as.character(family.data.clean$type.60)
@@ -801,9 +846,11 @@ plot_grid(box.r0,
 
 ```
 
+\pagebreak
+
 #### Threshold 80%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean$type.50 <- as.character(family.data.clean$type.50)
 family.data.clean$type.60 <- as.character(family.data.clean$type.60)
@@ -838,9 +885,11 @@ plot_grid(box.r0,
 
 ```
 
+\pagebreak
+
 #### Threshold 100%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean$type.50 <- as.character(family.data.clean$type.50)
 family.data.clean$type.60 <- as.character(family.data.clean$type.60)
@@ -875,30 +924,36 @@ plot_grid(box.r0,
 
 ```
 
+\pagebreak
+
 ## Summary statistics
 
 ### phyANOVA
 
 ```{r}
 
-kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
-                                   F_r0 = c(phyaov.r0.50$F,
+phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                                   F.r0 = round(c(phyaov.r0.50$F,
                                             phyaov.r0.60$F,
                                             phyaov.r0.80$F,
-                                            phyaov.r0.100$F),
-                                   pvalue_r0 = c(phyaov.r0.50$Pf,
+                                            phyaov.r0.100$F), 3),
+                                   pvalue.r0 = round(c(phyaov.r0.50$Pf,
                                                  phyaov.r0.60$Pf,
                                                  phyaov.r0.80$Pf,
-                                                 phyaov.r0.100$Pf),
-                                   F_r09 = c(phyaov.r09.50$F,
+                                                 phyaov.r0.100$Pf), 3),
+                                   F.r09 = round(c(phyaov.r09.50$F,
                                             phyaov.r09.60$F,
                                             phyaov.r09.80$F,
-                                            phyaov.r09.100$F),
-                                   pvalue_r09 = c(phyaov.r09.50$Pf,
+                                            phyaov.r09.100$F), 3),
+                                   pvalue.r09 = round(c(phyaov.r09.50$Pf,
                                                  phyaov.r09.60$Pf,
                                                  phyaov.r09.80$Pf,
-                                                 phyaov.r09.100$Pf)
-                                   ), format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon"), latex_options = "HOLD_position")
+                                                 phyaov.r09.100$Pf), 3)
+                         )
+
+phyaov.sum[, 2:5] <- apply(phyaov.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -906,25 +961,28 @@ kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
 
 ```{r}
 
-kable_styling(kable(x =
-                        data.frame(Threshold = c(50, 60, 80, 100),
-                                   F_r0 = c(summary(aov.r0.50)[[1]]$F[1],
-                                            summary(aov.r0.60)[[1]]$F[1],
-                                            summary(aov.r0.80)[[1]]$F[1],
-                                            summary(aov.r0.100)[[1]]$F[1]),
-                                   pvalue_r0 = c(summary(aov.r0.50)[[1]]$P[1],
-                                                 summary(aov.r0.60)[[1]]$P[1],
-                                                 summary(aov.r0.80)[[1]]$P[1],
-                                                 summary(aov.r0.100)[[1]]$P[1]),
-                                   F_r09 = c(summary(aov.r09.50)[[1]]$F[1],
-                                            summary(aov.r09.60)[[1]]$F[1],
-                                            summary(aov.r09.80)[[1]]$F[1],
-                                            summary(aov.r09.100)[[1]]$F[1]),
-                                   pvalue_r09 = c(summary(aov.r09.50)[[1]]$P[1],
-                                                 summary(aov.r09.60)[[1]]$P[1],
-                                                 summary(aov.r09.80)[[1]]$P[1],
-                                                 summary(aov.r09.100)[[1]]$P[1])
-                                   ), format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon"), latex_options = "HOLD_position")
+std.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                      F.r0 = round(c(summary(aov.r0.50)[[1]]$F[1],
+                               summary(aov.r0.60)[[1]]$F[1],
+                               summary(aov.r0.80)[[1]]$F[1],
+                               summary(aov.r0.100)[[1]]$F[1]), 3),
+                      pvalue.r0 = round(c(summary(aov.r0.50)[[1]]$P[1],
+                                    summary(aov.r0.60)[[1]]$P[1],
+                                    summary(aov.r0.80)[[1]]$P[1],
+                                    summary(aov.r0.100)[[1]]$P[1]), 3),
+                      F.r09 = round(c(summary(aov.r09.50)[[1]]$F[1],
+                                summary(aov.r09.60)[[1]]$F[1],
+                                summary(aov.r09.80)[[1]]$F[1],
+                                summary(aov.r09.100)[[1]]$F[1]), 3),
+                      pvalue.r09 = round(c(summary(aov.r09.50)[[1]]$P[1],
+                                     summary(aov.r09.60)[[1]]$P[1],
+                                     summary(aov.r09.80)[[1]]$P[1],
+                                     summary(aov.r09.100)[[1]]$P[1]), 3)
+                      )
+
+std.sum[, 2:5] <- apply(std.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = std.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -935,22 +993,23 @@ kable_styling(kable(x =
 ```{r}
 
 sum.phyaov <- setNames(
-                        data.frame(
-                            threshold = rep(c(50, 60, 80, 100), each = 4),
-                            Myc.type = rep(c("AM", "EM", "MIX", "NM"), times = 4),
-                        rbind(phyaov.r0.50$Pt,
-                              phyaov.r0.60$Pt,
-                              phyaov.r0.80$Pt,
-                              phyaov.r0.100$Pt),
-                        rbind(phyaov.r09.50$Pt,
-                              phyaov.r09.60$Pt,
-                              phyaov.r09.80$Pt,
-                              phyaov.r09.100$Pt)
-                        ), nm = c("Threshold", "Mycorrhizal Type", "AM r0", "EM r0", "MIX r0", "NM r0", "AM r09", "EM r09", "MIX r09", "NM r09"))
+    data.frame(
+        threshold = rep(c(50, 60, 80, 100), each = 4),
+        Myc.type = rep(c("AM", "EM", "MIX", "NM"), times = 4),
+        rbind(phyaov.r0.50$Pt,
+              phyaov.r0.60$Pt,
+              phyaov.r0.80$Pt,
+              phyaov.r0.100$Pt),
+        rbind(phyaov.r09.50$Pt,
+              phyaov.r09.60$Pt,
+              phyaov.r09.80$Pt,
+              phyaov.r09.100$Pt)
+    ), nm = c("Threshold", "Mycorrhizal.Type", "AM.r0", "EM.r0", "MIX.r0", "NM.r0", "AM.r09", "EM.r09", "MIX.r09", "NM.r09"))
 rownames(sum.phyaov) <- NULL
 
-kable_styling(kable(x = sum.phyaov,
-                    format = "latex", caption = "Pairwise Corrected p-values for phyANOVA", row.names = FALSE), latex_options = "HOLD_position")
+sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
+
+kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -960,7 +1019,7 @@ kable_styling(kable(x = sum.phyaov,
 
 sum.aov <- setNames(
     data.frame(
-        pairs = names(TukeyHSD(aov.r0.50)$type.50[,4]),
+        pairs = gsub("-", ".", names(TukeyHSD(aov.r0.50)$type.50[,4])),
         TukeyHSD(aov.r0.50)$type.50[,4],
         TukeyHSD(aov.r0.60)$type.60[,4],
         TukeyHSD(aov.r0.80)$type.80[,4],
@@ -969,10 +1028,11 @@ sum.aov <- setNames(
         TukeyHSD(aov.r09.60)$type.60[,4],
         TukeyHSD(aov.r09.80)$type.80[,4],
         TukeyHSD(aov.r09.100)$type.100[,4]
-        ), nm = c("Types", "50% r0", "60% r0", "80% r0", "100% r0", "50% r09", "60% r09", "80% r09", "100% r09"))
+        ), nm = c("Types", "50.r0", "60.r0", "80.r0", "100.r0", "50.r09", "60.r09", "80.r09", "100.r09"))
 
-kable_styling(kable(x = sum.aov,
-                    format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA", row.names = FALSE), latex_options = "HOLD_position")
+sum.aov <- apply(sum.aov, 2, sig.formatter)
+
+kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -980,7 +1040,7 @@ kable_styling(kable(x = sum.aov,
 
 ### Scatterplots
 
-```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with ε (relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
 
 raw.r0 <-
     ggplot(data = na.omit(family.data.clean)) +
@@ -1039,13 +1099,19 @@ plot_grid(raw.r0,
 
 ```{r}
 
-kable_styling(kable(x = data.frame(epsilon = c(0, 0.9),
-                                   pvalue_PGLS = c(4.063e-07, 3.483e-07),
-                                   R2_PGLS = c(0.08904, 0.09007),
-                                   pvalue_LM = c(1.676e-07, 2.844e-07),
-                                   R2_LM = c(0.09458, 0.09109)), format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset.", longtable = TRUE), latex_options = "HOLD_position")
+reg.sum <- data.frame(epsilon = c(0, 0.9),
+                      pvalue.PGLS = c(4.063e-07, 3.483e-07),
+                      R2.PGLS = c(0.08904, 0.09007),
+                      pvalue.LM = c(1.676e-07, 2.844e-07),
+                      R2.LM = c(0.09458, 0.09109))
+
+reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
+
+\pagebreak
 
 ## More inclusive database - including species with any remark
 
@@ -1054,6 +1120,7 @@ kable_styling(kable(x = data.frame(epsilon = c(0, 0.9),
 ## This step is mandatory to avoid problems with overlapping object names
 rm(list = ls())
 load("../output/suppdata_species_withremarks.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
 ```
 
@@ -1061,7 +1128,7 @@ load("../output/suppdata_species_withremarks.RData")
 
 #### Threshold 50%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean.rem$type.50 <- as.character(family.data.clean.rem$type.50)
 family.data.clean.rem$type.60 <- as.character(family.data.clean.rem$type.60)
@@ -1096,9 +1163,11 @@ plot_grid(box.r0.rem,
 
 ```
 
+\pagebreak
+
 #### Threshold 60%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean.rem$type.50 <- as.character(family.data.clean.rem$type.50)
 family.data.clean.rem$type.60 <- as.character(family.data.clean.rem$type.60)
@@ -1135,9 +1204,11 @@ plot_grid(box.r0.rem,
 
 ```
 
+\pagebreak
+
 #### Threshold 80%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean.rem$type.50 <- as.character(family.data.clean.rem$type.50)
 family.data.clean.rem$type.60 <- as.character(family.data.clean.rem$type.60)
@@ -1174,9 +1245,11 @@ plot_grid(box.r0.rem,
 
 ```
 
+\pagebreak
+
 #### Threshold 100%
 
-```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with ε (relative extinction fraction) = 0 and b) diversification rate estimated with ε= 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean.rem$type.50 <- as.character(family.data.clean.rem$type.50)
 family.data.clean.rem$type.60 <- as.character(family.data.clean.rem$type.60)
@@ -1211,30 +1284,36 @@ plot_grid(box.r0.rem,
 
 ```
 
+\pagebreak
+
 ## Summary statistics
 
 ### phyANOVA
 
 ```{r}
 
-kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
-                                   F_r0 = c(phyaov.r0.50.rem$F,
-                                            phyaov.r0.60.rem$F,
-                                            phyaov.r0.80.rem$F,
-                                            phyaov.r0.100.rem$F),
-                                   pvalue_r0 = c(phyaov.r0.50.rem$Pf,
-                                                 phyaov.r0.60.rem$Pf,
-                                                 phyaov.r0.80.rem$Pf,
-                                                 phyaov.r0.100.rem$Pf),
-                                   F_r09 = c(phyaov.r09.50.rem$F,
-                                            phyaov.r09.60.rem$F,
-                                            phyaov.r09.80.rem$F,
-                                            phyaov.r09.100.rem$F),
-                                   pvalue_r09 = c(phyaov.r09.50.rem$Pf,
-                                                 phyaov.r09.60.rem$Pf,
-                                                 phyaov.r09.80.rem$Pf,
-                                                 phyaov.r09.100.rem$Pf)
-                                   ), format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon"), latex_options = "HOLD_position")
+phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                         F.r0 = round(c(phyaov.r0.50.rem$F,
+                                  phyaov.r0.60.rem$F,
+                                  phyaov.r0.80.rem$F,
+                                  phyaov.r0.100.rem$F), 3),
+                         pvalue.r0 = round(c(phyaov.r0.50.rem$Pf,
+                                       phyaov.r0.60.rem$Pf,
+                                       phyaov.r0.80.rem$Pf,
+                                       phyaov.r0.100.rem$Pf), 3),
+                         F.r09 = round(c(phyaov.r09.50.rem$F,
+                                   phyaov.r09.60.rem$F,
+                                   phyaov.r09.80.rem$F,
+                                   phyaov.r09.100.rem$F), 3),
+                         pvalue.r09 = round(c(phyaov.r09.50.rem$Pf,
+                                        phyaov.r09.60.rem$Pf,
+                                        phyaov.r09.80.rem$Pf,
+                                        phyaov.r09.100.rem$Pf), 3)
+                         )
+
+phyaov.sum[, 2:5] <- apply(phyaov.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -1242,25 +1321,28 @@ kable_styling(kable(x = data.frame(Threshold = c(50, 60, 80, 100),
 
 ```{r}
 
-kable_styling(kable(x =
-                        data.frame(Threshold = c(50, 60, 80, 100),
-                                   F_r0 = c(summary(aov.r0.50.rem)[[1]]$F[1],
-                                            summary(aov.r0.60.rem)[[1]]$F[1],
-                                            summary(aov.r0.80.rem)[[1]]$F[1],
-                                            summary(aov.r0.100.rem)[[1]]$F[1]),
-                                   pvalue_r0 = c(summary(aov.r0.50.rem)[[1]]$P[1],
-                                                 summary(aov.r0.60.rem)[[1]]$P[1],
-                                                 summary(aov.r0.80.rem)[[1]]$P[1],
-                                                 summary(aov.r0.100.rem)[[1]]$P[1]),
-                                   F_r09 = c(summary(aov.r09.50.rem)[[1]]$F[1],
-                                            summary(aov.r09.60.rem)[[1]]$F[1],
-                                            summary(aov.r09.80.rem)[[1]]$F[1],
-                                            summary(aov.r09.100.rem)[[1]]$F[1]),
-                                   pvalue_r09 = c(summary(aov.r09.50.rem)[[1]]$P[1],
-                                                 summary(aov.r09.60.rem)[[1]]$P[1],
-                                                 summary(aov.r09.80.rem)[[1]]$P[1],
-                                                 summary(aov.r09.100.rem)[[1]]$P[1])
-                                   ), format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon"), latex_options = "HOLD_position")
+std.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                      F.r0 = round(c(summary(aov.r0.50.rem)[[1]]$F[1],
+                                     summary(aov.r0.60.rem)[[1]]$F[1],
+                                     summary(aov.r0.80.rem)[[1]]$F[1],
+                                     summary(aov.r0.100.rem)[[1]]$F[1]), 3),
+                      pvalue.r0 = round(c(summary(aov.r0.50.rem)[[1]]$P[1],
+                                          summary(aov.r0.60.rem)[[1]]$P[1],
+                                          summary(aov.r0.80.rem)[[1]]$P[1],
+                                          summary(aov.r0.100.rem)[[1]]$P[1]), 3),
+                      F.r09 = round(c(summary(aov.r09.50.rem)[[1]]$F[1],
+                                      summary(aov.r09.60.rem)[[1]]$F[1],
+                                      summary(aov.r09.80.rem)[[1]]$F[1],
+                                      summary(aov.r09.100.rem)[[1]]$F[1]), 3),
+                      pvalue.r09 = round(c(summary(aov.r09.50.rem)[[1]]$P[1],
+                                           summary(aov.r09.60.rem)[[1]]$P[1],
+                                           summary(aov.r09.80.rem)[[1]]$P[1],
+                                           summary(aov.r09.100.rem)[[1]]$P[1]), 3)
+                      )
+
+std.sum[, 2:5] <- apply(std.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = std.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -1271,22 +1353,24 @@ kable_styling(kable(x =
 ```{r}
 
 sum.phyaov <- setNames(
-                        data.frame(
-                            threshold = rep(c(50, 60, 80, 100), each = 4),
-                            Myc.type = rep(as.character(c("AM", "EM", "MIX", "NM")), times = 4),
-                        rbind(phyaov.r0.50.rem$Pt,
-                              phyaov.r0.60.rem$Pt,
-                              phyaov.r0.80.rem$Pt,
-                              phyaov.r0.100.rem$Pt),
-                        rbind(phyaov.r09.50.rem$Pt,
-                              phyaov.r09.60.rem$Pt,
-                              phyaov.r09.80.rem$Pt,
-                              phyaov.r09.100.rem$Pt),
-                        stringsAsFactors = FALSE
-                        ), nm = c("Threshold", "Mycorrhizal Type", "AM r0", "EM r0", "MIX r0", "NM r0", "AM r09", "EM r09", "MIX r09", "NM r09"))
+    data.frame(
+        threshold = rep(c(50, 60, 80, 100), each = 4),
+        Myc.type = rep(as.character(c("AM", "EM", "MIX", "NM")), times = 4),
+        rbind(phyaov.r0.50.rem$Pt,
+              phyaov.r0.60.rem$Pt,
+              phyaov.r0.80.rem$Pt,
+              phyaov.r0.100.rem$Pt),
+        rbind(phyaov.r09.50.rem$Pt,
+              phyaov.r09.60.rem$Pt,
+              phyaov.r09.80.rem$Pt,
+              phyaov.r09.100.rem$Pt),
+        stringsAsFactors = FALSE
+    ), nm = c("Threshold", "Mycorrhizal.Type", "AM.r0", "EM.r0", "MIX.r0", "NM.r0", "AM.r09", "EM.r09", "MIX.r09", "NM.r09"))
 rownames(sum.phyaov) <- NULL
 
-kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA", row.names = FALSE), latex_options = "HOLD_position")
+sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
+
+kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -1296,7 +1380,7 @@ kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Correc
 
 sum.aov <- setNames(
     data.frame(
-        pairs = names(TukeyHSD(aov.r0.50.rem)$type.50[,4]),
+        pairs = gsub("-", ".", names(TukeyHSD(aov.r0.50.rem)$type.50[,4])),
         TukeyHSD(aov.r0.50.rem)$type.50[,4],
         TukeyHSD(aov.r0.60.rem)$type.60[,4],
         TukeyHSD(aov.r0.80.rem)$type.80[,4],
@@ -1305,17 +1389,18 @@ sum.aov <- setNames(
         TukeyHSD(aov.r09.60.rem)$type.60[,4],
         TukeyHSD(aov.r09.80.rem)$type.80[,4],
         TukeyHSD(aov.r09.100.rem)$type.100[,4]
-        ), nm = c("Types", "50% r0", "60% r0", "80% r0", "100% r0", "50% r09", "60% r09", "80% r09", "100% r09"))
+        ), nm = c("Types", "50.r0", "60.r0", "80.r0", "100.r0", "50.r09", "60.r09", "80.r09", "100.r09"))
 
-kable_styling(kable(x = sum.aov,
-                    format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA", row.names = FALSE), latex_options = "HOLD_position")
+sum.aov[, 2:9] <- apply(sum.aov[, 2:9], 2, sig.formatter)
+
+kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
 
 ### Scatterplots
 
-```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with ε (relative extinction fraction) = 0 (a) and with ε= 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates (a and c), species richness (b) and age family (d). Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (c). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
 
 raw.r0.rem <-
     ggplot(data = na.omit(family.data.clean.rem)) +
@@ -1374,11 +1459,15 @@ plot_grid(raw.r0.rem,
 
 ```{r}
 
-kable_styling(kable(x = data.frame(epsilon = c(0, 0.9),
-                                   pvalue_PGLS = c(5.265e-05, 4.013e-05),
-                                   R2_PGLS = c(0.06444, 0.06653),
-                                   pvalue_LM = c(2.528e-07, 4.977e-07),
-                                   R2_LM = c(0.09354, 0.08898)), format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset.", longtable = TRUE), latex_options = "HOLD_position")
+reg.sum <- data.frame(epsilon = c(0, 0.9),
+                      pvalue.PGLS = c(5.265e-05, 4.013e-05),
+                      R2.PGLS = c(0.06444, 0.06653),
+                      pvalue.LM = c(2.528e-07, 4.977e-07),
+                      R2.LM = c(0.09354, 0.08898))
+
+reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
+
+kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -1388,6 +1477,7 @@ kable_styling(kable(x = data.frame(epsilon = c(0, 0.9),
 
 rm(list = ls())
 load("../output/results_20perc.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
 ```
 
