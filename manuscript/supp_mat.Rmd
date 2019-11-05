@@ -262,7 +262,7 @@ kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Correc
 
 sum.aov <- setNames(
     data.frame(
-        pairs = gsub("-", ".", names(TukeyHSD(aov.r0.50)$type.50[,4])),
+        pairs = names(TukeyHSD(aov.r0.50)$type.50[,4]),
         round(TukeyHSD(aov.r0.50)$type.50[,4], 3),
         round(TukeyHSD(aov.r0.60)$type.60[,4], 3),
         round(TukeyHSD(aov.r0.80)$type.80[,4], 3),
@@ -557,7 +557,7 @@ kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Correc
 
 sum.aov <- setNames(
     data.frame(
-        pairs = gsub("-", ".", names(TukeyHSD(aov.r0.50.rem)$type.50[,4])),
+        pairs = names(TukeyHSD(aov.r0.50.rem)$type.50[,4]),
         round(TukeyHSD(aov.r0.50.rem)$type.50[,4], 3),
         round(TukeyHSD(aov.r0.60.rem)$type.60[,4], 3),
         round(TukeyHSD(aov.r0.80.rem)$type.80[,4], 3),
@@ -970,17 +970,17 @@ kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Correc
 sum.aov <- setNames(
     data.frame(
         pairs = names(TukeyHSD(aov.r0.50)$type.50[,4]),
-        TukeyHSD(aov.r0.50)$type.50[,4],
-        TukeyHSD(aov.r0.60)$type.60[,4],
-        TukeyHSD(aov.r0.80)$type.80[,4],
-        TukeyHSD(aov.r0.100)$type.100[,4],
-        TukeyHSD(aov.r09.50)$type.50[,4],
-        TukeyHSD(aov.r09.60)$type.60[,4],
-        TukeyHSD(aov.r09.80)$type.80[,4],
-        TukeyHSD(aov.r09.100)$type.100[,4]
+        round(TukeyHSD(aov.r0.50)$type.50[,4], 3),
+        round(TukeyHSD(aov.r0.60)$type.60[,4], 3),
+        round(TukeyHSD(aov.r0.80)$type.80[,4], 3),
+        round(TukeyHSD(aov.r0.100)$type.100[,4], 3),
+        round(TukeyHSD(aov.r09.50)$type.50[,4], 3),
+        round(TukeyHSD(aov.r09.60)$type.60[,4], 3),
+        round(TukeyHSD(aov.r09.80)$type.80[,4], 3),
+        round(TukeyHSD(aov.r09.100)$type.100[,4], 3)
         ), nm = c("Types", "50.r0", "60.r0", "80.r0", "100.r0", "50.r09", "60.r09", "80.r09", "100.r09"))
 
-sum.aov <- apply(sum.aov, 2, sig.formatter)
+sum.aov[, 2:9] <- apply(sum.aov[, 2:9], 2, sig.formatter)
 
 kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
@@ -1217,18 +1217,18 @@ kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Correc
 
 sum.aov <- setNames(
     data.frame(
-        pairs = gsub("-", ".", names(TukeyHSD(aov.r0.50)$type.50[,4]), fixed = TRUE),
-        TukeyHSD(aov.r0.50)$type.50[,4],
-        TukeyHSD(aov.r0.60)$type.60[,4],
-        TukeyHSD(aov.r0.80)$type.80[,4],
-        TukeyHSD(aov.r0.100)$type.100[,4],
-        TukeyHSD(aov.r09.50)$type.50[,4],
-        TukeyHSD(aov.r09.60)$type.60[,4],
-        TukeyHSD(aov.r09.80)$type.80[,4],
-        TukeyHSD(aov.r09.100)$type.100[,4]
+        pairs = names(TukeyHSD(aov.r0.50)$type.50[,4]),
+        round(TukeyHSD(aov.r0.50)$type.50[,4], 3),
+        round(TukeyHSD(aov.r0.60)$type.60[,4], 3),
+        round(TukeyHSD(aov.r0.80)$type.80[,4], 3),
+        round(TukeyHSD(aov.r0.100)$type.100[,4], 3),
+        round(TukeyHSD(aov.r09.50)$type.50[,4], 3),
+        round(TukeyHSD(aov.r09.60)$type.60[,4], 3),
+        round(TukeyHSD(aov.r09.80)$type.80[,4], 3),
+        round(TukeyHSD(aov.r09.100)$type.100[,4], 3)
         ), nm = c("Pairs", "50.r0", "60.r0", "80.r0", "100.r0", "50.r09", "60.r09", "80.r09", "100.r09"))
 
-sum.aov <- apply(sum.aov, 2, sig.formatter)
+sum.aov[, 2:9] <- apply(sum.aov[, 2:9], 2, sig.formatter)
 
 kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
