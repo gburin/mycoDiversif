@@ -129,8 +129,9 @@ plants, key innovation, mycorrhizal diversity
 \href{mailto:mujisa@gmail.com}{\nolinkurl{mujisa@gmail.com}})
 
 \textbf{Statement of authorship}: MIM, TQ and MFP designed the research;
-GB, MIM and TQ analyzed the data; GB made all the figures; all authors
-wrote the manuscript
+GB and MIM organized and curated the original downloaded data for
+posterior analysis; GB, MIM and TQ analyzed the data; GB made all the
+figures; all authors wrote the manuscript
 
 \textbf{Data accessibility statement}: All data, R scripts, and
 documents related to this manuscript are available at
@@ -174,7 +175,7 @@ trait might allow a given lineage to exploit the environment in a
 significantly different way, potentially resulting in an explosive
 radiation.
 
-One crucial innovation in plants evolution was the association with soil
+One crucial innovation in plant evolution was the association with soil
 fungi during land colonization (Pirozynski \& Malloch 1975; Selosse \&
 Le Tacon 1998; Strullu-Derrien \emph{et al.} 2018). Before plant
 colonization, land was hostile, with extreme drought and temperatures,
@@ -190,7 +191,7 @@ classified in four major types: arbuscular mycorrhiza (AM),
 ectomycorrhiza (EM), orchid mycorrhizal (OM) and ericoid mycorrhizal
 (ER) (Brundrett 2002).
 
-Ancestral state reconstruction and the fossil record show that the
+Ancestral state reconstruction and the fossil record suggest that the
 ancestor of seed plants probably had AM associations (Redecker \emph{et
 al.} 2000; Maherali \emph{et al.} 2016). This is the most frequent
 mycorrhizal type in plants (74\% of extant plant species) and is
@@ -272,17 +273,18 @@ misdiagnoses might lead to wrong conclusions. Although their approach
 used to determine these errors (taxonomic approach; Brundrett (2017)) is
 controversial (Guillermo Bueno \emph{et al.} 2019; Sun \emph{et al.}
 2019) and the proportion of errors they detected in databases is
-relatively low (Brundrett \& Tedersoo 2019), caution must be taken when
-analyzing large databases of plant mycorrhizal status. Therefore, in
-addition to the main analyses that were conducted using the genus-level
-list, we evaluated if the results were maintained when using only
-empirical data, by conducting the same analyses using the species-level
-list. Additionally, in the species-level list, the authors included
-remarks for 3,954 plant records (out of 36,303), indicating potential
-mistakes or misidentification of mycorrhizal associations in the
-original publication (see details in Table Media 3 in Soudzilovskaia
-\emph{et al.} (2019)). Then, to test the effect of potential errors in
-the database, we conducted the analyses (i) excluding and (ii) without
+relatively low (Brundrett \& Tedersoo 2019), Brundrett \& Tedersoo
+(2019) are right to point out that caution must be taken when analyzing
+large databases of plant mycorrhizal status. Therefore, in addition to
+the main analyses that were conducted using the genus-level list, we
+evaluated if the results were maintained when using only empirical data,
+by conducting the same analyses using the species-level list.
+Additionally, in the species-level list, the authors included remarks
+for 3,954 plant records (out of 36,303), indicating potential mistakes
+or misidentification of mycorrhizal associations in the original
+publication (see details in Table Media 3 in Soudzilovskaia \emph{et
+al.} (2019)). Then, to test the effect of potential errors in the
+database, we conducted the analyses (i) excluding and (ii) without
 excluding plant records that had remarks (see Appendix S1 in Supporting
 Information). Furthermore, to assess the effect of possible undetected
 errors in the genus-level dataset, we introduced errors to the
@@ -304,47 +306,55 @@ obtained from Zanne et al.~(2014), (iii) Used package ``taxize''
 (Chamberlain \emph{et al.} 2019) for R (R Core Team 2019) to fill in for
 genera without family data and (iv) removed Ferns and Mosses. In the
 genus-level list, genera were classified as AM, EM, NM, OM, ER, or with
-multiple mycorrhizal status (i.e.~AM-EM, AM-NM). Finally, the genera
-that were classified with multiple mycorrhizal status were classified as
-MIX, to indicate that these genera presented more than one mycorrhizal
-state. We obtained the richness of each genus from The Plant List
+multiple mycorrhizal status (i.e.~AM-EM, AM-NM). The genera that were
+classified with multiple mycorrhizal status were classified as MIX, to
+indicate that these genera presented more than one mycorrhizal state.
+Instead of using MIX as a separate mycorrhizal status, we divided the
+species richness of those genera equally into the types that composed
+the MIX category, e.g.~if one genus had 100 species and was classified
+originally as AM-NM, we would then add 50 species to the AM category and
+50 species to the NM category prior to grouping all data per family. We
+obtained the richness of each genus from The Plant List
 ({[}theplantlist.org{]}), and then calculated the number of species with
 each mycorrhizal state within each family, discarding those genera that
 had unknown mycorrhizal type. Each family was assigned a unique
 mycorrhizal state (AM, EM, NM, ER or OM) when more than 60\% of species
 sampled belonged to this mycorrhizal state. If no single state were
-present in more than 60\% of species, the family was assigned a ``MIX''
-state, to indicate no dominance of any mycorrhizal association. Other
+present in more than 60\% of species, the family was assigned as
+``MIX'', to indicate no dominance of any mycorrhizal association. Other
 thresholds for the assignment of family mycorrhizal state were tested
 and the pattern was similar (50\%, 80\% and 100\%, Appendix S3).
-However, we excluded from the analyses the families that all their
+However, we excluded from the analyses the families from which all
 species belonged to genera that were classified as MIX (only 18
 families) given that in this case there is no direct information for any
-species about its specific mycorrhizal state (MS). Given our
-methodological choice to assign equal proportions of MS for those genera
-classified as MIX, that would, by definition, fix the absolute value of
-diversity index for all those families (see below). Given those genera
-only make up for the entirety of very few families (only 18 out of 392),
-we decided to simply remove those families from the analysis (analyses
-without removing those families presented similar results and are shown
-in Appendix S3). To investigate the effect of mycorrhizal diversity in
-the diversification dynamics we estimated the ``Mycorrhizal diversity
-index'', which is calculated by estimating the heterogeneity of the
-mycorrhizal states in each family using the shannon diversity index.
+species about its specific mycorrhizal state (MS), and using those could
+strongly bias our results given our methods. Given our methodological
+choice to assign equal proportions of MS for those genera classified as
+MIX, that would, by definition, fix the absolute value of diversity
+index for all those families, and hence possibly remove any signal for a
+potential association between the diversity index and diversification
+rates (see below). Given that those genera only make up for the entirety
+of very few families (only 18 out of 392), we decided to simply remove
+those families from the main analysis (analyses without removing those
+families presented similar results and are shown in Appendix S3). To
+investigate the effect of mycorrhizal diversity in the diversification
+dynamics we estimated the ``Mycorrhizal Type Diversity Index'', which is
+calculated by estimating the heterogeneity of the mycorrhizal states in
+each family using the shannon diversity index.
 
 \hypertarget{diversification-rates}{%
 \subsection{Diversification rates}\label{diversification-rates}}
 
 First, to explore the underlying diversification model behind plant seed
-diversification, we assessed the correlation between age and richness
+diversification, we assessed the association between age and richness
 among seed plant families. Thus, following Sanchez-Reyes et al.~(2017),
-we evaluated the correlation between stem age and richness, including
+we evaluated the association between stem age and richness, including
 all seed plant families available (i.e.~without removing families
 lacking information on mycorrhizal states) and correcting for
 phylogenetic structure and not. Stem group ages of the families were
 obtained from the dated molecular phylogeny of seed plants of Zanne et
 al.~(2014) and the number of species of each family was obtained from
-The Plant List ({[}\url{http://www.theplantlist.org}{]}). No correlation
+The Plant List ({[}\url{http://www.theplantlist.org}{]}). No association
 was found between stem group age and richness, either considering or not
 phylogenetic structure (R\textsuperscript{2} = 0.009;
 R\textsuperscript{2} = 0.007, respectively; Fig.1), suggesting that
@@ -359,10 +369,27 @@ another with high extinction, \(\epsilon\) = 0.9. We are aware of more
 sophisticated and direct methods (e.g.~BAMM; Rabosky, (2014)) to
 investigate the association between trait states and diversification
 dynamics, but the plant phylogeny is massively under-sampled at the
-species level, and we clearly do not have mycorrhizal information for
-most species. Therefore, we decided to use simpler and less data hungry
+species level. Therefore, we decided to use simpler and less data hungry
 methods, and to discuss our results in the light of the methods
 limitations.
+
+The tree used in this study (Zanne et al.~2014) was build using a
+Maximum Likelihood framework, and therefore consists in a single
+topology, not allowing phylogenetic uncertainty to be readily
+incorporated. That said, given the fact that the possible variations in
+age estimates should, at this temporal scale, not really influence the
+diversification estimates (rates are calculated using age in a log
+scale), we believe this has no impact in our results. More importantly,
+we replicated the same procedure using a different family-level
+phylogeny (Harris \& Davies 2016), allowing some level of phylogenetic
+uncertainty to be addressed. This study estimates diversification rates
+using the same source of information for species richness per family
+(theplantlist.org), but with different values for family ages, therefore
+rendering these rates slightly different from our estimates. As
+expected, the results are virtually identical (figures S11 and S12, and
+table S23) and we show here only the results from the Zanne et
+al.~(2014) study (all the results for the other phylogeny can be seen in
+the supplemental material).
 
 \hypertarget{phylogenetic-signal}{%
 \subsection{Phylogenetic signal}\label{phylogenetic-signal}}
@@ -424,13 +451,13 @@ types of mixed families: 21 mixed families had AM and NM species (such
 as Amaranthaceae, Cyperaceae and Juncaceae), four had AM and EM species
 (Casuarinaceae, Hydrocharitaceae and Juglandaceae) and three had AM, EM
 and NM (Goodeniaceae, Nyctaginaceae and Polygonaceae). The phylogenetic
-signal strength differs among mycorrhizal types. All mycorrhizal states
-are phylogenetically clustered to some extent (Table S21). Likewise, the
-phylogenetic signal of diversification rates was significantly different
-from a random structure in rɛ = 0.0 and rɛ = 0.9 (Table S22). There was
-a significant difference in diversification rates between the
-mycorrhizal states, irrespective of the extinction scenario (standard
-ANOVA: r\textsubscript{$\epsilon$ = 0.0}: F = 7.25, p = 0.013;
+signal strength differs among mycorrhizal types, but all mycorrhizal
+states are phylogenetically clustered to some extent (Table S21).
+Likewise, the phylogenetic signal of diversification rates was
+significantly different from a random structure in rɛ = 0.0 and rɛ = 0.9
+(Table S22). There was a significant difference in diversification rates
+between the mycorrhizal states, irrespective of the extinction scenario
+(standard ANOVA: r\textsubscript{$\epsilon$ = 0.0}: F = 7.25, p = 0.013;
 r\textsubscript{$\epsilon$ = 0.9}: F = 7.35, p = 0.007; Fig. 3a and 3b),
 which was observed in the ANOVA and in the phylogenetic ANOVA (Tables
 S12 and S13). The a posteriori analysis of the ANOVA showed that
@@ -460,11 +487,13 @@ The additional analyses of adding a mycorrhizal misidentification to
 20\% of the species, supported our main conclusions, which are the
 positive association between mycorrhizal diversity index and
 diversification rates, and MIX families having higher diversification
-rates (Appendix S2). Contrary, the additional analyses at the species
-level also showed a positive association between mycorrhizal diversity
-index and diversification rates (Tables S5 and S10), however, they did
-not show significant differences on diversification rates among
-different mycorrhizal states (Fig. S1 and S3).
+rates (Appendix S2). The additional analyses at the species level also
+showed a positive association between mycorrhizal diversity index and
+diversification rates (Tables S5 and S10). Although the ANOVA analysis
+at the species level showed a similar tendency for most comparisons, it
+did not show significant differences on diversification rates among
+different mycorrhizal states for all thresholds (Fig. S1 and S3, and
+tables S1 and S2).
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
@@ -512,7 +541,7 @@ the effect of those variables could have driven the relationship between
 mycorrhizal heterogeneity and diversification rates. We observed no
 significant correlation between mycorrhizal heterogeneity and age; and
 we see a similar pattern with species richness, although the correlation
-is significant, the R\textsuperscript{2} is quite low (Fig. 4b, 4d).
+is significant, but the R\textsuperscript{2} is quite low (Fig. 4b, 4d).
 This supports that mycorrhizal heterogeneity is mainly associated with
 diversification rates, not with age or richness per se. In addition,
 these patterns are also observed when we analyzed the species-level data
@@ -568,16 +597,11 @@ by (Rabosky 2009). Moreover, with an average rate is not possible to
 distinguish between speciation and extinction rates or to test directly
 the effect of one trait on diversification dynamics. Ideally one would
 use more complex tests, but that would require a lot more phylogenetic
-data than what is currently available. Additionally, the ecological data
-is scarce, and the identification of root associations might be
-complicated by inconsistent applications of definitions (Brundrett
-n.d.). Thus, our study points out the need for more accurate ecological
-knowledge on plants species and their mycorrhizal state. Overall, we
-used a relatively simple and limited macroevolutionary method and our
-conclusions arose from a limited ecological and phylogenetic data. These
-conclusions might be revisited in future studies, when more data on
-mycorrhizal states and more complete phylogenies of plants are
-available.
+data than what is currently available. Overall, we used a relatively
+simple and limited macroevolutionary method and our conclusions arose
+from a limited ecological and phylogenetic data. These conclusions might
+be revisited in future studies, when more data on mycorrhizal states and
+more complete phylogenies of plants are available.
 
 Acknowledging the limitations of our study, the results suggest that a
 higher diversity of mycorrhizal strategies promotes diversification of
@@ -658,6 +682,12 @@ Hardy, N.B. \& Otto, S.P. (2014). Specialization and generalization in
 the diversification of phytophagous insects: Tests of the musical chairs
 and oscillation hypotheses. \emph{Proceedings. Biological Sciences / the
 Royal Society}, 281.
+
+\leavevmode\hypertarget{ref-Harris_Davies_2016}{}%
+Harris, L.W. \& Davies, T.J. (2016). A complete fossil-calibrated
+phylogeny of seed plant families as a tool for comparative analyses:
+Testing the ``time for speciation'' hypothesis. \emph{Plos One}, 11,
+e0162907.
 
 \leavevmode\hypertarget{ref-vanderheijden_2015}{}%
 Heijden, M.G.A. van der, Martin, F.M., Selosse, M.-A. \& Sanders, I.R.

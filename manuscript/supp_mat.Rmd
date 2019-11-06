@@ -14,8 +14,6 @@ header-includes:
   - \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
 ---
 
-\beginsupplement
-
 ```{r echo = FALSE}
 
 knitr::opts_chunk$set(echo = FALSE, fig.width = 11, fig.height = 9, warning = FALSE, message = FALSE, fig.pos = 'H')
@@ -30,6 +28,8 @@ sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.
 options(digits = 3)
 
 ```
+
+\beginsupplement
 
 # Analyses with the Species-level database
 
@@ -1390,3 +1390,108 @@ kable_styling(kable(x = data.frame(Variable = c("r.e0", "r.e09", "Stem.Age", "Ri
 
 ```
 
+# Replicating main analyses with tree from Harris and Davies (2016)
+
+```{r}
+
+rm(list = ls())
+load("../output/harris_davies_results.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
+
+```
+
+```{r fig.height = 5, fig.cap = "Relationship between net diversification calculated in our study and with the rates from Harris and Davies (2016) The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. a: epsilon = 0; b: epsilon = 0.9. Red lines: LM fit; blue dashed lines: identity fit."}
+
+r0.corr <-
+    ggplot(data.muj) +
+    geom_point(aes(x = new.phylo.r.e0, y = r.e0)) +
+    geom_smooth(aes(x = new.phylo.r.e0, y = r.e0), method = "lm", se = FALSE, colour = "red") +
+    geom_abline(slope = 1, intercept = 0, colour = "blue", linetype = "dashed") +
+    labs(x = "NewPhylo", y = "Isa") +
+    cowplot::theme_cowplot()
+
+r09.corr <-
+    ggplot(data.muj) +
+    geom_point(aes(x = new.phylo.r.e09, y = r.e09)) +
+    geom_smooth(aes(x = new.phylo.r.e09, y = r.e09), method = "lm", se = FALSE, colour = "red") +
+    geom_abline(slope = 1, intercept = 0, colour = "blue", linetype = "dashed") +
+    labs(x = "NewPhylo", y = "Isa") +
+    cowplot::theme_cowplot()
+
+plot_grid(r0.corr,
+          r09.corr,
+          ncol = 2,
+          align = 'h',
+          labels = letters[1:2]
+          )
+
+```
+
+```{r fig.cap = "Main analyses replicated using Harris and Davies (2016) phylogeny. The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. Panels a and c: epsilon = 0; panels b and d: epsilon = 0.9. Red lines: PGLS fit; blue dashed lines: LM fit."}
+
+sh.r0.np <-
+    ggplot(data = data.muj.plot) +
+    geom_point(aes(x = shannon, y = new.phylo.r.e0)) +
+    geom_abline(intercept = coef(lm.np.r0)[1], slope = coef(lm.np.r0)[2], colour = brewer.pal(3, "Set1")[2], size = 2, linetype = "dashed") +
+    geom_abline(intercept = coef(mod.np.r0)[1], slope = coef(mod.np.r0)[2], colour = brewer.pal(3, "Set1")[1], size = 2) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "NetDiversification\n(epsilon = 0)", colour = "Model") +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+sh.r09.np <-
+    ggplot(data = data.muj.plot) +
+    geom_point(aes(x = shannon, y = new.phylo.r.e0)) +
+    geom_abline(intercept = coef(lm.np.r09)[1], slope = coef(lm.np.r09)[2], colour = brewer.pal(3, "Set1")[2], size = 2, linetype = "dashed") +
+    geom_abline(intercept = coef(mod.np.r09)[1], slope = coef(mod.np.r09)[2], colour = brewer.pal(3, "Set1")[1], size = 2) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "NetDiversification\n(epsilon = 0.9)", colour = "Model") +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+
+aov.r0.np <-
+    ggplot(data = data.aov) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = new.phylo.r.e0), colour = "lightgrey") +
+    geom_jitter(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = new.phylo.r.e0, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.5) +
+    labs(x = "Mycorrhizal Type", y = "NetDiversification\n(epsilon = 0)") +
+    scale_colour_manual(values = RColorBrewer::brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    theme_cowplot() +
+    theme(legend.position = "none")
+
+
+aov.r09.np <-
+    ggplot(data = data.aov) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = new.phylo.r.e09), colour = "lightgrey") +
+    geom_jitter(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = new.phylo.r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.5) +
+    labs(x = "Mycorrhizal Type", y = "NetDiversification\n(epsilon = 0.9)") +
+    scale_colour_manual(values = RColorBrewer::brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    theme_cowplot() +
+    theme(legend.position = "none")
+
+plot_grid(sh.r0.np,
+          sh.r09.np,
+          aov.r0.np,
+          aov.r09.np,
+          ncol = 2,
+          align = 'hv',
+          labels = letters[1:4]
+          )
+
+```
+
+```{r}
+
+np.sum <-
+    data.frame(epsilon = c(0, 0.9),
+                     pvalue.PGLS = c("\\textbf{2.724e-13}", "\\textbf{3.581e-13}"),
+                     R2.PGLS = c(0.1349, 0.1336),
+                     pvalue.LM = c("\\textbf{1.345e-14}", "\\textbf{1.228e-14}"),
+                     R2.LM = c(0.1464, 0.1468),
+                     pvalue.stdaov = c("\\textbf{0.019}", "\\textbf{0.02}"),
+                     pvalue.phyaov = c("\\textbf{0.0005}", "\\textbf{0.0003}")
+                     )
+
+kable_styling(kable(x = np.sum,
+                    format = "latex", caption = "Summary statistics for linear models and ANOVA using Harris and Davies (2016) phylogeny.", escape = FALSE), latex_options = "HOLD_position"
+              )
+
+```
