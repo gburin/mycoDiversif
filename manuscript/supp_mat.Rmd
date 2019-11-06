@@ -31,7 +31,7 @@ options(digits = 3)
 
 \beginsupplement
 
-# Analyses with the Species-level database
+# Analyses with the Species-level dataset
 
 ```{r}
 
@@ -42,11 +42,11 @@ sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.
 
 ```
 
-## Clean database - excluding species with any remark
+## Clean dataset - excluding species with any remark
 
-### Boxplots using the clean species-level database
+### Boxplots using the clean species-level dataset
 
-```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the thresholds (a) 50%, (b) 60%, (c) 80% and (d) 100% for MIX state assignment. Each panel shows diversification rate estimated with epsilon = 0 (upper) and diversification rate estimated with epsilon = 0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the thresholds (a) 50%, (b) 60%, (c) 80% and (d) 100% for MIX state assignment using the species-level dataset without remarks. Each panel shows diversification rate estimated with epsilon = 0 (upper) and diversification rate estimated with epsilon = 0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean$type.50 <- as.character(family.data.clean$type.50)
 family.data.clean$type.60 <- as.character(family.data.clean$type.60)
@@ -169,7 +169,7 @@ plot_grid(thresh50,
 
 
 
-### Summary statistics using clean species-level database
+### Summary statistics using clean species-level dataset
 
 #### phyANOVA
 
@@ -196,7 +196,7 @@ phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
 
 phyaov.sum[, 2:5] <- apply(phyaov.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon using the species-level dataset without remarks. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -225,11 +225,11 @@ std.sum <- data.frame(Threshold = c(50, 60, 80, 100),
 
 std.sum[, 2:5] <- apply(std.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = std.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = std.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon using the species-level dataset without remarks. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
-### Posthoc tests using clean species-level database
+### Posthoc tests using clean species-level dataset
 
 #### phyANOVA
 
@@ -252,7 +252,7 @@ rownames(sum.phyaov) <- NULL
 
 sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
 
-kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA using the species-level dataset without remarks. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -281,7 +281,7 @@ kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected
 
 ### Scatterplots
 
-```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates. Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates using the species-level dataset without remarks. Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
 
 raw.r0 <-
     ggplot(data = na.omit(family.data.clean)) +
@@ -325,12 +325,12 @@ reg.sum <- data.frame(epsilon = c(0, 0.9),
 
 reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the species-level dataset without remarks. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
 
-## Full species-level database - including species with any remark
+## Full species-level dataset - including species with any remark
 
 ```{r}
 
@@ -341,9 +341,9 @@ sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.
 
 ```
 
-### Boxplots using full species-level database
+### Boxplots using full species-level dataset
 
-```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the thresholds (a) 50%, (b) 60%, (c) 80% and (d) 100% for MIX state assignment. Each panel shows diversification rate estimated with epsilon = 0 (upper) and diversification rate estimated with epsilon = 0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the thresholds (a) 50%, (b) 60%, (c) 80% and (d) 100% for MIX state assignment using the species-level dataset with remarks. Each panel shows diversification rate estimated with epsilon = 0 (upper) and diversification rate estimated with epsilon = 0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.clean.rem$type.50 <- as.character(family.data.clean.rem$type.50)
 family.data.clean.rem$type.60 <- as.character(family.data.clean.rem$type.60)
@@ -463,7 +463,7 @@ plot_grid(thresh50,
 ```
 
 
-### Summary statistics using full species-level database
+### Summary statistics using full species-level dataset
 
 #### phyANOVA
 
@@ -490,7 +490,7 @@ phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
 
 phyaov.sum[, 2:5] <- apply(phyaov.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon using the species-level dataset with remarks. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -519,11 +519,11 @@ std.sum <- data.frame(Threshold = c(50, 60, 80, 100),
 
 std.sum[, 2:5] <- apply(std.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = std.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = std.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon using the species-level dataset with remarks. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
-### Posthoc tests using full species-level database
+### Posthoc tests using full species-level dataset
 
 #### phyANOVA
 
@@ -547,7 +547,7 @@ rownames(sum.phyaov) <- NULL
 
 sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
 
-kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA using the species-level dataset with remarks. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -576,7 +576,7 @@ kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected
 
 ### Scatterplots
 
-```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates. Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates using the species-level dataset with remarks. Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
 
 raw.r0.rem <-
     ggplot(data = na.omit(family.data.clean.rem)) +
@@ -620,7 +620,7 @@ reg.sum <- data.frame(epsilon = c(0, 0.9),
 
 reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the species-level dataset with remarks. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -722,7 +722,7 @@ plot_grid(pvalue.20perc.aov.r0,
 
 ```
 
-# Analyses with the genus-level database
+# Analyses with the genus-level dataset
 
 ```{r echo = FALSE}
 
@@ -734,9 +734,9 @@ sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.
 
 ## Analysis per genera excluding 100% MIX families
 
-### Boxplots using clean genus-level database
+### Boxplots using clean genus-level dataset
 
-```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the genus-level dataset excluding 100% MIX families. a) diversification rate estimated with epsilon = 0 and b) diversification rate estimated with epsilon = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -870,14 +870,14 @@ fam.class <- data.frame(Threshold = c("50", "60", "80", "100"),
 
 # fam.class <- apply(fam.class, 2, sig.formatter)
 
-kable_styling(kable(x = fam.class, format = "latex", caption = "Mycorrhizal type assigned to each family based on 4 different percentage thresholds (50, 60, 80 and 100). Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = fam.class, format = "latex", caption = "Mycorrhizal type assigned to each family based on 4 different percentage thresholds (50, 60, 80 and 100) using the genus-level dataset excluding 100% MIX families. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
 
 
 
-### Summary statistics using clean genus-level database
+### Summary statistics using clean genus-level dataset
 
 #### phyANOVA
 
@@ -904,7 +904,7 @@ phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
 
 phyaov.sum[, 2:5] <- apply(phyaov.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = phyaov.sum, format = "latex", caption = "Summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = phyaov.sum, format = "latex", caption = "Summary statistics for phyANOVA for both values of epsilon using the genus-level dataset excluding 100% MIX families. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -933,7 +933,7 @@ aov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
 
 aov.sum[, 2:5] <- apply(aov.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = aov.sum, format = "latex", caption = "summary statistics for standard ANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = aov.sum, format = "latex", caption = "summary statistics for standard ANOVA for both values of epsilon using the genus-level dataset excluding 100% MIX families. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 ### Posthoc tests
@@ -959,7 +959,7 @@ rownames(sum.phyaov) <- NULL
 
 sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
 
-kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA using the genus-level dataset excluding 100% MIX families. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -982,11 +982,11 @@ sum.aov <- setNames(
 
 sum.aov[, 2:9] <- apply(sum.aov[, 2:9], 2, sig.formatter)
 
-kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA using the genus-level dataset excluding 100% MIX families. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
-## Genus-level full database - including all families
+## Genus-level full dataset - including all families
 
 ```{r}
 
@@ -997,9 +997,9 @@ sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.
 
 ```
 
-### Boxplots using genus-level full database
+### Boxplots using genus-level full dataset
 
-```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the thresholds (a) 50%, (b) 60%, (c) 80% and (d) 100% for MIX state assignment. Each panel shows diversification rate estimated with epsilon = 0 (upper) and diversification rate estimated with epsilon = 0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the thresholds (a) 50%, (b) 60%, (c) 80% and (d) 100% for MIX state assignment using the genus-level dataset including all families. Each panel shows diversification rate estimated with epsilon = 0 (upper) and diversification rate estimated with epsilon = 0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
@@ -1152,7 +1152,7 @@ phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
 
 phyaov.sum <- apply(phyaov.sum, 2, sig.formatter)
 
-kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = phyaov.sum, format = "latex", caption = "summary statistics for phyANOVA for both values of epsilon using the genus-level dataset including all families. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -1180,11 +1180,11 @@ aov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
                       )
 aov.sum <- apply(aov.sum, 2, sig.formatter)
 
-kable_styling(kable(x = aov.sum, format = "latex", caption = "summary statistics for standard ANOVA for both values of epsilon. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = aov.sum, format = "latex", caption = "summary statistics for standard ANOVA for both values of epsilon using the genus-level dataset including all families. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
-### Posthoc tests using genus-level full database
+### Posthoc tests using genus-level full dataset
 
 #### phyANOVA
 
@@ -1207,7 +1207,7 @@ rownames(sum.phyaov) <- NULL
 
 sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
 
-kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA using the genus-level dataset including all families. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -1234,9 +1234,9 @@ kable_styling(kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected
 
 ```
 
-### Scatterplots using genus-level full database
+### Scatterplots using genus-level full dataset
 
-```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates. Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates using the genus-level dataset including all families. Diversification rates were estimated with epsilon = 0 (a) and with epsilon = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
 
 ## Scatter - MTDI vs. Net Diversification
 mtdi.r0 <-
@@ -1281,7 +1281,7 @@ reg.sum <- data.frame(epsilon = c(0, 0.9),
 
 reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
 
-kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the full genus dataset. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the genus-level dataset including all families. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -1373,7 +1373,7 @@ phylod.table <- data.frame(
 
 phylod.table[, 3:6] <- apply(phylod.table[, 3:6], 2, sig.formatter)
 
-kable_styling(kable(x = phylod.table, format = "latex", caption = "P-values for test of phylogenetic signal (D) of each mycorrhizal type. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+kable_styling(kable(x = phylod.table, format = "latex", caption = "P-values for test of phylogenetic signal (D) of each mycorrhizal type using the genus-level dataset including all families. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
 
 ```
 
@@ -1385,7 +1385,7 @@ kable_styling(kable(x = data.frame(Variable = c("r.e0", "r.e09", "Stem.Age", "Ri
                                               paste0("\\textbf{", summary(phylosig.age)$param[2], "}"),
                                               summary(phylosig.rich)$param[2]
                                               )),
-                    format = "latex", caption = "Phylogenetic signal of the four response variables. Significant values are highlighted in bold.", escape = FALSE), latex_options = "HOLD_position"
+                    format = "latex", caption = "Phylogenetic signal of the four response variables using the genus-level dataset including all families. Significant values are highlighted in bold.", escape = FALSE), latex_options = "HOLD_position"
               )
 
 ```
@@ -1413,7 +1413,7 @@ r0.corr <-
     geom_point(aes(x = new.phylo.r.e0, y = r.e0)) +
     geom_smooth(aes(x = new.phylo.r.e0, y = r.e0), method = "lm", se = FALSE, colour = "red") +
     geom_abline(slope = 1, intercept = 0, colour = "blue", linetype = "dashed") +
-    labs(x = "NewPhylo", y = "Isa") +
+    labs(x = "Harris and Davies\n(epsilon = 0)", y = "Zanne et al\n(epsilon = 0)") +
     cowplot::theme_cowplot()
 
 r09.corr <-
@@ -1421,7 +1421,7 @@ r09.corr <-
     geom_point(aes(x = new.phylo.r.e09, y = r.e09)) +
     geom_smooth(aes(x = new.phylo.r.e09, y = r.e09), method = "lm", se = FALSE, colour = "red") +
     geom_abline(slope = 1, intercept = 0, colour = "blue", linetype = "dashed") +
-    labs(x = "NewPhylo", y = "Isa") +
+    labs(x = "Harris and Davies\n(epsilon = 0.9)", y = "Zanne et al\n(epsilon = 0.9)") +
     cowplot::theme_cowplot()
 
 plot_grid(r0.corr,
