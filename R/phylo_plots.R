@@ -58,7 +58,7 @@ fulldata <- read.csv("./data/family_data_genus_classif.csv")
 rownames(fulldata) <- fulldata$family
 
 cleandata <- fulldata[which(!is.na(match(rownames(fulldata), tree$tip.label))),]
-cleandata <- cleandata[cleandata$MIX.perc < 0.95,]
+cleandata <- cleandata[cleandata$MIX.raw.perc != 1,]
 cleandata$stem.age <- age.data$stem.age[match(cleandata$family, age.data$familia)]
 cleandata$stem.age[cleandata$family == "Cornaceae"] <- tree$edge.length[2 * which(tree$tip.label == "Cornaceae") + 1]
 cleandata$stem.age[cleandata$family == "Schlegeliaceae"] <- tree$edge.length[2 * which(tree$tip.label == "Schlegeliaceae") + 1]
@@ -71,7 +71,6 @@ df.myc <- setNames(cleandata[, c(22, 23, 26)], c("AM", "EM", "NM"))
 df.shan <- data.frame(MTDI = as.numeric(vegan::diversity(cleandata[, 3:7])))
 rownames(df.shan) <- rownames(df.myc)
 
-df.myc <- df.myc[-which(is.na(df.myc$AM)),]
 df.rates <- df.rates[which(!is.na(match(rownames(df.rates), rownames(df.myc)))),]
 df.shan <- data.frame(MTDI = df.shan[which(!is.na(match(rownames(df.shan), rownames(df.myc)))),], row.names = rownames(df.myc))
 
@@ -98,7 +97,6 @@ p3 <-
     scale_fill_gradient(low = paste0(brewer.pal(3, "Dark2")[2], "25"), high = paste0(brewer.pal(3, "Dark2")[2], "FF"), name = "Mycorrhizal Type")
 
 p4 <- p3 + new_scale_fill()
-
 
 p5 <- gheatmap(p = p4, data = df.shan, offset = 210, width = 0.1, colnames_angle = 90, color = "lightgrey") +
     scale_fill_gradient(low = paste0(brewer.pal(3, "Dark2")[3], "25"), high = paste0(brewer.pal(3, "Dark2")[3], "FF"), name = "Mycorrhizal Type Diversity Index")
