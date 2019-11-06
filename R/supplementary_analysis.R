@@ -363,3 +363,63 @@ lm.stem.age.sh.rem <- lm(stem.age ~ shannon, data = family.data.clean.rem)
 lm.rich.sh.rem <- lm(global.rich ~ shannon, data = family.data.clean.rem)
 
 save.image("./output/suppdata_species_withremarks.RData")
+
+
+## Replicating analysis with Harris & Davies' phylogeny
+
+rm(list = ls())
+
+tree <- read.tree("./data/harris_davies_phylo.txt")
+tree$tip.label <- str_to_title(tree$tip.label)
+
+data.match <- setNames(read.csv("./data/harris_davies_data.csv", header = FALSE, stringsAsFactors = FALSE), c("node", "family"))
+data.match$family <- str_to_title(data.match$family)
+
+rates <- read.csv("./data/harris_davies_rates.csv")
+
+rates$clade <- data.match$family[1:nrow(rates)]
+rates <- rates[order(rates$clade),]
+
+data.muj <- read.csv("./data/family_data_genus_final.csv")
+
+data.muj <- cbind(data.muj, rates[match(data.muj$family, rates$clade), c("r.e0", "r.e09")])
+names(data.muj)[36:37] <- c("new.phylo.r.e0", "new.phylo.r.e09")
+
+data.muj <- data.muj[-match(c("Orchidaceae", "Ericaceae"), data.muj$family), ]
+
+tree.pruned <- drop.tip(tree, tip = tree$tip.label[is.na(match(tree$tip.label, data.muj$family))])
+
+data.pgls <- comparative.data(tree.pruned, data.muj[data.muj$MIX.raw.perc != 1, ], names.col = "family")
+
+phylosig.new.phylo.r0 <- pgls(new.phylo.r.e0 ~ 1, data.pgls, lambda = "ML")
+phylosig.new.phylo.r09 <- pgls(new.phylo.r.e09 ~ 1, data.pgls, lambda = "ML")
+
+mod.np.r0 <- caper::pgls(new.phylo.r.e0 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.new.phylo.r0)$param[2], NULL))
+mod.np.r09 <- caper::pgls(new.phylo.r.e09 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.new.phylo.r0)$param[2], NULL))
+
+lm.np.r0 <- lm(new.phylo.r.e0 ~ shannon, data = data.muj[data.muj$MIX.raw.perc != 1,])
+lm.np.r09 <- lm(new.phylo.r.e09 ~ shannon, data = data.muj[data.muj$MIX.raw.perc != 1,])
+
+data.aov <- data.muj[-which(is.na(match(data.muj$family, tree$tip.label))), ]
+data.aov <- data.aov[which(data.aov$MIX.raw.perc != 1), ]
+data.aov <- data.aov[-which(data.aov$type.60 == "ER"), ]
+data.aov$type.60 <- as.character(data.aov$type.60)
+
+phyaov.np.r0.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$new.phylo.r.e0, data.aov$family))
+
+phyaov.np.r09.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$new.phylo.r.e09, data.aov$family))
+
+aov.np.r0.60 <- aov(new.phylo.r.e0 ~ type.60, data = data.aov)
+aov.np.r09.60 <- aov(new.phylo.r.e09 ~ type.60, data = data.aov)
+
+TukeyHSD(aov.np.r0.60)
+TukeyHSD(aov.np.r09.60)
+
+data.muj.plot <- data.muj[data.muj$MIX.raw.perc != 1, ]
+data.muj.plot$np.lm.r0[which(!is.na(data.muj.plot$new.phylo.r.e0))] <- fitted(lm.np.r0)
+data.muj.plot$np.lm.r09[which(!is.na(data.muj.plot$new.phylo.r.e09))] <- fitted(lm.np.r09)
+
+data.muj.plot$np.plgs.r0 <- fitted(mod.np.r0)[,1][match(data.muj.plot$family, names(fitted(mod.np.r0)[,1]))]
+data.muj.plot$np.plgs.r09 <- fitted(mod.np.r09)[,1][match(data.muj.plot$family, names(fitted(mod.np.r09)[,1]))]
+
+save.image(file = "./output/harris_davies_results.RData")
