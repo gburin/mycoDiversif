@@ -1400,6 +1400,12 @@ sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.
 
 ```
 
+```{r fig.height = 7, fig.cap = "Association between placement of families in both Zanne's (left) and Harris and Davies' (right) phylogenies, indicating differences in the topologies."}
+
+cophyloplot(fulltree, tree, assoc = cophylo.myco$assoc, use.edge.length = TRUE, show.tip.label = FALSE, space = 500)
+
+```
+
 ```{r fig.height = 5, fig.cap = "Relationship between net diversification calculated in our study and with the rates from Harris and Davies (2016) The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. a: epsilon = 0; b: epsilon = 0.9. Red lines: LM fit; blue dashed lines: identity fit."}
 
 r0.corr <-

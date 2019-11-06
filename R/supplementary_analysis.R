@@ -412,8 +412,8 @@ phyaov.np.r09.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[
 aov.np.r0.60 <- aov(new.phylo.r.e0 ~ type.60, data = data.aov)
 aov.np.r09.60 <- aov(new.phylo.r.e09 ~ type.60, data = data.aov)
 
-TukeyHSD(aov.np.r0.60)
-TukeyHSD(aov.np.r09.60)
+# TukeyHSD(aov.np.r0.60)
+# TukeyHSD(aov.np.r09.60)
 
 data.muj.plot <- data.muj[data.muj$MIX.raw.perc != 1, ]
 data.muj.plot$np.lm.r0[which(!is.na(data.muj.plot$new.phylo.r.e0))] <- fitted(lm.np.r0)
@@ -421,5 +421,9 @@ data.muj.plot$np.lm.r09[which(!is.na(data.muj.plot$new.phylo.r.e09))] <- fitted(
 
 data.muj.plot$np.plgs.r0 <- fitted(mod.np.r0)[,1][match(data.muj.plot$family, names(fitted(mod.np.r0)[,1]))]
 data.muj.plot$np.plgs.r09 <- fitted(mod.np.r09)[,1][match(data.muj.plot$family, names(fitted(mod.np.r09)[,1]))]
+
+fulltree <- read.tree("./data/fam_tree_family_full.tre")
+
+cophylo.myco <- cophylo(tree, fulltree)
 
 save.image(file = "./output/harris_davies_results.RData")
