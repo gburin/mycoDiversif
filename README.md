@@ -1,6 +1,21 @@
 # "Seed plant families with diverse mycorrhizal states have higher diversification rates"
 
-Codes and data for Mujica et al.
+Codes and data for Mujica et al. Link to the preprint will be available soon.
+
+## Instructions to reproduce the manuscript
+
+1. Set the working directory to the root of the repository
+2. Run the following commands:
+> library("rmarkdown")
+> rmarkdown::render("./manuscript/mujica_etal.Rmd")
+> rmarkdown::render("./manuscript/supp_mat.Rmd")
+3. PDFs will be available in the ./'manuscript' folder
+
+Should you want to re-run the analysis, run the following replacing 'filename' by the corresponding script:
+> source("./R/filename.R")
+but keep in mind that some of the analyses take a few seconds/minutes to run, so be patient.
+
+Some of the figures needed to be adapted using the vector graphics editor [inkscape](https://inkscape.org/). The SVG files are available within the './output' folder, along with the raw pdf versions of the figures straight from R.
 
 ## Abstract
 
