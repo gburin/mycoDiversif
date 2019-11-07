@@ -955,13 +955,17 @@ obtained from their phylogeny. Panels a and c: e = 0; panels b and d: e
 
 \caption{\label{tab:unnamed-chunk-43}Summary statistics for linear models and ANOVA using Harris and Davies (2016) phylogeny.}
 \centering
-\begin{tabular}{l|l|r|l|r|l|l}
+\begin{tabular}{c|c|c|c|c|c|c}
 \hline
-model & pvalue.r0 & R2.r0 & pvalue.r09 & R2.r09 & pvalue.r0.1 & pvalue.r09.1\\
+\multicolumn{1}{c|}{ } & \multicolumn{3}{c|}{e = 0} & \multicolumn{3}{c}{e = 0.9} \\
+\cline{2-4} \cline{5-7}
+\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Regression} & \multicolumn{1}{c|}{ANOVA} & \multicolumn{2}{c|}{Regression} & \multicolumn{1}{c}{ANOVA} \\
+\cline{2-3} \cline{4-4} \cline{5-6} \cline{7-7}
+Model & p-value & R\textsuperscript{2} & p-value & p-value & R\textsuperscript{2} & p-value\\
 \hline
-Phylogenetic & \textbf{2.724e-13} & 0.135 & \textbf{3.581e-13} & 0.134 & \textbf{0.0005} & \textbf{0.0003}\\
+Phylogenetic & \textbf{2.724e-13} & 0.135 & \textbf{0.0005} & \textbf{3.581e-13} & 0.134 & \textbf{0.0003}\\
 \hline
-Linear & \textbf{1.345e-14} & 0.146 & \textbf{1.228e-14} & 0.147 & \textbf{0.019} & \textbf{0.02}\\
+Linear & \textbf{1.345e-14} & 0.146 & \textbf{0.019} & \textbf{1.228e-14} & 0.147 & \textbf{0.02}\\
 \hline
 \end{tabular}
 \end{table}

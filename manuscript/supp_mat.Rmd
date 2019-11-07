@@ -1561,16 +1561,19 @@ plot_grid(sh.r0.np,
 
 np.sum <-
     data.frame(model = c("Phylogenetic", "Linear"),
-                     pvalue.r0 = c("\\textbf{2.724e-13}", "\\textbf{1.345e-14}"),
-                     R2.r0 = c(0.1349, 0.1464),
-                     pvalue.r09 = c("\\textbf{3.581e-13}", "\\textbf{1.228e-14}"),
-                     R2.r09 = c(0.1336, 0.1468),
-                     pvalue.r0 = c("\\textbf{0.0005}", "\\textbf{0.019}"),
-                     pvalue.r09 = c("\\textbf{0.0003}", "\\textbf{0.02}")
+                     pvalue.r0.reg = c("\\textbf{2.724e-13}", "\\textbf{1.345e-14}"),
+                     R2.r0.reg = c(0.1349, 0.1464),
+                     pvalue.r0.aov = c("\\textbf{0.0005}", "\\textbf{0.019}"),
+                     pvalue.r09.reg = c("\\textbf{3.581e-13}", "\\textbf{1.228e-14}"),
+                     R2.r09.reg = c(0.1336, 0.1468),
+                     pvalue.r09.aov = c("\\textbf{0.0003}", "\\textbf{0.02}")
                      )
 
-kable_styling(kable(x = np.sum,
-                    format = "latex", caption = "Summary statistics for linear models and ANOVA using Harris and Davies (2016) phylogeny.", escape = FALSE), latex_options = "HOLD_position"
-              )
+kable(x = np.sum,
+      format = "latex", caption = "Summary statistics for linear models and ANOVA using Harris and Davies (2016) phylogeny.", escape = FALSE, digits = 3, col.names = c("Model", "p-value", "R\\textsuperscript{2}", "p-value", "p-value", "R\\textsuperscript{2}", "p-value"), align = "c") %>%
+  kable_styling(latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "Regression" = 2, "ANOVA" = 1, "Regression" = 2, "ANOVA" = 1)) %>%
+  add_header_above(c(" ", "e = 0" = 3, "e = 0.9" = 3))
 
 ```
