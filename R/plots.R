@@ -1,3 +1,9 @@
+library("ape")
+library("tidyverse")
+library("RColorBrewer")
+library("geiger")
+library("phytools")
+library("cowplot")
 load("./output/main_results.RData")
 
 ## Calculating expected limits from all vascular plants
@@ -28,7 +34,7 @@ ggplot(data = limits.vasc.stem) +
     theme_cowplot() +
     theme(legend.position = "bottom") +
     scale_colour_brewer(palette = "Dark2") +
-    labs(colour = "Mycorrhizal Type")
+    labs(colour = "Mycorrhizal State")
 
 ggsave(filename = "./output/figs/magsand_stem_labeled.pdf")
 
@@ -44,7 +50,7 @@ ggplot(data = limits.vasc.stem) +
     theme_cowplot() +
     theme(legend.position = "bottom") +
     scale_colour_brewer(palette = "Dark2") +
-    labs(colour = "Mycorrhizal Type")
+    labs(colour = "Mycorrhizal State")
 
 ggsave(filename = "./output/figs/magsand_stem_nolabel.pdf")
 
@@ -125,7 +131,7 @@ box.r0 <-
     theme_cowplot() +
     theme(legend.position = "none") +
     scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
-    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
 
 box.r09 <-
     ggplot(data = family.data.gen[-which(is.na(family.data.gen$r.e09)),]) +
@@ -134,7 +140,7 @@ box.r09 <-
     theme_cowplot() +
     theme(legend.position = "none") +
     scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
-    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
 
 
 plot_grid(box.r0,
