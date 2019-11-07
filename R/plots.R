@@ -1,4 +1,4 @@
-source("./R/main_analysis.R")
+load("./output/main_results.RData")
 
 ## Calculating expected limits from all vascular plants
 stem.age.vasc <- max(branching.times(fulltree.vasc)) - findMRCA(fulltree.vasc, c(fulltree.vasc$tip.label[621:622]), type = "height")
@@ -38,7 +38,7 @@ ggplot(data = limits.vasc.stem) +
     geom_line(aes(x = age, y = ub.0)) +
     geom_line(aes(x = age, y = lb.09), linetype = "dashed") +
     geom_line(aes(x = age, y = ub.09), linetype = "dashed") +
-    geom_point(data = family.data.gen, aes(x = stem.age, y = rich, colour = type.60), size = 2.5) +
+    geom_point(data = family.data.gen[family.data.gen$type.60 != "ER",], aes(x = stem.age, y = rich, colour = type.60), size = 2.5) +
     scale_y_log10() +
     labs(x = "Age of Clade (MY)", y = "Number of Species") +
     theme_cowplot() +
@@ -116,23 +116,24 @@ family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
 family.data.gen$type.80 <- as.character(family.data.gen$type.80)
 family.data.gen$type.100 <- as.character(family.data.gen$type.100)
+family.data.gen <- family.data.gen[family.data.gen$type.60 != "ER",]
 
 box.r0 <-
     ggplot(data = family.data.gen[-which(is.na(family.data.gen$r.e0)),]) +
-    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
-    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e0, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e0), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
     theme_cowplot() +
     theme(legend.position = "none") +
-    scale_colour_brewer(palette = "Set1") +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
     labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
 
 box.r09 <-
     ggplot(data = family.data.gen[-which(is.na(family.data.gen$r.e09)),]) +
-    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
-    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
     theme_cowplot() +
     theme(legend.position = "none") +
-    scale_colour_brewer(palette = "Set1") +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
     labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
 
 
