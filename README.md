@@ -1,6 +1,6 @@
 # "Seed plant families with diverse mycorrhizal states have higher diversification rates"
 
-Codes and data for Mujica et al. Link to the preprint will be available soon.
+Codes and data for Mujica et al. You can access the preprint @ [bioRxiv](https://www.biorxiv.org/content/10.1101/824441v1).
 
 ## Instructions to reproduce the manuscript
 
