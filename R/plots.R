@@ -61,7 +61,7 @@ mtdi.r0 <-
     geom_point(aes(x = shannon, y = r.e0), size = 2) +
     geom_abline(data = data.frame(int = coef(lm.r0)[1], sl = coef(lm.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
     geom_abline(data = data.frame(int = coef(mod.r0)[1], sl = coef(mod.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
-    labs(x = "Mycorrhizal Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    labs(x = "Mycorrhizal State Shannon Index", y = "Diversification Rate", col = "Model Type") +
     #xlim(0, 1) +
     scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
     theme_cowplot() +
@@ -72,7 +72,7 @@ mtdi.r09 <-
     geom_point(aes(x = shannon, y = r.e0), size = 2) +
     geom_abline(data = data.frame(int = coef(lm.r09)[1], sl = coef(lm.r09)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
     geom_abline(data = data.frame(int = coef(mod.r09)[1], sl = coef(mod.r09)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
-    labs(x = "Mycorrhizal Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    labs(x = "Mycorrhizal State Shannon Index", y = "Diversification Rate", col = "Model Type") +
     #xlim(0, 1) +
     scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
     theme_cowplot() +
@@ -84,7 +84,7 @@ stem.age.sh <-
     geom_point(aes(x = shannon, y = stem.age), size = 2) +
     geom_abline(data = data.frame(int = coef(pgls.age.sh)[1], sl = coef(pgls.age.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, ,colour = col),  size = 1.5) +
     geom_abline(data = data.frame(int = coef(lm.age.sh)[1], sl = coef(lm.age.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
-    labs(x = "Mycorrhizal Type Diversity Index", y = "Family Age", colour = "Model Type") +
+    labs(x = "Mycorrhizal State Diversity Index", y = "Family Age", colour = "Model Type") +
     #xlim(0, 1) +
     scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model"))+
     theme_cowplot() +
@@ -95,7 +95,7 @@ rich.sh <-
     geom_point(aes(x = shannon, y = rich), size = 2) +
     geom_abline(data = data.frame(int = coef(pgls.rich.sh)[1], sl = coef(pgls.rich.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, ,colour = col), size = 1.5) +
     geom_abline(data = data.frame(int = coef(lm.rich.sh)[1], sl = coef(lm.rich.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
-    labs(x = "Mycorrhizal Type Diversity Index", y = "Species Richness", colour = "Model Type") +
+    labs(x = "Mycorrhizal State Diversity Index", y = "Species Richness", colour = "Model Type") +
     #xlim(0, 1) +
     scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model")) +
     theme_cowplot() +
