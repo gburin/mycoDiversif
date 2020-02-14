@@ -34,7 +34,7 @@ family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
 
 ## write.table(family.data.gen, file = "./data/family_data_genus_final.csv", sep = ",", quote = FALSE, row.names = FALSE)
 
-family.data.gen <- family.data.gen[-match(c("Orchidaceae", "Ericaceae"), family.data.gen$family),]
+family.data.gen <- family.data.gen[-match(c("Orchidaceae", "Ericaceae", "Diapensiaceae"), family.data.gen$family),]
 
 ## min(((family.data.gen$rich - family.data.gen$UNK)/family.data.gen$rich))
 
@@ -64,7 +64,6 @@ lm.r09 <- lm(r.e09 ~ shannon, data = family.data.gen[family.data.gen$MIX.raw.per
 data.aov <- family.data.gen[-which(is.na(match(family.data.gen$family, fulltree$tip.label))), ]
 data.aov <- data.aov[-which(is.na(data.aov$r.e0)),]
 data.aov <- data.aov[which(data.aov$MIX.raw.perc != 1), ]
-data.aov <- data.aov[-which(data.aov$type.50 == "ER"), ]
 
 ## Thresholds
 ### 50%

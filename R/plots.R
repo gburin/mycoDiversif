@@ -4,6 +4,8 @@ library("RColorBrewer")
 library("geiger")
 library("phytools")
 library("cowplot")
+library("ggrepel")
+library("caper")
 load("./output/main_results.RData")
 
 ## Calculating expected limits from all vascular plants
@@ -28,7 +30,7 @@ ggplot(data = limits.vasc.stem) +
     geom_line(aes(x = age, y = lb.09), linetype = "dashed") +
     geom_line(aes(x = age, y = ub.09), linetype = "dashed") +
     geom_point(data = family.data.gen, aes(x = stem.age, y = rich, colour = type.60), size = 2.5) +
-    geom_text_repel(data = family.data.gen, aes(x = stem.age, y = rich, label = family, colour = type.60.valid)) +
+    geom_text_repel(data = family.data.gen, aes(x = stem.age, y = rich, label = family, colour = type.60)) +
     scale_y_log10() +
     labs(x = "Age of Clade (MY)", y = "Number of Species") +
     theme_cowplot() +
@@ -56,20 +58,20 @@ ggsave(filename = "./output/figs/magsand_stem_nolabel.pdf")
 
 
 ## Scatter - MTDI vs. Net Diversification
-mtdi.r0 <-
-    ggplot(data = na.omit(family.data.gen)) +
-    geom_point(aes(x = shannon, y = r.e0), size = 2) +
-    geom_abline(data = data.frame(int = coef(lm.r0)[1], sl = coef(lm.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
-    geom_abline(data = data.frame(int = coef(mod.r0)[1], sl = coef(mod.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
-    labs(x = "Mycorrhizal State Shannon Index", y = "Diversification Rate", col = "Model Type") +
-    #xlim(0, 1) +
-    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
-    theme_cowplot() +
-    theme(legend.position = "top")
+## mtdi.r0 <-
+##     ggplot(data = na.omit(family.data.gen)) +
+##     geom_point(aes(x = shannon, y = r.e0), size = 2) +
+##     geom_abline(data = data.frame(int = coef(lm.r0)[1], sl = coef(lm.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
+##     geom_abline(data = data.frame(int = coef(mod.r0)[1], sl = coef(mod.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+##     labs(x = "Mycorrhizal State Shannon Index", y = "Diversification Rate", col = "Model Type") +
+##     #xlim(0, 1) +
+##     scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+##     theme_cowplot() +
+##     theme(legend.position = "top")
 
 mtdi.r09 <-
     ggplot(data = na.omit(family.data.gen)) +
-    geom_point(aes(x = shannon, y = r.e0), size = 2) +
+    geom_point(aes(x = shannon, y = r.e09), size = 2) +
     geom_abline(data = data.frame(int = coef(lm.r09)[1], sl = coef(lm.r09)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
     geom_abline(data = data.frame(int = coef(mod.r09)[1], sl = coef(mod.r09)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
     labs(x = "Mycorrhizal State Shannon Index", y = "Diversification Rate", col = "Model Type") +
@@ -93,26 +95,37 @@ stem.age.sh <-
 rich.sh <-
     ggplot(data = na.omit(family.data.gen)) +
     geom_point(aes(x = shannon, y = rich), size = 2) +
-    geom_abline(data = data.frame(int = coef(pgls.rich.sh)[1], sl = coef(pgls.rich.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, ,colour = col), size = 1.5) +
+    geom_abline(data = data.frame(int = coef(pgls.rich.sh)[1], sl = coef(pgls.rich.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5) +
     geom_abline(data = data.frame(int = coef(lm.rich.sh)[1], sl = coef(lm.rich.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
     labs(x = "Mycorrhizal State Diversity Index", y = "Species Richness", colour = "Model Type") +
     #xlim(0, 1) +
     scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model")) +
+    #scale_y_log10() +
     theme_cowplot() +
     theme(legend.position = "top")
 
+rich.sh.log10 <-
+    ggplot(data = na.omit(family.data.gen)) +
+    geom_point(aes(x = shannon, y = rich), size = 2) +
+    geom_line(data = data.frame(x = seq(0, max(na.omit(family.data.gen)$shannon), by = 0.01), y = (seq(0, max(na.omit(family.data.gen)$shannon), by = 0.01) * coef(pgls.rich.sh)[2]) + coef(pgls.rich.sh)[1], col = "a"), aes(x = x, y = y, colour = col), size = 1.5) +
+    geom_line(data = data.frame(x = seq(0, max(na.omit(family.data.gen)$shannon), by = 0.01), y = (seq(0, max(na.omit(family.data.gen)$shannon), by = 0.01) * coef(lm.rich.sh)[2]) + coef(lm.rich.sh)[1], col = "blue"), aes(x = x, y = y, colour = col), size = 1.5, linetype = "dashed") +
+    labs(x = "Mycorrhizal State Diversity Index", y = "Species Richness", colour = "Model Type") +
+    scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model")) +
+    scale_y_log10() +
+    theme_cowplot() +
+    theme(legend.position = "top")
 
-plot_grid(mtdi.r0,
+plot_grid(mtdi.r09,
           stem.age.sh,
-          mtdi.r09,
-          rich.sh,
-          ncol = 2,
+          #mtdi.r09,
+          rich.sh.log10,
+          nrow = 3,
           align = 'hv',
           axis = 'tlbr',
           labels = letters[1:4]
           )
 
-ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf", width = 11, height = 7)
+ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf", width = 5.5, height = 13)
 
 
 
@@ -141,6 +154,8 @@ box.r09 <-
     theme(legend.position = "none") +
     scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
     labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+ggsave(filename = "./output/figs/boxplots_netdiv_myctype_r09.pdf", width = 11, height = 5.5, units = "in")
 
 
 plot_grid(box.r0,

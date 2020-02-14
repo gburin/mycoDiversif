@@ -136,8 +136,8 @@ Figure 4: Scatterplots showing the relationship between mycorrhizal diversity in
 
 \newpage
 
-![](../output/figs/boxplots_netdiv_myctype.pdf)
+![](../output/figs/boxplots_netdiv_myctype_r09.pdf)
 
 \newpage
 
-![](../output/figs/scatterplots_lm_pgls_stem_edited.pdf)
+![](../output/figs/scatterplots_lm_pgls_stem_vert.pdf)
