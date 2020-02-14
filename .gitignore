@@ -41,3 +41,6 @@ rsconnect/
 # Word documents
 *.doc
 *.docx
+
+# nohup log files
+*.err
