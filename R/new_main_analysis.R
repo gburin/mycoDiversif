@@ -5,7 +5,7 @@ library("cowplot")
 library("RColorBrewer")
 library("geiger")
 library("phytools")
-library("ggrepel")
+#library("ggrepel")
 library("foreach")
 library("doMC")
 library("reshape2")
@@ -154,6 +154,6 @@ main.analysis <- function(x, age, fulltree){
 
 registerDoMC(56)
 
-main.results <- foreach(i = 1:nrep) %dopar% {
-    main.analysis(x = i, age = age.data, fulltree = fulltree)
-}
+main.results <- ldply(1:nrep, main.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE)
+
+write.table(main.results, file = "./output/fit_data_random_datasets.csv", sep = ",", quote = FALSE, row.names = FALSE)
