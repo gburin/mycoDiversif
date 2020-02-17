@@ -6,7 +6,31 @@ library("phytools")
 library("cowplot")
 library("ggrepel")
 library("caper")
-load("./output/main_results.RData")
+library("patchwork")
+
+## Importing tree
+fulltree <- read.tree("./data/fam_tree_family_full.tre")
+fulltree$node.label <- NULL
+fulltree.vasc <- read.tree("./data/Vascular_Plants_rooted.dated.tre")
+
+## Importing results from random datasets
+fullresults <- read.csv("./output/fit_data_random_datasets.csv")
+
+## Importing table with rates for plotting
+family.data.gen <- read.csv("./data/family_data_genus_classif.csv", stringsAsFactors = FALSE, row.names = NULL)
+family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
+family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
+
+age.data <- read.csv("./data/data_all_families.csv", sep = ";")
+
+## Removing families with unknown mycorrhizal type
+family.data.gen <- family.data.gen[-which(family.data.gen$UNK.raw.perc == 1),]
+
+family.data.gen$stem.age <- age.data$stem.age[match(family.data.gen$family, age.data$familia)]
+family.data.gen$r.e0 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0)
+family.data.gen$r.e05 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.5)
+family.data.gen$r.e09 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.9)
+family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
 
 ## Calculating expected limits from all vascular plants
 stem.age.vasc <- max(branching.times(fulltree.vasc)) - findMRCA(fulltree.vasc, c(fulltree.vasc$tip.label[621:622]), type = "height")
@@ -58,78 +82,142 @@ ggsave(filename = "./output/figs/magsand_stem_nolabel.pdf")
 
 
 ## Scatter - MTDI vs. Net Diversification
-## mtdi.r0 <-
-##     ggplot(data = na.omit(family.data.gen)) +
-##     geom_point(aes(x = shannon, y = r.e0), size = 2) +
-##     geom_abline(data = data.frame(int = coef(lm.r0)[1], sl = coef(lm.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
-##     geom_abline(data = data.frame(int = coef(mod.r0)[1], sl = coef(mod.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
-##     labs(x = "Mycorrhizal State Shannon Index", y = "Diversification Rate", col = "Model Type") +
-##     #xlim(0, 1) +
-##     scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
-##     theme_cowplot() +
-##     theme(legend.position = "top")
 
-mtdi.r09 <-
-    ggplot(data = na.omit(family.data.gen)) +
-    geom_point(aes(x = shannon, y = r.e09), size = 2) +
-    geom_abline(data = data.frame(int = coef(lm.r09)[1], sl = coef(lm.r09)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, linetype = "dashed", show.legend = TRUE) +
-    geom_abline(data = data.frame(int = coef(mod.r09)[1], sl = coef(mod.r09)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+## Using 50/50 MIX division just to represent points
+
+scatter.mtdi.r09 <-
+    ggplot(fullresults) +
+    geom_abline(mapping = aes(intercept = pgls.int.r09, slope = pgls.slope.r09), colour = brewer.pal(3, "Set1")[1], show.legend = TRUE, alpha = 0.01) +
+    geom_abline(mapping = aes(intercept = lm.int.r09, slope = lm.slope.r09), colour = brewer.pal(3, "Set1")[2], show.legend = TRUE, alpha = 0.01) +
+    geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = r.e09), size = 2, alpha = 0.5) +
     labs(x = "Mycorrhizal State Shannon Index", y = "Diversification Rate", col = "Model Type") +
     #xlim(0, 1) +
     scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
     theme_cowplot() +
     theme(legend.position = "top")
 
+r2.pgls.r09 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.r2.r09, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.r2.r09), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2))+
+    theme_cowplot()
 
-stem.age.sh <-
-    ggplot(data = na.omit(family.data.gen)) +
-    geom_point(aes(x = shannon, y = stem.age), size = 2) +
-    geom_abline(data = data.frame(int = coef(pgls.age.sh)[1], sl = coef(pgls.age.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, ,colour = col),  size = 1.5) +
-    geom_abline(data = data.frame(int = coef(lm.age.sh)[1], sl = coef(lm.age.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
-    labs(x = "Mycorrhizal State Diversity Index", y = "Family Age", colour = "Model Type") +
-    #xlim(0, 1) +
-    scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model"))+
-    theme_cowplot() +
-    theme(legend.position = "top") 
+pvalue.pgls.r09 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.pvalue.r09, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.pvalue.r09), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
 
-rich.sh <-
-    ggplot(data = na.omit(family.data.gen)) +
-    geom_point(aes(x = shannon, y = rich), size = 2) +
-    geom_abline(data = data.frame(int = coef(pgls.rich.sh)[1], sl = coef(pgls.rich.sh)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5) +
-    geom_abline(data = data.frame(int = coef(lm.rich.sh)[1], sl = coef(lm.rich.sh)[2], col = "blue"), mapping = aes(intercept = int, slope = sl, colour = col), linetype = "dashed", size = 1.5) +
-    labs(x = "Mycorrhizal State Diversity Index", y = "Species Richness", colour = "Model Type") +
+r2.lm.r09 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.r2.r09, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.r2.r09), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2)) +
+    theme_cowplot()
+
+pvalue.lm.r09 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.pvalue.r09, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.pvalue.r09), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+scatter.mtdi.r09 | ((r2.lm.r09 + pvalue.lm.r09) / (r2.pgls.r09 + pvalue.pgls.r09))
+
+## Age vs Shannon
+scatter.age.sh <-
+    ggplot(fullresults) +
+    geom_abline(mapping = aes(intercept = pgls.int.age.sh, slope = pgls.slope.age.sh), colour = brewer.pal(3, "Set1")[1], show.legend = TRUE, alpha = 0.01) +
+    geom_abline(mapping = aes(intercept = lm.int.age.sh, slope = lm.slope.age.sh), colour = brewer.pal(3, "Set1")[2], show.legend = TRUE, alpha = 0.01) +
+    geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = stem.age), size = 2, alpha = 0.5) +
+    labs(x = "Mycorrhizal State Shannon Index", y = "Stem Age", col = "Model Type") +
     #xlim(0, 1) +
-    scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model")) +
-    #scale_y_log10() +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
     theme_cowplot() +
     theme(legend.position = "top")
 
-rich.sh.log10 <-
-    ggplot(data = na.omit(family.data.gen)) +
-    geom_point(aes(x = shannon, y = rich), size = 2) +
-    geom_line(data = data.frame(x = seq(0, max(na.omit(family.data.gen)$shannon), by = 0.01), y = (seq(0, max(na.omit(family.data.gen)$shannon), by = 0.01) * coef(pgls.rich.sh)[2]) + coef(pgls.rich.sh)[1], col = "a"), aes(x = x, y = y, colour = col), size = 1.5) +
-    geom_line(data = data.frame(x = seq(0, max(na.omit(family.data.gen)$shannon), by = 0.01), y = (seq(0, max(na.omit(family.data.gen)$shannon), by = 0.01) * coef(lm.rich.sh)[2]) + coef(lm.rich.sh)[1], col = "blue"), aes(x = x, y = y, colour = col), size = 1.5, linetype = "dashed") +
-    labs(x = "Mycorrhizal State Diversity Index", y = "Species Richness", colour = "Model Type") +
-    scale_colour_brewer(palette = "Set1", labels = c("PGLS", "Linear Model")) +
-    scale_y_log10() +
+r2.pgls.age.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.r2.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.r2.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2))+
+    theme_cowplot()
+
+pvalue.pgls.age.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.pvalue.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.pvalue.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+r2.lm.age.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.r2.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.r2.age.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2)) +
+    theme_cowplot()
+
+pvalue.lm.age.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.pvalue.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.pvalue.age.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+scatter.age.sh | ((r2.pgls.age.sh + pvalue.pgls.age.sh) / (r2.lm.age.sh + pvalue.lm.age.sh))
+
+
+## Richness vs Shannon
+scatter.rich.sh <-
+    ggplot(fullresults) +
+    geom_abline(mapping = aes(intercept = pgls.int.rich.sh, slope = pgls.slope.rich.sh), colour = brewer.pal(3, "Set1")[1], show.legend = TRUE, alpha = 0.01) +
+    geom_abline(mapping = aes(intercept = lm.int.rich.sh, slope = lm.slope.rich.sh), colour = brewer.pal(3, "Set1")[2], show.legend = TRUE, alpha = 0.01) +
+    geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = rich), size = 2, alpha = 0.5) +
+    labs(x = "Mycorrhizal State Shannon Index", y = "Stem Rich", col = "Model Type") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    coord_trans(y = "log10") +
+    scale_y_continuous(breaks = c(10, 50, 100, 500, 1000, 10000, 20000, 30000)) +
     theme_cowplot() +
     theme(legend.position = "top")
 
-plot_grid(mtdi.r09,
-          stem.age.sh,
-          #mtdi.r09,
-          rich.sh.log10,
-          nrow = 3,
-          align = 'hv',
-          axis = 'tlbr',
-          labels = letters[1:4]
-          )
+r2.pgls.rich.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.r2.rich.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.r2.rich.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2))+
+    theme_cowplot()
+
+pvalue.pgls.rich.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.pvalue.rich.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.pvalue.rich.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+r2.lm.rich.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.r2.rich.sh, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.r2.rich.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2)) +
+    theme_cowplot()
+
+pvalue.lm.rich.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.pvalue.rich.sh, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.pvalue.rich.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+scatter.rich.sh | ((r2.pgls.rich.sh + pvalue.pgls.rich.sh) / (r2.lm.rich.sh + pvalue.lm.rich.sh))
 
 ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf", width = 5.5, height = 13)
 
 
 
 ### Boxplots
+## We aggregate mean rates per type for each random dataset
 
 family.data.gen$type.50 <- as.character(family.data.gen$type.50)
 family.data.gen$type.60 <- as.character(family.data.gen$type.60)
