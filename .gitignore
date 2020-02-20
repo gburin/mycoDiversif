@@ -44,3 +44,6 @@ rsconnect/
 
 # nohup log files
 *.err
+
+# Individual csv files for the random datasets
+/output/simulated_datasets/

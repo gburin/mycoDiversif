@@ -219,39 +219,51 @@ ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf", width = 5.5, he
 ### Boxplots
 ## We aggregate mean rates per type for each random dataset
 
-family.data.gen$type.50 <- as.character(family.data.gen$type.50)
-family.data.gen$type.60 <- as.character(family.data.gen$type.60)
-family.data.gen$type.80 <- as.character(family.data.gen$type.80)
-family.data.gen$type.100 <- as.character(family.data.gen$type.100)
-family.data.gen <- family.data.gen[family.data.gen$type.60 != "ER",]
+age.data$r.e0 <- geiger::bd.ms(time = age.data$stem.age, n = age.data$nro_especies, crown = FALSE, epsilon = 0)
+age.data$r.e09 <- geiger::bd.ms(time = age.data$stem.age, n = age.data$nro_especies, crown = FALSE, epsilon = 0.9)
+
+random.data <- lapply(paste0("./output/simulated_datasets/", list.files("./output/simulated_datasets/")), read.csv, stringsAsFactors = FALSE)
+
+random.types <- data.frame(
+    family = age.data$familia,
+    r.e0 = age.data$r.e0,
+    r.e09 = age.data$r.e09
+)
+
+for(i in 1:length(random.data)){
+    random.types <- cbind(random.types,
+                          random.data[[i]]$type.60
+                          )
+}
+
+## Removing families that are 100% UNK
+random.types <- random.types[-which(random.types[,4] == "UNK"),]
+
+anova.data.r0 <- plyr::ldply(random.types[4:10003], function(x){aggregate(random.types$r.e0, by = list(x), FUN = mean)})
+anova.data.r09 <- plyr::ldply(random.types[4:10003], function(x){aggregate(random.types$r.e09, by = list(x), FUN = mean)})
 
 box.r0 <-
-    ggplot(data = family.data.gen[-which(is.na(family.data.gen$r.e0)),]) +
-    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e0, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
-    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e0), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
-    theme_cowplot() +
-    theme(legend.position = "none") +
-    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
-    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
-
-box.r09 <-
-    ggplot(data = family.data.gen[-which(is.na(family.data.gen$r.e09)),]) +
-    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
-    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    ggplot(data = anova.data.r0[is.na(match(anova.data.r0$Group.1, c("OM", "ER"))),]) +
+    geom_boxplot(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, outlier.alpha = 1, outlier.shape = 3, size = 1) +
+    geom_point(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), alpha = 0.05, position = position_jitterdodge(jitter.width = 2.2, dodge.width = 1)) +
+    stat_summary(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fun.y = mean, geom = "point", colour = "black", size = 2) +
     theme_cowplot() +
     theme(legend.position = "none") +
     scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
     labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
 
-ggsave(filename = "./output/figs/boxplots_netdiv_myctype_r09.pdf", width = 11, height = 5.5, units = "in")
+box.r09 <-
+    ggplot(data = anova.data.r09[is.na(match(anova.data.r09$Group.1, c("OM", "ER"))),]) +
+    geom_boxplot(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, outlier.alpha = 1, outlier.shape = 3, size = 2) +
+    geom_point(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), alpha = 0.05, position = position_jitterdodge(jitter.width = 2.2, dodge.width = 1)) +
+    stat_summary(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fun.y = mean, geom = "point", colour = "black", size = 2) +
+    theme_cowplot() +
+    theme(legend.position = "none") +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+ggsave(filename = "./output/figs/boxplots_netdiv_myctype_r09.pdf", box.r09, width = 11, height = 5.5, units = "in")
 
 
-plot_grid(box.r0,
-          box.r09,
-          nrow = 2,
-          align = 'v',
-          labels = c("a", "b")
-          )
-
-ggsave(filename = "./output/figs/boxplots_netdiv_myctype.pdf", width = 11, height = 7, units = "in")
+ggsave(filename = "./output/figs/boxplots_netdiv_myctype_r0.pdf", box.r0, width = 11, height = 7, units = "in")
 
