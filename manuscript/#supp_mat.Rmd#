@@ -39,7 +39,7 @@ options(digits = 3)
 
 # Comparison with background rates
 
-```{r}
+```{r fig.caption = "Relationship between number of species and age for each lineage when compared to the confidence intervals based on the global diversification rate of seed plants.  The solid and dashed lines represent the expected richness for epsilon = 0 and epsilon = 0.9, respectively. The color of the points represents the mycorrhizal state for the 60% threshold."}
 
 ## Importing tree
 fulltree <- read.tree("./data/fam_tree_family_full.tre")

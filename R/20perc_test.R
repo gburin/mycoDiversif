@@ -42,7 +42,7 @@ registerDoMC(2)
 
 myco.sampling <- function(x, age, fulltree, reps){
     print(paste0("Replica ", x))
-    family.data.gen <- read.csv(paste0("./output/simulated_datasets/random_data_", x, ".csv"), stringsAsFactors = FALSE)
+    family.data.gen <- read.csv(paste0("./output/simulated_datasets/random_data_", sprintf("%05d", x), ".csv"), stringsAsFactors = FALSE)
     family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
     family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
     ## Removing families with unknown mycorrhizal type

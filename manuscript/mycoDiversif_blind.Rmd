@@ -140,4 +140,4 @@ Figure 4: Scatterplots showing the relationship between mycorrhizal diversity in
 
 \newpage
 
-![](../output/figs/scatterplots_lm_pgls_stem_vert.pdf)
+![](../output/figs/scatterplots_lm_pgls_stem_r09.pdf)

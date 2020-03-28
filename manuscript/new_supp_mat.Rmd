@@ -1,0 +1,1256 @@
+---
+title: "Supplementary Material - Mujica et al."
+output:
+  pdf_document:
+    toc: true
+    fig_caption: true
+    latex_engine: lualatex
+    number_sections: false
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \floatplacement{table}{H}
+  - \floatplacement{verbatim}{H}
+  - \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
+  - \usepackage{lscape}
+  - \newcommand{\blandscape}{\begin{landscape}}
+  - \newcommand{\elandscape}{\end{landscape}}
+---
+
+```{r echo = FALSE}
+
+knitr::opts_chunk$set(echo = FALSE, fig.width = 11, fig.height = 9, warning = FALSE, message = FALSE, fig.pos = 'H')
+library("kableExtra")
+library("caper")
+library("tidyverse")
+library("cowplot")
+library("RColorBrewer")
+library("ape")
+library("RColorBrewer")
+library("geiger")
+library("phytools")
+library("ggrepel")
+library("patchwork")
+rm(list = ls())
+load("../output/main_results.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
+options(digits = 3)
+
+```
+
+\beginsupplement
+
+# Comparison with background rates
+
+\blandscape
+
+```{r fig.height = 6, fig.cap = "Relationship between number of species and age for each lineage when compared to the confidence intervals based on the global diversification rate of seed plants. The solid and dashed lines represent the expected richness for epsilon = 0 and epsilon = 0.9, respectively. The color of the points represents the mycorrhizal state for the 60% threshold."}
+
+## Importing tree
+fulltree <- read.tree("../data/fam_tree_family_full.tre")
+fulltree$node.label <- NULL
+fulltree.vasc <- read.tree("../data/Vascular_Plants_rooted.dated.tre")
+
+## Importing results from random datasets
+fullresults <- read.csv("../output/fit_data_random_datasets.csv")
+
+## Importing table with rates for plotting
+family.data.gen <- read.csv("../output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
+family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
+family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
+
+age.data <- read.csv("../data/data_all_families.csv", sep = ";")
+
+## Removing families with unknown mycorrhizal type
+family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
+
+family.data.gen$stem.age <- age.data$stem.age[match(family.data.gen$family, age.data$familia)]
+family.data.gen$r.e0 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0)
+family.data.gen$r.e05 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.5)
+family.data.gen$r.e09 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.9)
+family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
+
+## Calculating expected limits from all vascular plants
+stem.age.vasc <- max(branching.times(fulltree.vasc)) - findMRCA(fulltree.vasc, c(fulltree.vasc$tip.label[621:622]), type = "height")
+
+r.vasc.stem.r0 <- bd.ms(time = stem.age.vasc, n = sum(family.data.gen$rich), crown = FALSE, epsilon = 0)
+r.vasc.stem.r05 <- bd.ms(time = stem.age.vasc, n = sum(family.data.gen$rich), crown = FALSE, epsilon = 0.5)
+r.vasc.stem.r0.9 <- bd.ms(time = stem.age.vasc, n = sum(family.data.gen$rich), crown = FALSE, epsilon = 0.9)
+
+limits.vasc.stem <- data.frame(
+    time = seq(1, 300, by = 1),
+    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r0, epsilon = 0)),
+    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r05, epsilon = 0.5)),
+    t(mapply(stem.limits, seq(1, 300, by = 1), r = r.vasc.stem.r0.9, epsilon = 0.9))
+    )
+names(limits.vasc.stem) <- c("age", "lb.0", "ub.0", "lb.05", "ub.05", "lb.09", "ub.09")
+
+## Stem age
+ggplot(data = limits.vasc.stem) +
+    geom_line(aes(x = age, y = lb.0)) +
+    geom_line(aes(x = age, y = ub.0)) +
+    geom_line(aes(x = age, y = lb.09), linetype = "dashed") +
+    geom_line(aes(x = age, y = ub.09), linetype = "dashed") +
+    geom_point(data = family.data.gen, aes(x = stem.age, y = rich, colour = type.60), size = 2.5) +
+    #geom_label_repel(data = family.data.gen, aes(x = stem.age, y = rich, label = family, colour = type.60), segment.alpha = 0.5) +
+    #xlim(-50, 300) +
+    scale_y_log10(breaks = c(10, 1000, 10000)) +
+    labs(x = "Age of Clade (MY)", y = "Number of Species") +
+    theme_cowplot() +
+    theme(legend.position = "bottom") +
+    scale_colour_brewer(palette = "Dark2") +
+    labs(colour = "Mycorrhizal State")
+
+```
+
+\elandscape
+
+# Relationship bewteen mycorrhizal diversity index, species richness and age
+
+```{r fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and (a) species richness and (c) stem age. Panels (b) and (d) show the frequency distribution of R\^{2} and p-values of linear models (blue bars) and PGLS (red bars). Dashed lines show the median for each distribution."}
+
+## Age vs Shannon
+scatter.age.sh <-
+    ggplot(fullresults) +
+    geom_abline(mapping = aes(intercept = pgls.int.age.sh, slope = pgls.slope.age.sh, colour = "PGLS"), show.legend = TRUE, alpha = 1) +
+    geom_abline(mapping = aes(intercept = lm.int.age.sh, slope = lm.slope.age.sh, colour = "Linear Model"), show.legend = TRUE, alpha = 1) +
+    geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = stem.age), size = 2, alpha = 0.5) +
+    labs(x = "Mycorrhizal State Diversity Index", y = "Stem Age", col = "Model Type") +
+    #xlim(0, 1) +
+    scale_colour_manual(values = c("PGLS" = brewer.pal(3, "Set1")[1], "Linear Model" = brewer.pal(3, "Set1")[2])) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+r2.pgls.age.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.r2.age.sh), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.r2.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(x = bquote('R' ^2), y = element_blank()) +
+    theme_cowplot()
+
+pvalue.pgls.age.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.pvalue.age.sh), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.pvalue.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+r2.lm.age.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.r2.age.sh), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.r2.age.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2)) +
+    theme_cowplot()
+
+pvalue.lm.age.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.pvalue.age.sh), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.pvalue.age.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+
+scatter.rich.sh <-
+    ggplot(fullresults) +
+    geom_abline(mapping = aes(intercept = pgls.int.rich.sh, slope = pgls.slope.rich.sh), colour = brewer.pal(3, "Set1")[1], show.legend = TRUE, alpha = 1) +
+    geom_abline(mapping = aes(intercept = lm.int.rich.sh, slope = lm.slope.rich.sh), colour = brewer.pal(3, "Set1")[2], show.legend = TRUE, alpha = 1) +
+    geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = rich), size = 2, alpha = 0.5) +
+    labs(x = "Mycorrhizal State Diversity Index", y = "Species Richness per Family", col = "Model Type") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    #coord_trans(y = "log10") +
+    #scale_y_continuous(breaks = c(10, 50, 100, 500, 1000, 10000, 20000, 30000)) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+r2.pgls.rich.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.r2.rich.sh), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.r2.rich.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2))+
+    theme_cowplot()
+
+pvalue.pgls.rich.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.pvalue.rich.sh), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.pvalue.rich.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+r2.lm.rich.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.r2.rich.sh), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.r2.rich.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2)) +
+    theme_cowplot()
+
+pvalue.lm.rich.sh <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.pvalue.rich.sh), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$lm.pvalue.rich.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    theme_cowplot()
+
+((scatter.age.sh | ((r2.pgls.age.sh + pvalue.pgls.age.sh) / (r2.lm.age.sh + pvalue.lm.age.sh))) + plot_annotation(tag_levels = 'A'))/ ((scatter.rich.sh | ((r2.pgls.rich.sh + pvalue.pgls.rich.sh) / (r2.lm.rich.sh + pvalue.lm.rich.sh))) + plot_annotation(tag_levels = 'A'))
+
+```
+
+# Adding randomly 20% of misassignment of mycorrhizal type into the data obtained from genus-level list
+
+```{r fig.height = 4, fig.cap = "Distribution of R\\textsuperscript{2}, p-value and slope value distributions for epsilon = 0 after adding 20% misassignment of mycorrhizal type."}
+
+### 20% analysis
+rm(list = ls())
+load("../output/hist_20perc.RData")
+
+(hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
+
+```
+
+```{r fig.height = 4, fig.cap = "Distribution of R\\textsuperscript{2}, p-value and slope value distributions for epsilon = 0.9 after adding 20% misassignment of mycorrhizal type."}
+
+(hist.lm.pvalue.r09 + hist.lm.r2.r09 + hist.lm.slope.r09) / (hist.pgls.pvalue.r09 + hist.pgls.r2.r09 + hist.pgls.slope.r09)
+
+```
+
+# Analyses with the Species-level dataset
+
+```{r}
+
+## This step is mandatory to avoid problems with overlapping object names
+rm(list = ls())
+load("../output/suppdata_species_noremarks.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
+
+```
+
+## Clean dataset - excluding species with any remark
+
+```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the thresholds (a) 50\\%, (b) 60\\%, (c) 80\\% and (d) 100\\% for MIX state assignment using the species-level dataset without remarks. Each panel shows diversification rate estimated with e = 0 (upper) and diversification rate estimated with e = 0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+
+family.data.clean$type.50 <- as.character(family.data.clean$type.50)
+family.data.clean$type.60 <- as.character(family.data.clean$type.60)
+family.data.clean$type.80 <- as.character(family.data.clean$type.80)
+family.data.clean$type.100 <- as.character(family.data.clean$type.100)
+
+box.r0.50 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.50, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem, colour = factor(type.50, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.50, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.50 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.50, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem, colour = factor(type.50, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.50, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+thresh50 <-
+    plot_grid(box.r0.50,
+          box.r09.50,
+          nrow = 2,
+          align = 'v'
+          )
+
+box.r0.60 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.60 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem, colour = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+
+thresh60 <-
+    plot_grid(box.r0.60,
+          box.r09.60,
+          nrow = 2,
+          align = 'v'
+          )
+
+box.r0.80 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.80, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem, colour = factor(type.80, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.80, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.80 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.80, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem, colour = factor(type.80, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.80, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+
+thresh80 <-
+    plot_grid(box.r0.80,
+          box.r09.80,
+          nrow = 2,
+          align = 'v'
+          )
+
+box.r0.100 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.100, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem, colour = factor(type.100, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.100, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.100 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = factor(type.100, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem, colour = factor(type.100, levels = c("AM", "EM", "NM", "ER", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.100, levels = c("AM", "EM", "NM", "ER", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+
+thresh100 <-
+    plot_grid(box.r0.100,
+          box.r09.100,
+          nrow = 2,
+          align = 'v'
+          )
+
+plot_grid(thresh50,
+          thresh60,
+          thresh80,
+          thresh100,
+          nrow = 2,
+          align = 'hv',
+          labels = LETTERS[1:4]
+          )
+
+```
+
+### Summary statistics using clean species-level dataset
+
+```{r}
+
+phyaov.sum <- data.frame(Threshold = c("50\\%", "60\\%", "80\\%", "100\\%"),
+                                   F.r0 = round(c(phyaov.r0.50$F,
+                                            phyaov.r0.60$F,
+                                            phyaov.r0.80$F,
+                                            phyaov.r0.100$F), 3),
+                                   pvalue.r0 = round(c(phyaov.r0.50$Pf,
+                                                 phyaov.r0.60$Pf,
+                                                 phyaov.r0.80$Pf,
+                                                 phyaov.r0.100$Pf), 3),
+                                   F.r09 = round(c(phyaov.r09.50$F,
+                                            phyaov.r09.60$F,
+                                            phyaov.r09.80$F,
+                                            phyaov.r09.100$F), 3),
+                                   pvalue.r09 = round(c(phyaov.r09.50$Pf,
+                                                 phyaov.r09.60$Pf,
+                                                 phyaov.r09.80$Pf,
+                                                 phyaov.r09.100$Pf), 3)
+                         )
+
+phyaov.sum[, 2:5] <- apply(phyaov.sum[, 2:5], 2, sig.formatter)
+#names(phyaov.sum)[2:5] <- c("F\n(e = 0)", "p-value\n(e = 0)", "F\n(e = 0.9)", "p-value\n(e = 0.9)")
+
+kable(x = phyaov.sum, format = "latex", caption = "Summary statistics for phyANOVA for both values of epsilon using the species-level dataset without remarks to test for significant differences in diversification rates. Significant values are highlighted in bold.", escape = FALSE, digits = 3, col.names = c("Threshold", "F", "p-value", "F", "p-value"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 2, "e = 0.9" = 2))
+
+```
+
+```{r}
+
+std.sum <- data.frame(Threshold = c("50\\%", "60\\%", "80\\%", "100\\%"),
+                      F.r0 = round(c(summary(aov.r0.50)[[1]]$F[1],
+                               summary(aov.r0.60)[[1]]$F[1],
+                               summary(aov.r0.80)[[1]]$F[1],
+                               summary(aov.r0.100)[[1]]$F[1]), 3),
+                      pvalue.r0 = round(c(summary(aov.r0.50)[[1]]$P[1],
+                                    summary(aov.r0.60)[[1]]$P[1],
+                                    summary(aov.r0.80)[[1]]$P[1],
+                                    summary(aov.r0.100)[[1]]$P[1]), 3),
+                      F.r09 = round(c(summary(aov.r09.50)[[1]]$F[1],
+                                summary(aov.r09.60)[[1]]$F[1],
+                                summary(aov.r09.80)[[1]]$F[1],
+                                summary(aov.r09.100)[[1]]$F[1]), 3),
+                      pvalue.r09 = round(c(summary(aov.r09.50)[[1]]$P[1],
+                                     summary(aov.r09.60)[[1]]$P[1],
+                                     summary(aov.r09.80)[[1]]$P[1],
+                                     summary(aov.r09.100)[[1]]$P[1]), 3)
+                      )
+
+std.sum[, 2:5] <- apply(std.sum[, 2:5], 2, sig.formatter)
+#names(std.sum)[2:5] <- c("F (e = 0)", "p-value (e = 0)", "F (e = 0.9)", "p-value (e = 0.9)")
+
+kable(x = std.sum, format = "latex", caption = "Summary statistics for standard ANOVA for both values of epsilon using the species-level dataset without remarks to test for significant differences in diversification rates. Significant values are highlighted in bold.", escape = FALSE, digits = 3, col.names = c("Threshold", "F", "p-value", "F", "p-value"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 2, "e = 0.9" = 2))
+
+```
+
+### Posthoc tests using clean species-level dataset
+
+```{r}
+
+sum.phyaov <- setNames(
+    data.frame(
+        threshold = rep(c("50\\%", "60\\%", "80\\%", "100\\%"), each = 4),
+        Myc.type = rep(c("AM", "EM", "MIX", "NM"), times = 4),
+        rbind(phyaov.r0.50$Pt,
+              phyaov.r0.60$Pt,
+              phyaov.r0.80$Pt,
+              phyaov.r0.100$Pt),
+        rbind(phyaov.r09.50$Pt,
+              phyaov.r09.60$Pt,
+              phyaov.r09.80$Pt,
+              phyaov.r09.100$Pt)
+    ), nm = c("Threshold", "Mycorrhizal.Type", "AM.r0", "EM.r0", "MIX.r0", "NM.r0", "AM.r09", "EM.r09", "MIX.r09", "NM.r09"))
+rownames(sum.phyaov) <- NULL
+
+sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
+#names(sum.phyaov)[3:10] <- c("AM (e = 0)", "EM (e = 0)", "MIX (e = 0)", "NM (e = 0)", "AM (e = 0.9)", "EM (e = 0.9)", "MIX (e = 0.9", "NM (e = 0.9")
+
+kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA using the species-level dataset without remarks. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3, col.names = c("Threshold", "Mycorrhizal Type", "AM", "EM", "MIX", "NM", "AM", "EM", "MIX", "NM"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" " = 2, "e = 0" = 4, "e = 0.9" = 4))
+
+```
+
+```{r}
+
+sum.aov <- setNames(
+    data.frame(
+        pairs = names(TukeyHSD(aov.r0.50)$type.50[,4]),
+        round(TukeyHSD(aov.r0.50)$type.50[,4], 3),
+        round(TukeyHSD(aov.r0.60)$type.60[,4], 3),
+        round(TukeyHSD(aov.r0.80)$type.80[,4], 3),
+        round(TukeyHSD(aov.r0.100)$type.100[,4], 3),
+        round(TukeyHSD(aov.r09.50)$type.50[,4], 3),
+        round(TukeyHSD(aov.r09.60)$type.60[,4], 3),
+        round(TukeyHSD(aov.r09.80)$type.80[,4], 3),
+        round(TukeyHSD(aov.r09.100)$type.100[,4], 3)
+        ), nm = c("Types", "50.r0", "60.r0", "80.r0", "100.r0", "50.r09", "60.r09", "80.r09", "100.r09"))
+
+sum.aov[, 2:9] <- apply(sum.aov[, 2:9], 2, sig.formatter)
+#names(sum.phyaov)[2:9] <- c("50 (e = 0)", "60 (e = 0)", "80 (e = 0)", "100 (e = 0)", "50 (e = 0.9)", "60 (e = 0.9)", "80 (e = 0.9", "100 (e = 0.9")
+
+kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3, col.names = c("Types", "50\\%", "60\\%", "80\\%", "100\\%", "50\\%", "60\\%", "80\\%", "100\\%"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 4, "e = 0.9" = 4))
+
+```
+
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates using the species-level dataset without remarks. Diversification rates were estimated with e = 0 (a) and with e = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+
+raw.r0 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = shannon, y = r.e0.stem), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.r0)[1], sl = coef(lm.r0)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.r0)[1], sl = coef(mod.r0)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    labs(x = "Mycorrhizae Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    #xlim(0, 1) +
+    theme_cowplot() +
+    theme(legend.position = "top") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1)
+
+raw.r09 <-
+    ggplot(data = na.omit(family.data.clean)) +
+    geom_point(aes(x = shannon, y = r.e09.stem), size = 2) +
+    geom_abline(data = data.frame(int = coef(lm.r09)[1], sl = coef(lm.r09)[2], col = "a"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    geom_abline(data = data.frame(int = coef(mod.r09)[1], sl = coef(mod.r09)[2], col = "b"), mapping = aes(intercept = int, slope = sl, colour = col), size = 1.5, show.legend = TRUE) +
+    labs(x = "Mycorrhizae Type Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    #xlim(0, 1) +
+    theme_cowplot() +
+    theme(legend.position = "top") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1)
+
+plot_grid(raw.r0,
+          raw.r09,
+          ncol = 2,
+          align = 'hv',
+          axis = 'tlbr',
+          labels = letters[1:4]
+          )
+
+```
+
+```{r}
+
+reg.sum <- data.frame(model = c("PGLS", "LM"),
+                      pvalue.r0 = c(4.063e-07, 1.676e-07),
+                      R2.r0 = c(0.08904, 0.09458),
+                      pvalue.r09 = c(3.483e-07, 2.844e-07),
+                      R2.r09 = c(0.09007, 0.09109))
+
+reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
+
+kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the species-level dataset without remarks. Significant values are highlighted in bold.", escape = FALSE, digits = 3, col.names = c("Model", "p-value", "R\\textsuperscript{2}", "p-value", "R\\textsuperscript{2}"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 2, "e = 0.9" = 2))
+  
+```
+
+
+## Full species-level dataset - including species with any remark
+
+```{r}
+
+## This step is mandatory to avoid problems with overlapping object names
+rm(list = ls())
+load("../output/suppdata_species_withremarks.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
+
+```
+
+```{r fig.height = 11, fig.cap = "Relationship between mycorrhizal type and diversification rates using the thresholds (a) 50\\%, (b) 60\\%, (c) 80\\% and (d) 100\\% for MIX state assignment using the species-level dataset with remarks. Each panel shows diversification rate estimated with e = 0 (upper) and diversification rate estimated with e = 0.9 (lower). AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates."}
+
+family.data.clean.rem$type.50 <- as.character(family.data.clean.rem$type.50)
+family.data.clean.rem$type.60 <- as.character(family.data.clean.rem$type.60)
+family.data.clean.rem$type.80 <- as.character(family.data.clean.rem$type.80)
+family.data.clean.rem$type.100 <- as.character(family.data.clean.rem$type.100)
+
+box.r0.rem.50 <-
+    ggplot(data = family.data.clean.rem[family.data.clean.rem$type.50 != "ER",]) +
+    geom_point(aes(x = factor(type.50, levels = c("AM", "EM", "NM", "MIX")), y = r.e0.stem, colour = factor(type.50, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.50, levels = c("AM", "EM", "NM", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.rem.50 <-
+    ggplot(data = family.data.clean.rem[family.data.clean.rem$type.50 != "ER", ]) +
+    geom_point(aes(x = factor(type.50, levels = c("AM", "EM", "NM", "MIX")), y = r.e09.stem, colour = factor(type.50, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.50, levels = c("AM", "EM", "NM", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+thresh50 <- 
+    plot_grid(box.r0.rem.50,
+              box.r09.rem.50,
+              nrow = 2,
+              align = 'v'
+              )
+
+box.r0.rem.60 <-
+    ggplot(data = family.data.clean.rem[family.data.clean.rem$type.60 != "ER", ]) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e0.stem, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.rem.60 <-
+    ggplot(data = family.data.clean.rem[family.data.clean.rem$type.50 != "ER", ]) +
+    geom_point(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09.stem, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+
+thresh60 <-
+    plot_grid(box.r0.rem.60,
+          box.r09.rem.60,
+          nrow = 2,
+          align = 'v'
+          )
+
+box.r0.rem.80 <-
+    ggplot(data = family.data.clean.rem[family.data.clean.rem$type.80 != "ER", ]) +
+    geom_point(aes(x = factor(type.80, levels = c("AM", "EM", "NM", "MIX")), y = r.e0.stem, colour = factor(type.80, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.80, levels = c("AM", "EM", "NM", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.rem.80 <-
+    ggplot(data = family.data.clean.rem[family.data.clean.rem$type.80 != "ER", ]) +
+    geom_point(aes(x = factor(type.80, levels = c("AM", "EM", "NM", "MIX")), y = r.e09.stem, colour = factor(type.80, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.80, levels = c("AM", "EM", "NM", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+thresh80 <-
+    plot_grid(box.r0.rem.80,
+          box.r09.rem.80,
+          nrow = 2,
+          align = 'v'
+          )
+
+box.r0.rem.100 <-
+    ggplot(data = family.data.clean.rem[family.data.clean.rem$type.100 != "ER", ]) +
+    geom_point(aes(x = factor(type.100, levels = c("AM", "EM", "NM", "MIX")), y = r.e0.stem, colour = factor(type.100, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.100, levels = c("AM", "EM", "NM", "MIX")), y = r.e0.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0 )"))
+
+box.r09.rem.100 <-
+    ggplot(data = family.data.clean.rem[family.data.clean.rem$type.100 != "ER", ]) +
+    geom_point(aes(x = factor(type.100, levels = c("AM", "EM", "NM", "MIX")), y = r.e09.stem, colour = factor(type.100, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.75, position = position_jitterdodge(jitter.width = 0.75, dodge.width = 1)) +
+    geom_boxplot(aes(x = factor(type.100, levels = c("AM", "EM", "NM", "MIX")), y = r.e09.stem), fill = NA, colour = "darkgrey", outlier.alpha = 1) +
+    theme_cowplot() +
+    theme(legend.position = "none", axis.title.y = element_text(size = 10)) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    labs(x = "Mycorrhizal Type", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+thresh100 <-
+    plot_grid(box.r0.rem.100,
+          box.r09.rem.100,
+          nrow = 2,
+          align = 'v'
+          )
+
+plot_grid(thresh50,
+          thresh60,
+          thresh80,
+          thresh100,
+          nrow = 2,
+          align = 'hv',
+          labels = letters[1:4]
+          )
+
+```
+
+### Summary statistics using full species-level dataset
+
+```{r}
+
+phyaov.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                         F.r0 = round(c(phyaov.r0.50.rem$F,
+                                        phyaov.r0.60.rem$F,
+                                        phyaov.r0.80.rem$F,
+                                        phyaov.r0.100.rem$F), 3),
+                         pvalue.r0 = round(c(phyaov.r0.50.rem$Pf,
+                                             phyaov.r0.60.rem$Pf,
+                                             phyaov.r0.80.rem$Pf,
+                                             phyaov.r0.100.rem$Pf), 3),
+                         F.r09 = round(c(phyaov.r09.50.rem$F,
+                                         phyaov.r09.60.rem$F,
+                                         phyaov.r09.80.rem$F,
+                                         phyaov.r09.100.rem$F), 3),
+                         pvalue.r09 = round(c(phyaov.r09.50.rem$Pf,
+                                              phyaov.r09.60.rem$Pf,
+                                              phyaov.r09.80.rem$Pf,
+                                              phyaov.r09.100.rem$Pf), 3)
+                         )
+
+phyaov.sum[, 2:5] <- apply(phyaov.sum[, 2:5], 2, sig.formatter)
+names(phyaov.sum)[2:5] <- c("F (e = 0)", "p-value (e = 0)", "F (e = 0.9)", "p-value (e = 0.9)")
+
+kable(x = phyaov.sum, format = "latex", caption = "Summary statistics for phyANOVA for both values of epsilon using the species-level dataset with remarks to test for differences in diversification rates. Significant values are highlighted in bold.", escape = FALSE, digits = 3, col.names = c("Threshold", "F", "p-value", "F", "p-value"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 2, "e = 0.9" = 2))
+
+```
+
+```{r}
+
+std.sum <- data.frame(Threshold = c(50, 60, 80, 100),
+                      F.r0 = round(c(summary(aov.r0.50.rem)[[1]]$F[1],
+                                     summary(aov.r0.60.rem)[[1]]$F[1],
+                                     summary(aov.r0.80.rem)[[1]]$F[1],
+                                     summary(aov.r0.100.rem)[[1]]$F[1]), 3),
+                      pvalue.r0 = round(c(summary(aov.r0.50.rem)[[1]]$P[1],
+                                          summary(aov.r0.60.rem)[[1]]$P[1],
+                                          summary(aov.r0.80.rem)[[1]]$P[1],
+                                          summary(aov.r0.100.rem)[[1]]$P[1]), 3),
+                      F.r09 = round(c(summary(aov.r09.50.rem)[[1]]$F[1],
+                                      summary(aov.r09.60.rem)[[1]]$F[1],
+                                      summary(aov.r09.80.rem)[[1]]$F[1],
+                                      summary(aov.r09.100.rem)[[1]]$F[1]), 3),
+                      pvalue.r09 = round(c(summary(aov.r09.50.rem)[[1]]$P[1],
+                                           summary(aov.r09.60.rem)[[1]]$P[1],
+                                           summary(aov.r09.80.rem)[[1]]$P[1],
+                                           summary(aov.r09.100.rem)[[1]]$P[1]), 3)
+                      )
+
+std.sum[, 2:5] <- apply(std.sum[, 2:5], 2, sig.formatter)
+names(std.sum)[2:5] <- c("F (e = 0)", "p-value (e = 0)", "F (e = 0.9)", "p-value (e = 0.9)")
+
+kable(x = std.sum, format = "latex", caption = "Summary statistics for standard ANOVA for both values of epsilon using the species-level dataset with remarks to test for differences in diversification rates. Significant values are highlighted in bold.", escape = FALSE, digits = 3, col.names = c("Threshold", "F", "p-value", "F", "p-value"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 2, "e = 0.9" = 2))
+
+```
+
+### Posthoc tests using full species-level dataset
+
+```{r}
+
+sum.phyaov <- setNames(
+    data.frame(
+        threshold = rep(c("50\\%", "60\\%", "80\\%", "100\\%"), each = 4),
+        Myc.type = rep(as.character(c("AM", "EM", "MIX", "NM")), times = 4),
+        rbind(phyaov.r0.50.rem$Pt,
+              phyaov.r0.60.rem$Pt,
+              phyaov.r0.80.rem$Pt,
+              phyaov.r0.100.rem$Pt),
+        rbind(phyaov.r09.50.rem$Pt,
+              phyaov.r09.60.rem$Pt,
+              phyaov.r09.80.rem$Pt,
+              phyaov.r09.100.rem$Pt),
+        stringsAsFactors = FALSE
+    ), nm = c("Threshold", "Mycorrhizal.Type", "AM.r0", "EM.r0", "MIX.r0", "NM.r0", "AM.r09", "EM.r09", "MIX.r09", "NM.r09"))
+rownames(sum.phyaov) <- NULL
+
+sum.phyaov[, 3:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
+names(sum.phyaov)[3:10] <- c("AM (e = 0)", "EM (e = 0)", "MIX (e = 0)", "NM (e = 0)", "AM (e = 0.9)", "EM (e = 0.9)", "MIX (e = 0.9)", "NM (e = 0.9)")
+
+kable(x = sum.phyaov, format = "latex", caption = "Pairwise Corrected p-values for phyANOVA using the species-level dataset with remarks. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3, col.names = c("Threshold", "Mycorrhizal Type", "AM", "EM", "MIX", "NM", "AM", "EM", "MIX", "NM"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" " = 2, "e = 0" = 4, "e = 0.9" = 4))
+
+```
+
+```{r}
+
+sum.aov <- setNames(
+    data.frame(
+        pairs = names(TukeyHSD(aov.r0.50.rem)$type.50[,4]),
+        round(TukeyHSD(aov.r0.50.rem)$type.50[,4], 3),
+        round(TukeyHSD(aov.r0.60.rem)$type.60[,4], 3),
+        round(TukeyHSD(aov.r0.80.rem)$type.80[,4], 3),
+        round(TukeyHSD(aov.r0.100.rem)$type.100[,4], 3),
+        round(TukeyHSD(aov.r09.50.rem)$type.50[,4], 3),
+        round(TukeyHSD(aov.r09.60.rem)$type.60[,4], 3),
+        round(TukeyHSD(aov.r09.80.rem)$type.80[,4], 3),
+        round(TukeyHSD(aov.r09.100.rem)$type.100[,4], 3)
+        ), nm = c("Types", "50.r0", "60.r0", "80.r0", "100.r0", "50.r09", "60.r09", "80.r09", "100.r09"))
+
+sum.aov[, 2:9] <- apply(sum.aov[, 2:9], 2, sig.formatter)
+#names(sum.aov)[2:9] <- c("50 (e = 0)", "60 (e = 0)", "80 (e = 0)", "100 (e = 0)", "50 (e = 0.9)", "60 (e = 0.9)", "80 (e = 0.9)", "100 (e = 0.9)")
+
+kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for standard ANOVA. Significant values are highlighted in bold.", row.names = FALSE, escape = FALSE, digits = 3, col.names = c("Types", "50\\%", "60\\%", "80\\%", "100\\%", "50\\%", "60\\%", "80\\%", "100\\%"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 4, "e = 0.9" = 4))
+
+```
+
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates using the species-level dataset with remarks. Diversification rates were estimated with e = 0 (a) and with e = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
+
+load("../output/scatter_boxplots_remarks.RData")
+
+plot_grid(raw.r0.rem,
+          raw.r09.rem,
+          ncol = 2,
+          align = 'hv',
+          axis = 'tlbr',
+          labels = letters[1:4]
+          )
+
+```
+
+```{r}
+
+reg.sum <- data.frame(model = c("PGLS", "LM"),
+                      pvalue.r0 = c(5.265e-05, 2.528e-07),
+                      R2.r0 = c(0.06444, 0.09354),
+                      pvalue.r09 = c(4.013e-05, 4.977e-07),
+                      R2.r09 = c(0.06653, 0.08898))
+
+reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
+
+kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylogenetic and parametric regressions using the species-level dataset with remarks. Significant values are highlighted in bold.", escape = FALSE, digits = 3, col.names = c("Model", "p-value", "R\\textsuperscript{2}", "p-value", "R\\textsuperscript{2}"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 2, "e = 0.9" = 2))
+
+```
+
+\newpage
+
+# Analyses with the genus-level dataset
+
+## Thresholds for mycorrhizal state assignment
+
+```{r}
+
+## This step is mandatory to avoid problems with overlapping object names
+rm(list = ls())
+load("../output/suppdata_genus_full.RData")
+load("../output/anova_boxplots.RData")
+##source("../R/anova_plots.R")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
+
+```
+
+\blandscape
+
+```{r fig.width = 11, fig.height = 7, fig.cap = "Relationship between mycorrhizal type and diversification rates using the threshold 50\\% for MIX state assignment using the genus-level dataset and with e = 0. Panel (A): Boxplot of random dataset showing the distribution of diversification rates for each mycorrhizal state. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates. Panel (B): Histogram of p-value both phylogenetic (red) and standard (blue) ANOVA for all 10000 datasets. Panel (C): p-value of post-hoc tests of all pairwise combinations of mycorrhizal states using all 10000 datasets. In panels (B) and (C) the vertical dashed line correspond to 0.05"}
+
+(box.r0.50) + (((pvalue.phyanova.r0.50 + pvalue.anova.r0.50) / posthoc.r0.50) + plot_layout(heights = c(3, 7))) +
+    plot_layout(widths = c(6, 4))
+
+```
+
+```{r fig.width = 11, fig.height = 7, fig.cap = "Relationship between mycorrhizal type and diversification rates using the threshold 60\\% for MIX state assignment using the genus-level dataset and with e = 0. Panel (A): Boxplot of random dataset showing the distribution of diversification rates for each mycorrhizal state. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates. Panel (B): Histogram of p-value both phylogenetic (red) and standard (blue) ANOVA for all 10000 datasets. Panel (C): p-value of post-hoc tests of all pairwise combinations of mycorrhizal states using all 10000 datasets. In panels (B) and (C) the vertical dashed line correspond to 0.05"}
+
+(box.r0.60) + (((pvalue.phyanova.r0.60 + pvalue.anova.r0.60) / posthoc.r0.60) + plot_layout(heights = c(3, 7))) +
+    plot_layout(widths = c(6, 4))
+
+```
+
+```{r fig.width = 11, fig.height = 7, fig.cap = "Relationship between mycorrhizal type and diversification rates using the threshold 80\\% for MIX state assignment using the genus-level dataset and with e = 0. Panel (A): Boxplot of random dataset showing the distribution of diversification rates for each mycorrhizal state. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates. Panel (B): Histogram of p-value both phylogenetic (red) and standard (blue) ANOVA for all 10000 datasets. Panel (C): p-value of post-hoc tests of all pairwise combinations of mycorrhizal states using all 10000 datasets. In panels (B) and (C) the vertical dashed line correspond to 0.05"}
+
+(box.r0.80) + (((pvalue.phyanova.r0.80 + pvalue.anova.r0.80) / posthoc.r0.80) + plot_layout(heights = c(3, 7))) +
+    plot_layout(widths = c(6, 4))
+
+```
+
+```{r fig.width = 11, fig.height = 7, fig.cap = "Relationship between mycorrhizal type and diversification rates using the threshold 100\\% for MIX state assignment using the genus-level dataset and with e = 0. Panel (A): Boxplot of random dataset showing the distribution of diversification rates for each mycorrhizal state. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates. Panel (B): Histogram of p-value both phylogenetic (red) and standard (blue) ANOVA for all 10000 datasets. Panel (C): p-value of post-hoc tests of all pairwise combinations of mycorrhizal states using all 10000 datasets. In panels (B) and (C) the vertical dashed line correspond to 0.05"}
+
+(box.r0.100) + (((pvalue.phyanova.r0.100 + pvalue.anova.r0.100) / posthoc.r0.100) + plot_layout(heights = c(3, 7))) +
+    plot_layout(widths = c(6, 4))
+
+```
+
+```{r fig.width = 11, fig.height = 7, fig.cap = "Relationship between mycorrhizal type and diversification rates using the threshold 50\\% for MIX state assignment using the genus-level dataset and with e = 0.9. Panel (A): Boxplot of random dataset showing the distribution of diversification rates for each mycorrhizal state. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates. Panel (B): Histogram of p-value both phylogenetic (red) and standard (blue) ANOVA for all 10000 datasets. Panel (C): p-value of post-hoc tests of all pairwise combinations of mycorrhizal states using all 10000 datasets. In panels (B) and (C) the vertical dashed line correspond to 0.05"}
+
+(box.r09.50) + (((pvalue.phyanova.r09.50 + pvalue.anova.r09.50) / posthoc.r09.50) + plot_layout(heights = c(3, 7))) +
+    plot_layout(widths = c(6, 4))
+
+```
+
+```{r fig.width = 11, fig.height = 7, fig.cap = "Relationship between mycorrhizal type and diversification rates using the threshold 60\\% for MIX state assignment using the genus-level dataset and with e = 0.9. Panel (A): Boxplot of random dataset showing the distribution of diversification rates for each mycorrhizal state. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates. Panel (B): Histogram of p-value both phylogenetic (red) and standard (blue) ANOVA for all 10000 datasets. Panel (C): p-value of post-hoc tests of all pairwise combinations of mycorrhizal states using all 10000 datasets. In panels (B) and (C) the vertical dashed line correspond to 0.05"}
+
+(box.r09.60) + (((pvalue.phyanova.r09.60 + pvalue.anova.r09.60) / posthoc.r09.60) + plot_layout(heights = c(3, 7))) +
+    plot_layout(widths = c(6, 4))
+
+```
+
+```{r fig.width = 11, fig.height = 7, fig.cap = "Relationship between mycorrhizal type and diversification rates using the threshold 80\\% for MIX state assignment using the genus-level dataset and with e = 0.9. Panel (A): Boxplot of random dataset showing the distribution of diversification rates for each mycorrhizal state. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates. Panel (B): Histogram of p-value both phylogenetic (red) and standard (blue) ANOVA for all 10000 datasets. Panel (C): p-value of post-hoc tests of all pairwise combinations of mycorrhizal states using all 10000 datasets. In panels (B) and (C) the vertical dashed line correspond to 0.05"}
+
+(box.r09.80) + (((pvalue.phyanova.r09.80 + pvalue.anova.r09.80) / posthoc.r09.80) + plot_layout(heights = c(3, 7))) +
+    plot_layout(widths = c(6, 4))
+
+```
+
+```{r fig.width = 11, fig.height = 7, fig.cap = "Relationship between mycorrhizal type and diversification rates using the threshold 100\\% for MIX state assignment using the genus-level dataset and with e = 0.9. Panel (A): Boxplot of random dataset showing the distribution of diversification rates for each mycorrhizal state. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non-mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal Type Diversity Index value for each lineage, indicating a predominance of larger indices with higher diversification rates. Panel (B): Histogram of p-value both phylogenetic (red) and standard (blue) ANOVA for all 10000 datasets. Panel (C): p-value of post-hoc tests of all pairwise combinations of mycorrhizal states using all 10000 datasets. In panels (B) and (C) the vertical dashed line correspond to 0.05"}
+
+(box.r09.100) + (((pvalue.phyanova.r09.100 + pvalue.anova.r09.100) / posthoc.r09.100) + plot_layout(heights = c(3, 7))) +
+    plot_layout(widths = c(6, 4))
+
+```
+
+\elandscape
+
+
+### Summary statistics
+
+```{r}
+
+phyaov.sum <- data.frame(Quantile = c("Min", "1st Quart", "Median", "Mean", "3rd Quart", "Max"),
+                         as.vector(summary(fullresults$phyaov.pvalue.r0.50)),
+                         as.vector(summary(fullresults$phyaov.pvalue.r0.60)),
+                         as.vector(summary(fullresults$phyaov.pvalue.r0.80)),
+                         as.vector(summary(fullresults$phyaov.pvalue.r0.100)),
+                         as.vector(summary(fullresults$phyaov.pvalue.r09.50)),
+                         as.vector(summary(fullresults$phyaov.pvalue.r09.60)),
+                         as.vector(summary(fullresults$phyaov.pvalue.r09.80)),
+                         as.vector(summary(fullresults$phyaov.pvalue.r09.100))
+                         )
+
+names(phyaov.sum)[2:9] <- c("50\\%", "60\\%", "80\\%", "100\\%", "50\\%", "60\\%", "80\\%", "100\\%")
+#phyaov.sum[, 2:9] <- apply(phyaov.sum[, 2:9], 2, sig.formatter)
+#names(phyaov.sum)[2:5] <- c("F (e = 0)", "p-value (e = 0)", "F (e = 0.9)", "p-value (e = 0.9)")
+
+kable(x = phyaov.sum, format = "latex", caption = "Summary statistics for phyANOVA for both values of epsilon using the genus-level dataset including all families to test for differences in diversification rates. Significant values are highlighted in bold.", escape = FALSE, digits = 3, col.names = c("Quantile", "50\\%", "60\\%", "80\\%", "100\\%", "50\\%", "60\\%", "80\\%", "100\\%"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 4, "e = 0.9" = 4))
+
+```
+
+```{r}
+
+aov.sum <- data.frame(Quantile = c("Minimum", "1st Quart", "Median", "Mean", "3rd Quart", "Max"),
+                         as.vector(summary(fullresults$aov.pvalue.r0.50)),
+                         as.vector(summary(fullresults$aov.pvalue.r0.60)),
+                         as.vector(summary(fullresults$aov.pvalue.r0.80)),
+                         as.vector(summary(fullresults$aov.pvalue.r0.100)),
+                         as.vector(summary(fullresults$aov.pvalue.r09.50)),
+                         as.vector(summary(fullresults$aov.pvalue.r09.60)),
+                         as.vector(summary(fullresults$aov.pvalue.r09.80)),
+                         as.vector(summary(fullresults$aov.pvalue.r09.100))
+                         )
+
+names(aov.sum)[2:9] <- c("50\\%", "60\\%", "80\\%", "100\\%", "50\\%", "60\\%", "80\\%", "100\\%")
+#aov.sum[, 2:9] <- apply(aov.sum[, 2:9], 2, sig.formatter)
+#names(phyaov.sum)[2:5] <- c("F (e = 0)", "p-value (e = 0)", "F (e = 0.9)", "p-value (e = 0.9)")
+
+kable(x = aov.sum, format = "latex", caption = "Summary statistics for standard ANOVA for both values of epsilon using the genus-level dataset including all families to test for differences in diversification rates. Significant values are highlighted in bold.", escape = FALSE, digits = 3, col.names = c("Quantile", "50\\%", "60\\%", "80\\%", "100\\%", "50\\%", "60\\%", "80\\%", "100\\%"), align = "c") %>%
+  kable_styling(##latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "e = 0" = 4, "e = 0.9" = 4))
+
+```
+
+### Posthoc tests using genus-level full dataset
+
+\newpage
+
+```{r}
+
+sum.phyaov <- setNames(
+    data.frame(
+        epsilon = rep(c(0, 0.9), each = 24),
+        threshold = rep(rep(c("50\\%", "60\\%", "80\\%", "100\\%"), each = 6), 2),
+        state1 <- c("AM", "AM", "EM", "AM", "EM", "MIX"),
+        state2 <- c("EM", "MIX", "MIX", "NM", "NM", "NM"),
+        ldply(list(phyaov.r0.50, phyaov.r0.60, phyaov.r0.80, phyaov.r0.100, phyaov.r09.50, phyaov.r09.60, phyaov.r09.80, phyaov.r09.100), function(x){aggregate(na.omit(x)$value, by = list(na.omit(x)$variable, na.omit(x)$type.2), FUN = summary)$x})),
+        nm = c("Epsilon", "Threshold", "State 1", "State 2", "Min", "1st Quart", "Median", "Mean", "3rd Quart", "Max"))
+
+rownames(sum.phyaov) <- NULL
+
+#sum.phyaov[, 5:10] <- apply(sum.phyaov[, 3:10], 2, sig.formatter)
+#names(sum.phyaov)[3:10] <- c("AM (e = 0)", "EM (e = 0)", "MIX (e = 0)", "NM (e = 0)", "AM (e = 0.9)", "EM (e = 0.9)", "MIX (e = 0.9)", "NM (e = 0.9)")
+
+kable(x = sum.phyaov, format = "latex", caption = "Summary statistics for pairwise corrected p-value distributions for phyANOVA using all 10000 genus-level dataset.", row.names = FALSE, escape = FALSE, digits = 3, col.names = c("Epsilon", "Threshold", "State 1", "State 2", "Min", "1st Quart", "Median", "Mean", "3rd Quart", "Max"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F)
+
+```
+
+```{r}
+
+sum.aov <- setNames(
+    data.frame(
+        epsilon = rep(c(0, 0.9), each = 24),
+        threshold = rep(rep(c("50\\%", "60\\%", "80\\%", "100\\%"), each = 6), 2),
+        state1 <- c("AM", "AM", "EM", "AM", "EM", "MIX"),
+        state2 <- c("EM", "MIX", "MIX", "NM", "NM", "NM"),
+        ldply(list(aov.r0.50, aov.r0.60, aov.r0.80, aov.r0.100, aov.r09.50, aov.r09.60, aov.r09.80, aov.r09.100), function(x){aggregate(na.omit(x)$value, by = list(na.omit(x)$variable, na.omit(x)$type.2), FUN = summary)$x})),
+        nm = c("Epsilon", "Threshold", "State 1", "State 2", "Min", "1st Quart", "Median", "Mean", "3rd Quart", "Max"))
+
+rownames(sum.aov) <- NULL
+
+#sum.aov[, 5:10] <- apply(sum.aov[, 3:10], 2, sig.formatter)
+                                        #names(sum.aov)[3:10] <- c("AM (e = 0)", "EM (e = 0)", "MIX (e = 0)", "NM (e = 0)", "AM (e = 0.9)", "EM (e = 0.9)", "MIX (e = 0.9)", "NM (e = 0.9)")
+
+kable(x = sum.aov, format = "latex", caption = "Summary statistics for pairwise corrected p-value distributions for standard ANOVA using all 10000 genus-level dataset.", row.names = FALSE, escape = FALSE, digits = 3, col.names = c("Epsilon", "Threshold", "State 1", "State 2", "Min", "1st Quart", "Median", "Mean", "3rd Quart", "Max"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F)
+
+```
+
+```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal state diversity index and diversification rates estimated with ϵ (relative extinction fraction) = 0.9. The red and blue lines indicate the linear models and phylogenetic generalized least squares (PGLS) fit, respectively, for 1000 datasets of seed plant mycorrhizal states.  Panels b and c show the frequency distribution of R2 and p-values of (b) linear models (blue bars) and (c) PGLS (red bars), dashed lines show the median for each distribution."}
+
+## Scatter - MTDI vs. Net Diversification
+load("../output/scatter_r0.RData")
+scatter.mtdi.r0 | ((r2.lm.r0 + pvalue.lm.r0) / (r2.pgls.r0 + pvalue.pgls.r0))
+
+```
+
+
+```{r}
+
+reg.sum <- data.frame(Quantile = c("Min", "1st Quart", "Median", "Mean", "3rd Quart", "Max"),
+                      pvalue.r0.phy = as.vector(summary(fullresults$pgls.pvalue.r0)),
+                      R2.r0.phy = as.vector(summary(fullresults$pgls.r2.r0)),
+                      pvalue.r09.phy = as.vector(summary(fullresults$pgls.pvalue.r09)),
+                      R2.r09.phy = as.vector(summary(fullresults$pgls.r2.r09)),
+                      pvalue.r0.lm = as.vector(summary(fullresults$lm.pvalue.r0)),
+                      R2.r0.lm = as.vector(summary(fullresults$lm.r2.r0)),
+                      pvalue.r09.lm = as.vector(summary(fullresults$lm.pvalue.r09)),
+                      R2.r09.lm = as.vector(summary(fullresults$lm.r2.r09))
+                      )
+
+#reg.sum[, 2:5] <- apply(reg.sum[, 2:5], 2, sig.formatter)
+
+kable(x = reg.sum, format = "latex", caption = "Summary statistics for p-value and R\\textsuperscript{2} for the phylogenetic and parametric regressions using all 10000 genus-level datasets.", escape = FALSE, digits = 3, col.names = c("Quantile", "p-value", "R\\textsuperscript{2}", "p-value", "R\\textsuperscript{2}", "p-value", "R\\textsuperscript{2}", "p-value", "R\\textsuperscript{2}"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+    add_header_above(c(" ", "e = 0" = 2, "e = 0.9" = 2, "e = 0" = 2, "e = 0.9" = 2)) %>%
+    add_header_above(c(" ", "PGLS" = 4, "LM" = 4))
+
+```
+
+# Replicating main analyses with tree from Harris and Davies (2016)
+
+```{r}
+
+rm(list = ls())
+load("../output/harris_davies_results.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
+
+```
+
+```{r fig.height = 7, fig.cap = "Association between placement of families in both Zanne's (left) and Harris and Davies' (right) phylogenies, indicating differences in the topologies."}
+
+cophyloplot(fulltree, tree, assoc = cophylo.myco$assoc, use.edge.length = TRUE, show.tip.label = FALSE, space = 500)
+
+```
+
+```{r fig.height = 5, fig.cap = "Relationship between net diversification calculated in our study and with the rates from Harris and Davies (2016) The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. a: e = 0; b: e = 0.9. Red lines: LM fit; blue dashed lines: identity fit."}
+
+r0.corr <-
+    ggplot(data.muj) +
+    geom_point(aes(x = new.phylo.r.e0, y = r.e0)) +
+    geom_smooth(aes(x = new.phylo.r.e0, y = r.e0), method = "lm", se = FALSE, colour = "red") +
+    geom_abline(slope = 1, intercept = 0, colour = "blue", linetype = "dashed") +
+    labs(x = "Harris and Davies\n(e = 0)", y = "Zanne et al\n(e = 0)") +
+    cowplot::theme_cowplot()
+
+r09.corr <-
+    ggplot(data.muj) +
+    geom_point(aes(x = new.phylo.r.e09, y = r.e09)) +
+    geom_smooth(aes(x = new.phylo.r.e09, y = r.e09), method = "lm", se = FALSE, colour = "red") +
+    geom_abline(slope = 1, intercept = 0, colour = "blue", linetype = "dashed") +
+    labs(x = "Harris and Davies\n(e = 0.9)", y = "Zanne et al\n(e = 0.9)") +
+    cowplot::theme_cowplot()
+
+plot_grid(r0.corr,
+          r09.corr,
+          ncol = 2,
+          align = 'h',
+          labels = letters[1:2]
+          )
+
+```
+
+```{r fig.cap = "Main analyses replicated using Harris and Davies (2016) phylogeny. The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. Panels a and c: e = 0; panels b and d: e = 0.9. Red lines: PGLS fit; blue dashed lines: LM fit."}
+
+sh.r0.np <-
+    ggplot(data = data.muj.plot) +
+    geom_point(aes(x = shannon, y = new.phylo.r.e0)) +
+    geom_abline(intercept = coef(lm.np.r0)[1], slope = coef(lm.np.r0)[2], colour = brewer.pal(3, "Set1")[2], size = 2) +
+    geom_abline(intercept = coef(mod.np.r0)[1], slope = coef(mod.np.r0)[2], colour = brewer.pal(3, "Set1")[1], size = 2) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "NetDiversification\n(e = 0)", colour = "Model") +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+sh.r09.np <-
+    ggplot(data = data.muj.plot) +
+    geom_point(aes(x = shannon, y = new.phylo.r.e09)) +
+    geom_abline(intercept = coef(lm.np.r09)[1], slope = coef(lm.np.r09)[2], colour = brewer.pal(3, "Set1")[2], size = 2) +
+    geom_abline(intercept = coef(mod.np.r09)[1], slope = coef(mod.np.r09)[2], colour = brewer.pal(3, "Set1")[1], size = 2) +
+    labs(x = "Mycorrhizal Type Diversity Index", y = "NetDiversification\n(e = 0.9)", colour = "Model") +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+
+aov.r0.np <-
+    ggplot(data = data.aov) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = new.phylo.r.e0), colour = "lightgrey") +
+    geom_jitter(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = new.phylo.r.e0, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.5) +
+    labs(x = "Mycorrhizal Type", y = "NetDiversification\n(e = 0)") +
+    scale_colour_manual(values = RColorBrewer::brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    theme_cowplot() +
+    theme(legend.position = "none")
+
+
+aov.r09.np <-
+    ggplot(data = data.aov) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = new.phylo.r.e09), colour = "lightgrey") +
+    geom_jitter(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = new.phylo.r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.5) +
+    labs(x = "Mycorrhizal Type", y = "NetDiversification\n(e = 0.9)") +
+    scale_colour_manual(values = RColorBrewer::brewer.pal(5, "Set1")[c(1:3, 5)]) +
+    theme_cowplot() +
+    theme(legend.position = "none")
+
+plot_grid(sh.r0.np,
+          sh.r09.np,
+          aov.r0.np,
+          aov.r09.np,
+          ncol = 2,
+          align = 'hv',
+          labels = letters[1:4]
+          )
+
+```
+
+```{r}
+
+np.sum <-
+    data.frame(model = c("Phylogenetic", "Linear"),
+                     pvalue.r0.reg = c("\\textbf{2.724e-13}", "\\textbf{1.345e-14}"),
+                     R2.r0.reg = c(0.1349, 0.1464),
+                     pvalue.r0.aov = c("\\textbf{0.0005}", "\\textbf{0.019}"),
+                     pvalue.r09.reg = c("\\textbf{3.581e-13}", "\\textbf{1.228e-14}"),
+                     R2.r09.reg = c(0.1336, 0.1468),
+                     pvalue.r09.aov = c("\\textbf{0.0003}", "\\textbf{0.02}")
+                     )
+
+kable(x = np.sum,
+      format = "latex", caption = "Summary statistics for linear models and ANOVA using Harris and Davies (2016) phylogeny.", escape = FALSE, digits = 3, col.names = c("Model", "p-value", "R\\textsuperscript{2}", "p-value", "p-value", "R\\textsuperscript{2}", "p-value"), align = "c") %>%
+  kable_styling(#latex_options = "HOLD_position",
+                full_width = F) %>%
+  add_header_above(c(" ", "Regression" = 2, "ANOVA" = 1, "Regression" = 2, "ANOVA" = 1)) %>%
+  add_header_above(c(" ", "e = 0" = 3, "e = 0.9" = 3))
+
+```
+
+# Phylogenetic signal of diversification rates, age, and richness
+
+```{r}
+
+rm(list = ls())
+load("../output/main_results.RData")
+sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
+
+```
+
+```{r}
+
+age.data <- read.csv("./data/data_all_families.csv", sep = ";")
+fulltree <- read.tree("./data/fam_tree_family_full.tre")
+fulltree$node.label <- NULL
+
+nrep = length(list.files("./output/simulated_datasets/"))
+
+phylosig <- function(x, age, fulltree){
+    print(paste0("Replica ", x, " of ", length(list.files("../output/simulated_datasets/"))))
+    family.data.gen <- read.csv(paste0("../output/simulated_datasets/random_data_", sprintf("%05d", x), ".csv"), stringsAsFactors = FALSE)
+    family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
+    family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
+
+    ## Removing families with unknown mycorrhizal type
+    family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
+
+    family.data.gen$stem.age <- age$stem.age[match(family.data.gen$family, age$familia)]
+    family.data.gen$r.e0 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0)
+    family.data.gen$r.e09 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.9)
+
+    family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
+
+    family.data.gen <- family.data.gen[-match(c("Orchidaceae", "Ericaceae", "Diapensiaceae"), family.data.gen$family),]
+
+    tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, family.data.gen$family))])
+    data.pgls <- comparative.data(tree.pruned, family.data.gen, names.col = "family")
+    
+    data.phylo.d50 <- family.data.gen[, c("family", "type.50")]
+    data.phylo.d60 <- family.data.gen[, c("family", "type.60")]
+    data.phylo.d80 <- family.data.gen[, c("family", "type.80")]
+    data.phylo.d100 <- family.data.gen[, c("family", "type.100")]
+
+    ## Threshold 50%
+
+    data.phylo.d50$dummy.am <- ifelse(data.phylo.d50$type.50 == "AM", 1, 0)
+    data.phylo.d50$dummy.em <- ifelse(data.phylo.d50$type.50 == "EM", 1, 0)
+    data.phylo.d50$dummy.mix <- ifelse(data.phylo.d50$type.50 == "MIX", 1, 0)
+    data.phylo.d50$dummy.nm <- ifelse(data.phylo.d50$type.50 == "NM", 1, 0)
+
+    d.am.50 <- phylo.d(data.phylo.d50, data.pgls$phy, names.col = family, binvar = dummy.am)
+    d.em.50 <- phylo.d(data.phylo.d50, data.pgls$phy, names.col = family, binvar = dummy.em)
+    d.mix.50 <- phylo.d(data.phylo.d50, data.pgls$phy, names.col = family, binvar = dummy.mix)
+    d.nm.50 <- phylo.d(data.phylo.d50, data.pgls$phy, names.col = family, binvar = dummy.nm)
+
+    ## Threshold 60%
+
+    data.phylo.d60$dummy.am <- ifelse(data.phylo.d60$type.60 == "AM", 1, 0)
+    data.phylo.d60$dummy.em <- ifelse(data.phylo.d60$type.60 == "EM", 1, 0)
+    data.phylo.d60$dummy.mix <- ifelse(data.phylo.d60$type.60 == "MIX", 1, 0)
+    data.phylo.d60$dummy.nm <- ifelse(data.phylo.d60$type.60 == "NM", 1, 0)
+
+    d.am.60 <- phylo.d(data.phylo.d60, data.pgls$phy, names.col = family, binvar = dummy.am)
+    d.em.60 <- phylo.d(data.phylo.d60, data.pgls$phy, names.col = family, binvar = dummy.em)
+    d.mix.60 <- phylo.d(data.phylo.d60, data.pgls$phy, names.col = family, binvar = dummy.mix)
+    d.nm.60 <- phylo.d(data.phylo.d60, data.pgls$phy, names.col = family, binvar = dummy.nm)
+
+    ## Threshold 80%
+
+    data.phylo.d80$dummy.am <- ifelse(data.phylo.d80$type.80 == "AM", 1, 0)
+    data.phylo.d80$dummy.em <- ifelse(data.phylo.d80$type.80 == "EM", 1, 0)
+    data.phylo.d80$dummy.mix <- ifelse(data.phylo.d80$type.80 == "MIX", 1, 0)
+    data.phylo.d80$dummy.nm <- ifelse(data.phylo.d80$type.80 == "NM", 1, 0)
+
+    d.am.80 <- phylo.d(data.phylo.d80, data.pgls$phy, names.col = family, binvar = dummy.am)
+    d.em.80 <- phylo.d(data.phylo.d80, data.pgls$phy, names.col = family, binvar = dummy.em)
+    d.mix.80 <- phylo.d(data.phylo.d80, data.pgls$phy, names.col = family, binvar = dummy.mix)
+    d.nm.80 <- phylo.d(data.phylo.d80, data.pgls$phy, names.col = family, binvar = dummy.nm)
+
+    ## Threshold 100%
+
+    data.phylo.d100$dummy.am <- ifelse(data.phylo.d100$type.100 == "AM", 1, 0)
+    data.phylo.d100$dummy.em <- ifelse(data.phylo.d100$type.100 == "EM", 1, 0)
+    data.phylo.d100$dummy.mix <- ifelse(data.phylo.d100$type.100 == "MIX", 1, 0)
+    data.phylo.d100$dummy.nm <- ifelse(data.phylo.d100$type.100 == "NM", 1, 0)
+
+    d.am.100 <- phylo.d(data.phylo.d100, data.pgls$phy, names.col = family, binvar = dummy.am)
+    d.em.100 <- phylo.d(data.phylo.d100, data.pgls$phy, names.col = family, binvar = dummy.em)
+    d.mix.100 <- phylo.d(data.phylo.d100, data.pgls$phy, names.col = family, binvar = dummy.mix)
+    d.nm.100 <- phylo.d(data.phylo.d100, data.pgls$phy, names.col = family, binvar = dummy.nm)
+
+    phylod.table <- data.frame(
+        replica = rep(x, 8),
+        Threshold = rep(c("50\\%", "60\\%", "80\\%", "100\\%"), each = 2),
+        model = rep(c("random", "BM"), times = 4),
+        AM = c(unlist(d.am.50[c("Pval1", "Pval0")]),
+               unlist(d.am.60[c("Pval1", "Pval0")]),
+               unlist(d.am.80[c("Pval1", "Pval0")]),
+               unlist(d.am.100[c("Pval1", "Pval0")])),
+        EM = c(unlist(d.em.50[c("Pval1", "Pval0")]),
+               unlist(d.em.60[c("Pval1", "Pval0")]),
+               unlist(d.em.80[c("Pval1", "Pval0")]),
+               unlist(d.em.100[c("Pval1", "Pval0")])),
+        MIX = c(unlist(d.mix.50[c("Pval1", "Pval0")]),
+                unlist(d.mix.60[c("Pval1", "Pval0")]),
+                unlist(d.mix.80[c("Pval1", "Pval0")]),
+                unlist(d.mix.100[c("Pval1", "Pval0")])),
+        NM = c(unlist(d.nm.50[c("Pval1", "Pval0")]),
+               unlist(d.nm.60[c("Pval1", "Pval0")]),
+               unlist(d.nm.80[c("Pval1", "Pval0")]),
+               unlist(d.nm.100[c("Pval1", "Pval0")]))
+    )
+    return(phylod.table)
+}
+
+doMC::registerDoMC(56)
+phylod.table <- plyr::ldply(1:10000, phylosig, age = age.data, fulltree = fulltree)
+phylod.table[, 4:7] <- apply(phylod.table[, 4:7], 2, sig.formatter)
+
+kable_styling(kable(x = phylod.table, format = "latex", caption = "P-values for test of phylogenetic signal (D) of each mycorrhizal type using the genus-level dataset including all families. Significant values are highlighted in bold.", escape = FALSE, digits = 3), latex_options = "HOLD_position")
+
+```
+
+```{r}
+
+kable_styling(kable(x = data.frame(Variable = c("r (epsilon = 0)", "r (epsilon = 0.9)", "Stem Age", "Richness"),
+                                   Lambda = c(paste0("\\textbf{", round(summary(phylosig.r0)$param[2], 3), "}"),
+                                              paste0("\\textbf{", round(summary(phylosig.r09)$param[2], 3), "}"), 
+                                              paste0("\\textbf{", summary(phylosig.age)$param[2], "}"),
+                                              summary(phylosig.rich)$param[2]
+                                              )),
+                    format = "latex", caption = "Phylogenetic signal of the four response variables using the genus-level dataset including all families. Significant values are highlighted in bold.", escape = FALSE), latex_options = "HOLD_position"
+              )
+
+```

@@ -17,14 +17,14 @@ fulltree.vasc <- read.tree("./data/Vascular_Plants_rooted.dated.tre")
 fullresults <- read.csv("./output/fit_data_random_datasets.csv")
 
 ## Importing table with rates for plotting
-family.data.gen <- read.csv("./data/family_data_genus_classif.csv", stringsAsFactors = FALSE, row.names = NULL)
+family.data.gen <- read.csv("./output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
 family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
 family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 
 age.data <- read.csv("./data/data_all_families.csv", sep = ";")
 
 ## Removing families with unknown mycorrhizal type
-family.data.gen <- family.data.gen[-which(family.data.gen$UNK.raw.perc == 1),]
+family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
 
 family.data.gen$stem.age <- age.data$stem.age[match(family.data.gen$family, age.data$familia)]
 family.data.gen$r.e0 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0)
@@ -55,7 +55,7 @@ ggplot(data = limits.vasc.stem) +
     geom_line(aes(x = age, y = ub.09), linetype = "dashed") +
     geom_point(data = family.data.gen, aes(x = stem.age, y = rich, colour = type.60), size = 2.5) +
     geom_text_repel(data = family.data.gen, aes(x = stem.age, y = rich, label = family, colour = type.60)) +
-    scale_y_log10() +
+    scale_y_log10(breaks = c(10, 1000, 10000)) +
     labs(x = "Age of Clade (MY)", y = "Number of Species") +
     theme_cowplot() +
     theme(legend.position = "bottom") +
@@ -70,8 +70,8 @@ ggplot(data = limits.vasc.stem) +
     geom_line(aes(x = age, y = ub.0)) +
     geom_line(aes(x = age, y = lb.09), linetype = "dashed") +
     geom_line(aes(x = age, y = ub.09), linetype = "dashed") +
-    geom_point(data = family.data.gen[family.data.gen$type.60 != "ER",], aes(x = stem.age, y = rich, colour = type.60), size = 2.5) +
-    scale_y_log10() +
+    geom_point(data = family.data.gen, aes(x = stem.age, y = rich, colour = type.60), size = 2.5) +
+    scale_y_log10(breaks = c(10, 1000, 10000)) +
     labs(x = "Age of Clade (MY)", y = "Number of Species") +
     theme_cowplot() +
     theme(legend.position = "bottom") +
@@ -83,7 +83,7 @@ ggsave(filename = "./output/figs/magsand_stem_nolabel.pdf")
 
 ## Scatter - MTDI vs. Net Diversification
 
-## Using 50/50 MIX division just to represent points
+## Using replica 9986 (with R2 closer to the median) just to represent points
 
 scatter.mtdi.r09 <-
     ggplot(fullresults) +
@@ -105,9 +105,10 @@ r2.pgls.r09 <-
 
 pvalue.pgls.r09 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = pgls.pvalue.r09, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
-    geom_vline(xintercept = median(fullresults$pgls.pvalue.r09), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09), y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = log10(median(fullresults$pgls.pvalue.r09)), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
     labs(y = element_blank(), x = "p-value") +
+    scale_x_continuous(breaks = c(-12, -10, -8), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8))) +
     theme_cowplot()
 
 r2.lm.r09 <-
@@ -119,12 +120,15 @@ r2.lm.r09 <-
 
 pvalue.lm.r09 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = lm.pvalue.r09, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
-    geom_vline(xintercept = median(fullresults$lm.pvalue.r09), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09), y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = log10(median(fullresults$lm.pvalue.r09)), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
     labs(y = element_blank(), x = "p-value") +
+    scale_x_continuous(breaks = c(-14, -12, -10), labels = c(bquote('10' ^-14), bquote('10' ^-12), bquote('10' ^-10))) +
     theme_cowplot()
 
 scatter.mtdi.r09 | ((r2.lm.r09 + pvalue.lm.r09) / (r2.pgls.r09 + pvalue.pgls.r09))
+
+ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem_r09.pdf", height = 5.5, width = 13)
 
 ## Age vs Shannon
 scatter.age.sh <-
@@ -142,7 +146,6 @@ r2.pgls.age.sh <-
     ggplot(fullresults) +
     geom_histogram(aes(x = pgls.r2.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$pgls.r2.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = bquote('R' ^2))+
     theme_cowplot()
 
 pvalue.pgls.age.sh <-
@@ -168,6 +171,8 @@ pvalue.lm.age.sh <-
 
 scatter.age.sh | ((r2.pgls.age.sh + pvalue.pgls.age.sh) / (r2.lm.age.sh + pvalue.lm.age.sh))
 
+ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem_age.pdf", height = 5.5, width = 13)
+
 
 ## Richness vs Shannon
 scatter.rich.sh <-
@@ -175,10 +180,10 @@ scatter.rich.sh <-
     geom_abline(mapping = aes(intercept = pgls.int.rich.sh, slope = pgls.slope.rich.sh), colour = brewer.pal(3, "Set1")[1], show.legend = TRUE, alpha = 0.01) +
     geom_abline(mapping = aes(intercept = lm.int.rich.sh, slope = lm.slope.rich.sh), colour = brewer.pal(3, "Set1")[2], show.legend = TRUE, alpha = 0.01) +
     geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = rich), size = 2, alpha = 0.5) +
-    labs(x = "Mycorrhizal State Shannon Index", y = "Stem Rich", col = "Model Type") +
+    labs(x = "Mycorrhizal State Shannon Index", y = "Species Richness per Family", col = "Model Type") +
     scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
-    coord_trans(y = "log10") +
-    scale_y_continuous(breaks = c(10, 50, 100, 500, 1000, 10000, 20000, 30000)) +
+    #coord_trans(y = "log10") +
+    #scale_y_continuous(breaks = c(10, 50, 100, 500, 1000, 10000, 20000, 30000)) +
     theme_cowplot() +
     theme(legend.position = "top")
 
@@ -212,9 +217,28 @@ pvalue.lm.rich.sh <-
 
 scatter.rich.sh | ((r2.pgls.rich.sh + pvalue.pgls.rich.sh) / (r2.lm.rich.sh + pvalue.lm.rich.sh))
 
-ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem.pdf", width = 5.5, height = 13)
+ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem_rich.pdf", height = 5.5, width = 13)
 
 
+### Percentage of MIX species
+library("ggforce")
+mix.sp <- read.csv("./data/family_data_genus_final.csv", stringsAsFactors = FALSE)
+mix.sp$zoom.bin <- "a"
+mix.sp$zoom.bin[mix.sp$MIX.raw.perc != 0] <- "b"
+
+fullhist <- ggplot(mix.sp) +
+    geom_histogram(aes(x = MIX.raw.perc), bins = nrow(mix.sp), size = 2) +
+    labs(x = "Proportion of MIX species", y = "Frequency") +
+    theme_cowplot()
+
+mix.hist <- ggplot(mix.sp[mix.sp$MIX.raw.perc != 0,]) +
+    geom_histogram(aes(x = MIX.raw.perc), bins = nrow(mix.sp[mix.sp$MIX.raw.perc != 0,])) +
+    labs(x = "Proportion of MIX species", y = "Frequency") +
+    theme_cowplot()
+
+fullhist + annotation_custom(grob = ggplotGrob(mix.hist), xmin = 0.3, xmax = 1, ymin = 100, ymax = 300)
+
+ggsave(filename = "./output/figs/hist_mix_proportion.pdf")
 
 ### Boxplots
 ## We aggregate mean rates per type for each random dataset
@@ -242,28 +266,63 @@ random.types <- random.types[-which(random.types[,4] == "UNK"),]
 anova.data.r0 <- plyr::ldply(random.types[4:10003], function(x){aggregate(random.types$r.e0, by = list(x), FUN = mean)})
 anova.data.r09 <- plyr::ldply(random.types[4:10003], function(x){aggregate(random.types$r.e09, by = list(x), FUN = mean)})
 
-box.r0 <-
-    ggplot(data = anova.data.r0[is.na(match(anova.data.r0$Group.1, c("OM", "ER"))),]) +
-    geom_boxplot(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, outlier.alpha = 1, outlier.shape = 3, size = 1) +
-    geom_point(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), alpha = 0.05, position = position_jitterdodge(jitter.width = 2.2, dodge.width = 1)) +
-    stat_summary(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fun.y = mean, geom = "point", colour = "black", size = 2) +
-    theme_cowplot() +
-    theme(legend.position = "none") +
-    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
-    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+## box.r09 <-
+##     ggplot(data = anova.data.r09[is.na(match(anova.data.r09$Group.1, c("OM", "ER"))),]) +
+##     geom_boxplot(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, outlier.alpha = 1, outlier.shape = 3, size = 1) +
+##     geom_point(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), alpha = 0.05, position = position_jitterdodge(jitter.width = 2.2, dodge.width = 1)) +
+##     stat_summary(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fun.y = mean, geom = "point", colour = "black", size = 2) +
+##     theme_cowplot() +
+##     theme(legend.position = "none") +
+##     scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+##     labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
 
 box.r09 <-
-    ggplot(data = anova.data.r09[is.na(match(anova.data.r09$Group.1, c("OM", "ER"))),]) +
-    geom_boxplot(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, outlier.alpha = 1, outlier.shape = 3, size = 2) +
-    geom_point(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), alpha = 0.05, position = position_jitterdodge(jitter.width = 2.2, dodge.width = 1)) +
-    stat_summary(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fun.y = mean, geom = "point", colour = "black", size = 2) +
+    ggplot(data = family.data.gen[is.na(match(family.data.gen$type.60, c("OM", "ER"))),]) +
+    geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, size = 1.5, outlier.shape = 3, alpha = 0.5) +
+    geom_jitter(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX"))), size = 3, alpha = 0.5) +
+    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )")) +
+    scale_colour_manual(values = brewer.pal(5, "Set1")[-4]) +
     theme_cowplot() +
-    theme(legend.position = "none") +
-    scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
-    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+    theme(legend.position = "none")
 
-ggsave(filename = "./output/figs/boxplots_netdiv_myctype_r09.pdf", box.r09, width = 11, height = 5.5, units = "in")
+ggsave(filename = "./output/figs/boxplots_anova_myctype_r09.pdf", box.r09, width = 11, height = 5.5, units = "in")
+
+pvalue.phyanova.r09 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = phyaov.pvalue.r09.60, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    #geom_histogram(aes(x = aov.pvalue.r09.60, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    xlim(-0.005, 0.2) + 
+    theme_cowplot()
+
+pvalue.anova.r09 <-
+    ggplot(fullresults) +
+    #geom_histogram(aes(x = phyaov.pvalue.r09.60, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = aov.pvalue.r09.60, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    #xlim(-0.005, 0.2) + 
+    theme_cowplot()
+
+(box.r09) / (pvalue.phyanova.r09 + pvalue.anova.r09)
+
+ggsave(filename = "./output/figs/box_hist_anova_myctype_r09.pdf", width = 11, height = 9, units = "in")
 
 
-ggsave(filename = "./output/figs/boxplots_netdiv_myctype_r0.pdf", box.r0, width = 11, height = 7, units = "in")
+anovas.r09.pvalue <-
+    ggplot(fullresults) +
+    geom_jitter(aes(x = factor("phyANOVA"), y = phyaov.pvalue.r09.60), alpha = 0.1, colour = brewer.pal(3, "Set1")[1], width = 0.2) +
+    geom_jitter(aes(x = factor("ANOVA"), y = aov.pvalue.r09.60), alpha = 0.1, colour = brewer.pal(3, "Set1")[2], width = 0.2) +
+    geom_hline(yintercept = 0.05, linetype = "dashed") +
+    labs(x = "Model", y = "p-value") +
+    theme_cowplot()
+
+ggsave(filename = "./output/figs/jitter_pvalue_anovas_r09.pdf", anovas.r09.pvalue, width = 11, height = 5.5, units = "in")
+
 
