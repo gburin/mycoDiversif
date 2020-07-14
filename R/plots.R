@@ -87,44 +87,45 @@ ggsave(filename = "./output/figs/magsand_stem_nolabel.pdf")
 
 scatter.mtdi.r09 <-
     ggplot(fullresults) +
-    geom_abline(mapping = aes(intercept = pgls.int.r09, slope = pgls.slope.r09), colour = brewer.pal(3, "Set1")[1], show.legend = TRUE, alpha = 0.01) +
-    geom_abline(mapping = aes(intercept = lm.int.r09, slope = lm.slope.r09), colour = brewer.pal(3, "Set1")[2], show.legend = TRUE, alpha = 0.01) +
+    geom_abline(mapping = aes(intercept = pgls.int.r09, slope = pgls.slope.r09, colour = brewer.pal(3, "Set1")[1]), show.legend = TRUE, alpha = 1) +
+    geom_abline(mapping = aes(intercept = lm.int.r09, slope = lm.slope.r09, colour = brewer.pal(3, "Set1")[2]), show.legend = TRUE, alpha = 1) +
     geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = r.e09), size = 2, alpha = 0.5) +
-    labs(x = "Mycorrhizal State Shannon Index", y = "Diversification Rate", col = "Model Type") +
+    labs(x = "Mycorrhizal State Diversity Index", y = "Diversification Rate", col = "Model Type", title = "A") +
     #xlim(0, 1) +
     scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
     theme_cowplot() +
     theme(legend.position = "top")
 
-r2.pgls.r09 <-
-    ggplot(fullresults) +
-    geom_histogram(aes(x = pgls.r2.r09, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
-    geom_vline(xintercept = median(fullresults$pgls.r2.r09), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = bquote('R' ^2))+
-    theme_cowplot()
-
-pvalue.pgls.r09 <-
-    ggplot(fullresults) +
-    geom_histogram(aes(x = log10(pgls.pvalue.r09), y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
-    geom_vline(xintercept = log10(median(fullresults$pgls.pvalue.r09)), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    scale_x_continuous(breaks = c(-12, -10, -8), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8))) +
-    theme_cowplot()
-
 r2.lm.r09 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = lm.r2.r09, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = lm.r2.r09), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$lm.r2.r09), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = bquote('R' ^2)) +
+    labs(y = "Frequency", x = bquote('R' ^2), title = "B") +
     theme_cowplot()
 
 pvalue.lm.r09 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = log10(lm.pvalue.r09), y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = log10(median(fullresults$lm.pvalue.r09)), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    scale_x_continuous(breaks = c(-14, -12, -10), labels = c(bquote('10' ^-14), bquote('10' ^-12), bquote('10' ^-10))) +
+    labs(y = "Frequency", x = "p-value (log10)") +
+    #scale_x_continuous(breaks = c(-14, -12, -10), labels = c(bquote('10' ^-14), bquote('10' ^-12), bquote('10' ^-10))) +
     theme_cowplot()
+
+r2.pgls.r09 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = median(fullresults$pgls.r2.r09), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = "Frequency", x = bquote('R' ^2), title = "C")+
+    theme_cowplot()
+
+pvalue.pgls.r09 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_vline(xintercept = log10(median(fullresults$pgls.pvalue.r09)), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = "Frequency", x = "p-value (log10)") +
+    #scale_x_continuous(breaks = c(-12, -10, -8), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8))) +
+    theme_cowplot()
+
 
 scatter.mtdi.r09 | ((r2.lm.r09 + pvalue.lm.r09) / (r2.pgls.r09 + pvalue.pgls.r09))
 
@@ -144,29 +145,30 @@ scatter.age.sh <-
 
 r2.pgls.age.sh <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = pgls.r2.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = pgls.r2.age.sh), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$pgls.r2.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(x = bquote('R' ^2), y = "Frequency") +
     theme_cowplot()
 
 pvalue.pgls.age.sh <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = pgls.pvalue.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = pgls.pvalue.age.sh), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$pgls.pvalue.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
+    labs(y = "Frequency", x = "p-value") +
     theme_cowplot()
 
 r2.lm.age.sh <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = lm.r2.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = lm.r2.age.sh), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$lm.r2.age.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = bquote('R' ^2)) +
+    labs(y = "Frequency", x = bquote('R' ^2)) +
     theme_cowplot()
 
 pvalue.lm.age.sh <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = lm.pvalue.age.sh, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = lm.pvalue.age.sh), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$lm.pvalue.age.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
+    labs(y = "Frequency", x = "p-value") +
     theme_cowplot()
 
 scatter.age.sh | ((r2.pgls.age.sh + pvalue.pgls.age.sh) / (r2.lm.age.sh + pvalue.lm.age.sh))
@@ -220,26 +222,6 @@ scatter.rich.sh | ((r2.pgls.rich.sh + pvalue.pgls.rich.sh) / (r2.lm.rich.sh + pv
 ggsave(filename = "./output/figs/scatterplots_lm_pgls_stem_rich.pdf", height = 5.5, width = 13)
 
 
-### Percentage of MIX species
-library("ggforce")
-mix.sp <- read.csv("./data/family_data_genus_final.csv", stringsAsFactors = FALSE)
-mix.sp$zoom.bin <- "a"
-mix.sp$zoom.bin[mix.sp$MIX.raw.perc != 0] <- "b"
-
-fullhist <- ggplot(mix.sp) +
-    geom_histogram(aes(x = MIX.raw.perc), bins = nrow(mix.sp), size = 2) +
-    labs(x = "Proportion of MIX species", y = "Frequency") +
-    theme_cowplot()
-
-mix.hist <- ggplot(mix.sp[mix.sp$MIX.raw.perc != 0,]) +
-    geom_histogram(aes(x = MIX.raw.perc), bins = nrow(mix.sp[mix.sp$MIX.raw.perc != 0,])) +
-    labs(x = "Proportion of MIX species", y = "Frequency") +
-    theme_cowplot()
-
-fullhist + annotation_custom(grob = ggplotGrob(mix.hist), xmin = 0.3, xmax = 1, ymin = 100, ymax = 300)
-
-ggsave(filename = "./output/figs/hist_mix_proportion.pdf")
-
 ### Boxplots
 ## We aggregate mean rates per type for each random dataset
 
@@ -280,8 +262,8 @@ anova.data.r09 <- plyr::ldply(random.types[4:10003], function(x){aggregate(rando
 box.r09 <-
     ggplot(data = family.data.gen[is.na(match(family.data.gen$type.60, c("OM", "ER"))),]) +
     geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, size = 1.5, outlier.shape = 3, alpha = 0.5) +
-    geom_jitter(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX"))), size = 3, alpha = 0.5) +
-    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )")) +
+    geom_jitter(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.5) +
+    labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"), title = "A") +
     scale_colour_manual(values = brewer.pal(5, "Set1")[-4]) +
     theme_cowplot() +
     theme(legend.position = "none")
@@ -290,23 +272,23 @@ ggsave(filename = "./output/figs/boxplots_anova_myctype_r09.pdf", box.r09, width
 
 pvalue.phyanova.r09 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = phyaov.pvalue.r09.60, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = phyaov.pvalue.r09.60), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
     #geom_histogram(aes(x = aov.pvalue.r09.60, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
     #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
+    labs(y = "Frequency", x = "p-value", title = "B") +
     xlim(-0.005, 0.2) + 
     theme_cowplot()
 
 pvalue.anova.r09 <-
     ggplot(fullresults) +
     #geom_histogram(aes(x = phyaov.pvalue.r09.60, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
-    geom_histogram(aes(x = aov.pvalue.r09.60, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = aov.pvalue.r09.60), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
     #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
+    labs(y = "Frequency", x = "p-value", title = "C") +
     #xlim(-0.005, 0.2) + 
     theme_cowplot()
 

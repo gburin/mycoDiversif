@@ -48,7 +48,7 @@ scatter.mtdi.r0 <-
     geom_abline(mapping = aes(intercept = pgls.int.r0, slope = pgls.slope.r0, colour = brewer.pal(3, "Set1")[1]), show.legend = TRUE, alpha = 1) +
     geom_abline(mapping = aes(intercept = lm.int.r0, slope = lm.slope.r0, colour = brewer.pal(3, "Set1")[2]), show.legend = TRUE, alpha = 1) +
     geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = r.e0), size = 2, alpha = 0.5) +
-    labs(x = "Mycorrhizal State Diversity Index", y = "Diversification Rate", col = "Model Type") +
+    labs(x = "Mycorrhizal State Diversity Index", y = "Diversification Rate", col = "Model Type", title = "A") +
     #xlim(0, 1) +
     scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
     theme_cowplot() +
@@ -56,32 +56,32 @@ scatter.mtdi.r0 <-
 
 r2.pgls.r0 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = pgls.r2.r0, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = pgls.r2.r0), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$pgls.r2.r0), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = bquote('R' ^2))+
+    labs(y = "Frequency", x = bquote('R' ^2), title = "B")+
     theme_cowplot()
 
 pvalue.pgls.r0 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = log10(pgls.pvalue.r0), y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = log10(median(fullresults$pgls.pvalue.r0)), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    scale_x_continuous(breaks = c(-13, -12, -11, -10, -9), labels = c(bquote('10' ^-13), bquote('10' ^-12), bquote('10' ^-11), bquote('10' ^-10), bquote('10' ^-9))) +
+    labs(y = "Frequency", x = "p-value (log10)") +
+    #scale_x_continuous(breaks = c(-13, -12, -11, -10, -9), labels = c(bquote('10' ^-13), bquote('10' ^-12), bquote('10' ^-11), bquote('10' ^-10), bquote('10' ^-9))) +
     theme_cowplot()
 
 r2.lm.r0 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = lm.r2.r0, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = lm.r2.r0), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$lm.r2.r0), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = bquote('R' ^2)) +
+    labs(y = "Frequency", x = bquote('R' ^2), title = "C") +
     theme_cowplot()
 
 pvalue.lm.r0 <-
     ggplot(fullresults) +
-    geom_histogram(aes(x = log10(lm.pvalue.r0), y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = log10(median(fullresults$lm.pvalue.r0)), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    scale_x_continuous(breaks = c(-16, -14, -12, -10), labels = c(bquote('10' ^-16), bquote('10' ^-14), bquote('10' ^-12), bquote('10' ^-10))) +
+    labs(y = "Frequency", x = "p-value (log10)") +
+    #scale_x_continuous(breaks = c(-16, -14, -12, -10), labels = c(bquote('10' ^-16), bquote('10' ^-14), bquote('10' ^-12), bquote('10' ^-10))) +
     theme_cowplot()
 
 scatter.mtdi.r0 | ((r2.lm.r0 + pvalue.lm.r0) / (r2.pgls.r0 + pvalue.pgls.r0))
@@ -432,46 +432,48 @@ load("../output/results_20perc.RData")
 ## r_epsilon = 0
 hist.pgls.r2.r0 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = pgls.r2.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(pgls.r2.r0)), linetype = "dashed", size = 2, colour = "red") +
+    geom_histogram(aes(x = pgls.r2.r0), fill = RColorBrewer::brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r0)), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[1]) +
+    labs(x = bquote('R' ^2), y = "Frequency") +
     theme_cowplot()
 
 hist.pgls.pvalue.r0 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r0 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
-    scale_x_continuous(breaks = c(-16, -14, -12, -10, -8, -6), labels = c(bquote('10' ^-16), bquote('10' ^-14), bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6))) +
-    labs(x = "p-value", y = element_blank()) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = RColorBrewer::brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r0 + 1e-16))), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[1]) +
+    #scale_x_continuous(breaks = c(-16, -14, -12, -10, -8, -6), labels = c(bquote('10' ^-16), bquote('10' ^-14), bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6))) +
+    labs(x = "p-value (log10)", y = "Frequency") +
     theme_cowplot()
 
 hist.lm.r2.r0 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = lm.r2.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(lm.r2.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    geom_histogram(aes(x = lm.r2.r0), fill = RColorBrewer::brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r0)), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[2]) +
+    labs(x = bquote('R' ^2), y = "Frequency") +
     theme_cowplot()
 
 hist.lm.pvalue.r0 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r0))), linetype = "dashed", size = 2, colour = "blue") +
-    scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
-    labs(x = "p-value", y = element_blank()) +
+    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = RColorBrewer::brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r0))), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[2]) +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value (log10)", y = "Frequency") +
     theme_cowplot()
 
 
 
 hist.pgls.slope.r0 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = pgls.slope.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(pgls.slope.r0)), linetype = "dashed", size = 2, colour = "red") +
-    labs(x = bquote("R", ^2), y = element_blank()) +
+    geom_histogram(aes(x = pgls.slope.r0), fill = RColorBrewer::brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r0)), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[1]) +
+    labs(x = "Slope", y = "Frequency") +
     theme_cowplot()
 
 hist.lm.slope.r0 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = lm.slope.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(lm.slope.r0)), linetype = "dashed", size = 2, colour = "blue") +
-    labs(x = "slope", y = element_blank()) +
+    geom_histogram(aes(x = lm.slope.r0), fill = RColorBrewer::brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r0)), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[2]) +
+    labs(x = "Slope", y = "Frequency") +
     theme_cowplot()
 
 
@@ -479,51 +481,53 @@ hist.lm.slope.r0 <-
 
 
 
-## r_epslion = 0.9
+## r_epsilon = 0.9
 hist.pgls.r2.r09 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = pgls.r2.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(pgls.r2.r09)), linetype = "dashed", size = 2, colour = "red") +
-    labs(x = bquote("R", ^2), y = element_blank()) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = RColorBrewer::brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r09)), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[1]) +
+    labs(x = bquote('R' ^2), y = "Frequency") +
     theme_cowplot()
 
 hist.pgls.pvalue.r09 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r09 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
-    scale_x_continuous(breaks = c(-12.5, -10, -7.5, -5), labels = c(bquote('10' ^-12.5), bquote('10' ^-10), bquote('10' ^-7.5), bquote('10' ^-5))) +
-    labs(x = "p-value", y = element_blank()) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = RColorBrewer::brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r09 + 1e-16))), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[1]) +
+    #scale_x_continuous(breaks = c(-12.5, -10, -7.5, -5), labels = c(bquote('10' ^-12.5), bquote('10' ^-10), bquote('10' ^-7.5), bquote('10' ^-5))) +
+    labs(x = "p-value (log10)", y = "Frequency") +
     theme_cowplot()
 
 hist.lm.r2.r09 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = lm.r2.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(lm.r2.r09)), linetype = "dashed", size = 2, colour = "blue") +
-    labs(x = bquote("R", ^2), y = element_blank()) +
+    geom_histogram(aes(x = lm.r2.r09), fill = RColorBrewer::brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r09)), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[2]) +
+    labs(x = bquote('R' ^2), y = "Frequency") +
     theme_cowplot()
 
 hist.lm.pvalue.r09 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r09))), linetype = "dashed", size = 2, colour = "blue") +
-    scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
-    labs(x = "p-value", y = element_blank()) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = RColorBrewer::brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r09))), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[2]) +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value (log10)", y = "Frequency") +
     theme_cowplot()
 
 
 
 hist.pgls.slope.r09 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = pgls.slope.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(pgls.slope.r09)), linetype = "dashed", size = 2, colour = "red") +
-    labs(x = "slope", y = element_blank()) +
+    geom_histogram(aes(x = pgls.slope.r09), fill = RColorBrewer::brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r09)), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[1]) +
+    scale_x_continuous(breaks = c(0.015, 0.021, 0.027)) +
+    labs(x = "Slope", y = "Frequency") +
     theme_cowplot()
 
 hist.lm.slope.r09 <-
     ggplot(data = random.results) +
-    geom_histogram(aes(x = lm.slope.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
-    geom_vline(aes(xintercept = mean(lm.slope.r09)), linetype = "dashed", size = 2, colour = "blue") +
-    labs(x = "slope", y = element_blank()) +
+    geom_histogram(aes(x = lm.slope.r09), fill = RColorBrewer::brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.7, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r09)), linetype = "dashed", size = 2, colour = RColorBrewer::brewer.pal(3, "Set1")[2]) +
+    scale_x_continuous(breaks = c(0.014, 0.019, 0.024)) +
+    labs(x = "Slope", y = "Frequency") +
     theme_cowplot()
 
 

@@ -47,3 +47,12 @@ rsconnect/
 
 # Individual csv files for the random datasets
 /output/simulated_datasets/
+
+# Backup files from freeoffice
+*.bak
+
+# PDF files
+*.pdf
+
+# Large RData files
+*.RData
