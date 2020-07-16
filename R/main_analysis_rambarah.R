@@ -91,7 +91,7 @@ age.data$rb.UC.conservative.stem <- rb.RC.conservative.ages$Stem_BEAST[match(age
 age.data$rb.CC.conservative.stem <- rb.RC.conservative.ages$Stem_BEAST[match(age.data$familia, rb.CC.conservative.ages$Family)]
 
 
-nrep = length(list.files("./output/simulated_datasets/"))
+nrep = length(list.files("../output/simulated_datasets/"))
 
 main.analysis <- function(x, age, fulltree, calib){
     print(paste0("Replica ", x, " of ", length(list.files("../output/simulated_datasets/"))))
@@ -245,23 +245,23 @@ registerDoMC(50)
 
 ## main.results <- ldply(1:nrep, main.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE)
 
-results.RC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.complete, calib = "RC.complete", .parallel = TRUE)
+results.RC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.complete.pruned, calib = "RC.complete", .parallel = TRUE)
 save(results.RC.complete, file = "../output/RB_results_RC_complete.RData")
 rm(results.RC.complete)
-results.UC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.complete, calib = "UC.complete", .parallel = TRUE)
+results.UC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.complete.pruned, calib = "UC.complete", .parallel = TRUE)
 save(results.UC.complete, file = "../output/RB_results_UC_complete.RData")
 rm(results.UC.complete)
-results.CC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.complete, calib = "CC.complete", .parallel = TRUE)
+results.CC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.complete.pruned, calib = "CC.complete", .parallel = TRUE)
 save(results.CC.complete, file = "../output/RB_results_CC_complete.RData")
 rm(results.CC.complete)
 
-results.RC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.conservative, calib = "RC.conservative", .parallel = TRUE)
+results.RC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.conservative.pruned, calib = "RC.conservative", .parallel = TRUE)
 save(results.RC.conservative, file = "../output/RB_results_RC_conservative.RData")
 rm(results.RC.conservative)
-results.UC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.conservative, calib = "UC.conservative", .parallel = TRUE)
+results.UC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.conservative.pruned, calib = "UC.conservative", .parallel = TRUE)
 save(results.UC.conservative, file = "../output/RB_results_UC_conservative.RData")
 rm(results.UC.conservative)
-results.CC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.conservative, calib = "CC.conservative", .parallel = TRUE)
+results.CC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.conservative.pruned, calib = "CC.conservative", .parallel = TRUE)
 save(results.CC.conservative, file = "../output/RB_results_CC_conservative.RData")
 rm(results.CC.conservative)
 
