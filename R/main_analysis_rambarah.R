@@ -93,6 +93,39 @@ age.data$rb.CC.conservative.stem <- rb.RC.conservative.ages$Stem_BEAST[match(age
 
 nrep = length(list.files("../output/simulated_datasets/"))
 
+
+### Calculating phylogenetic signal to be used in PGLS/phylANOVA only once to speed up the script
+
+family.data.gen <- read.csv("../output/simulated_datasets/random_data_00001.csv", stringsAsFactors = FALSE)
+family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
+family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
+## Removing families with unknown mycorrhizal type
+family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
+
+calibs <- c("RC.complete", "UC.complete", "CC.complete", "RC.conservative", "UC.conservative", "CC.conservative")
+
+for(i in 1:length(calibs)){
+    family.data.gen[, calibs[i]] <- age.data[match(family.data.gen$family, age.data$familia), paste0("rb.", calibs[i], ".stem")]
+    family.data.gen[, paste0(calibs[i], ".r.e0")] <- bd.ms(time = family.data.gen[, calibs[i]], n = family.data.gen$rich, crown = FALSE, epsilon = 0)
+    family.data.gen[, paste0(calibs[i], ".r.e09")] <- bd.ms(time = family.data.gen[, calibs[i]], n = family.data.gen$rich, crown = FALSE, epsilon = 0.9)
+}
+
+family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
+
+family.data.gen <- family.data.gen[-match(c("Orchidaceae", "Ericaceae", "Diapensiaceae"), family.data.gen$family),]
+
+
+for(i in 1:length(calibs)){
+    assign(paste0("tree.pruned.", calibs[i]),
+           drop.tip(get(paste0("RB.tree.", calibs[i], ".pruned")),
+                    tip = get(paste0("RB.tree.", calibs[i], ".pruned"))$tip.label[is.na(match(get(paste0("RB.tree.", calibs[i], ".pruned"))$tip.label, family.data.gen$family))]))
+    assign(paste0("data.pgls.", calibs[i]), comparative.data(get(paste0("tree.pruned.", calibs[i])), family.data.gen, names.col = "family"))
+    assign(paste0("phylosig.r0.", calibs[i]), phylosig(get(paste0("data.pgls.", calibs[i]))$phy, setNames(get(paste0("data.pgls.", calibs[i]))$data[, paste0(calibs[i], ".r.e0")], rownames(get(paste0("data.pgls.", calibs[i]))$data)), method = "lambda", test = TRUE))
+    assign(paste0("phylosig.r09.", calibs[i]), phylosig(get(paste0("data.pgls.", calibs[i]))$phy, setNames(get(paste0("data.pgls.", calibs[i]))$data[, paste0(calibs[i], ".r.e09")], rownames(get(paste0("data.pgls.", calibs[i]))$data)), method = "lambda", test = TRUE))
+    assign(paste0("phylosig.rich.", calibs[i]), phylosig(get(paste0("data.pgls.", calibs[i]))$phy, setNames(get(paste0("data.pgls.", calibs[i]))$data[, "rich"], rownames(get(paste0("data.pgls.", calibs[i]))$data)), method = "lambda", test = TRUE))
+    assign(paste0("phylosig.age.", calibs[i]), phylosig(get(paste0("data.pgls.", calibs[i]))$phy, setNames(get(paste0("data.pgls.", calibs[i]))$data[, calibs[i]], rownames(get(paste0("data.pgls.", calibs[i]))$data)), method = "lambda", test = TRUE))
+}
+
 main.analysis <- function(x, age, fulltree, calib){
     print(paste0("Replica ", x, " of ", length(list.files("../output/simulated_datasets/"))))
     family.data.gen <- read.csv(paste0("../output/simulated_datasets/random_data_", sprintf("%05d", x), ".csv"), stringsAsFactors = FALSE)
@@ -112,14 +145,9 @@ main.analysis <- function(x, age, fulltree, calib){
     tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, family.data.gen$family))])
     data.pgls <- comparative.data(tree.pruned, family.data.gen, names.col = "family")
 
-    phylosig.r0 <- pgls(r.e0 ~ 1, data = data.pgls, lambda = "ML")
-    phylosig.r09 <- pgls(r.e09 ~ 1, data = data.pgls, lambda = "ML")
-    phylosig.rich <- pgls(rich ~ 1, data = data.pgls, lambda = "ML")
-    phylosig.age <- pgls(stem.age ~ 1, data = data.pgls, lambda = "ML")
-
     ## Fitting PGLS excluding families with != 100% MIX
-    mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r0)$param[2], NULL))
-    mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r09)$param[2], NULL))
+    mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r0.", calib))$lambda)
+    mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r09.", calib))$lambda)
 
     ## Fitting standard linear models excluding families with != 100% MIX
     lm.r0 <- lm(r.e0 ~ shannon, data = family.data.gen)
@@ -165,8 +193,8 @@ main.analysis <- function(x, age, fulltree, calib){
     aov.r09.100 <- aov(r.e09 ~ type.100, data = data.aov)
 
     ## Age vs rich
-    pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.age)$param[2], NULL))
-    pgls.rich.sh <- caper::pgls(rich ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.rich)$param[2], NULL))
+    pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.rich.", calib))$lambda)
+    pgls.rich.sh <- caper::pgls(rich ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.age.", calib))$lambda)
 
     lm.age.sh <- lm(stem.age ~ shannon, data = family.data.gen)
     lm.rich.sh <- lm(rich ~ shannon, data = family.data.gen)
