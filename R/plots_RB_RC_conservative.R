@@ -7,32 +7,54 @@ library("cowplot")
 library("ggrepel")
 library("caper")
 library("patchwork")
+library("plyr")
 
-## Importing tree
-fulltree <- read.tree("../data/fam_tree_family_full.tre")
-fulltree$node.label <- NULL
-fulltree.vasc <- read.tree("../data/Vascular_Plants_rooted.dated.tre")
+age.data <- read.csv("../data/data_all_families.csv", sep = ";")
+RB.tree.RC.conservative <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_RC_conservative_MCCv_2.tre")
+
+## Extracting families from tip information
+
+RB.tip.list <- RB.tree.RC.conservative$tip.label
+RB.family.list <- unique(setNames(sapply(RB.tip.list, function(x){strsplit(x, split = "_")[[1]][2]}), NULL))
+
+## Replacing species name by the family, and dropping repeated tips
+RB.tree.RC.conservative.pruned <- drop.tip(RB.tree.RC.conservative, tip = grep(RB.family.list[1], RB.tree.RC.conservative$tip.label)[-1])
+for(i in 2:length(RB.family.list)){
+    RB.tree.RC.conservative.pruned <- drop.tip(RB.tree.RC.conservative.pruned, tip = grep(RB.family.list[i], RB.tree.RC.conservative.pruned$tip.label)[-1])
+}
+RB.tree.RC.conservative.pruned$tip.label <- setNames(sapply(RB.tree.RC.conservative.pruned$tip.label, function(x){strsplit(x, split = "_")[[1]][2]}), NULL)
+
+rb.RC.conservative.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_RC_conservative.csv", as.is = TRUE)
+
+## Missing families from Ramírez-Barahona et al. 2020
+age.data$familia[is.na(match(age.data$familia, rb.RC.conservative.ages$Family))]
+
+## Adding ages from Ramírez-Barahona et al. 2020
+age.data$rb.RC.conservative.stem <- rb.RC.conservative.ages$Stem_BEAST[match(age.data$familia, rb.RC.conservative.ages$Family)]
 
 ## Importing results from random datasets
-fullresults <- read.csv("../output/fit_data_random_datasets.csv")
+load("../output/RB_results_RC_conservative.RData")
+nrep <- 10000
+fullresults <- ldply(1:nrep, function(x){results.RC.conservative[[x]][[1]]})
 
 ## Importing table with rates for plotting
 family.data.gen <- read.csv("../output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
 family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
 family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 
-age.data <- read.csv("../data/data_all_families.csv", sep = ";")
-
 ## Removing families with unknown mycorrhizal type
 family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
 
-family.data.gen$stem.age <- age.data$stem.age[match(family.data.gen$family, age.data$familia)]
+family.data.gen$stem.age <- age.data$rb.RC.conservative.stem[match(family.data.gen$family, age.data$familia)]
 family.data.gen$r.e0 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0)
 family.data.gen$r.e05 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.5)
 family.data.gen$r.e09 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.9)
 family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
 
 ## Calculating expected limits from all vascular plants
+
+fulltree.vasc <- read.tree("../data/Vascular_Plants_rooted.dated.tre")
+
 stem.age.vasc <- max(branching.times(fulltree.vasc)) - findMRCA(fulltree.vasc, c(fulltree.vasc$tip.label[621:622]), type = "height")
 
 r.vasc.stem.r0 <- bd.ms(time = stem.age.vasc, n = sum(family.data.gen$rich), crown = FALSE, epsilon = 0)
@@ -225,8 +247,8 @@ ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_rich.pdf", height = 
 ### Boxplots
 ## We aggregate mean rates per type for each random dataset
 
-age.data$r.e0 <- geiger::bd.ms(time = age.data$stem.age, n = age.data$nro_especies, crown = FALSE, epsilon = 0)
-age.data$r.e09 <- geiger::bd.ms(time = age.data$stem.age, n = age.data$nro_especies, crown = FALSE, epsilon = 0.9)
+age.data$r.e0 <- geiger::bd.ms(time = age.data$rb.RC.conservative.stem, n = age.data$nro_especies, crown = FALSE, epsilon = 0)
+age.data$r.e09 <- geiger::bd.ms(time = age.data$rb.RC.conservative.stem, n = age.data$nro_especies, crown = FALSE, epsilon = 0.9)
 
 random.data <- lapply(paste0("../output/simulated_datasets/", list.files("../output/simulated_datasets/")), read.csv, stringsAsFactors = FALSE)
 
