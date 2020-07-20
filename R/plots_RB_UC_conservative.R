@@ -10,32 +10,32 @@ library("patchwork")
 library("plyr")
 
 age.data <- read.csv("../data/data_all_families.csv", sep = ";")
-RB.tree.RC.complete <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_RC_complete_MCCv_2.tre")
+RB.tree.UC.conservative <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_UC_conservative_MCCv_2.tre")
 
 ## Extracting families from tip information
 
-RB.tip.list <- RB.tree.RC.complete$tip.label
+RB.tip.list <- RB.tree.UC.conservative$tip.label
 RB.family.list <- unique(setNames(sapply(RB.tip.list, function(x){strsplit(x, split = "_")[[1]][2]}), NULL))
 
 ## Replacing species name by the family, and dropping repeated tips
-RB.tree.RC.complete.pruned <- drop.tip(RB.tree.RC.complete, tip = grep(RB.family.list[1], RB.tree.RC.complete$tip.label)[-1])
+RB.tree.UC.conservative.pruned <- drop.tip(RB.tree.UC.conservative, tip = grep(RB.family.list[1], RB.tree.UC.conservative$tip.label)[-1])
 for(i in 2:length(RB.family.list)){
-    RB.tree.RC.complete.pruned <- drop.tip(RB.tree.RC.complete.pruned, tip = grep(RB.family.list[i], RB.tree.RC.complete.pruned$tip.label)[-1])
+    RB.tree.UC.conservative.pruned <- drop.tip(RB.tree.UC.conservative.pruned, tip = grep(RB.family.list[i], RB.tree.UC.conservative.pruned$tip.label)[-1])
 }
-RB.tree.RC.complete.pruned$tip.label <- setNames(sapply(RB.tree.RC.complete.pruned$tip.label, function(x){strsplit(x, split = "_")[[1]][2]}), NULL)
+RB.tree.UC.conservative.pruned$tip.label <- setNames(sapply(RB.tree.UC.conservative.pruned$tip.label, function(x){strsplit(x, split = "_")[[1]][2]}), NULL)
 
-rb.RC.complete.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_RC_complete.csv", as.is = TRUE)
+rb.UC.conservative.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_UC_conservative.csv", as.is = TRUE)
 
 ## Missing families from Ramírez-Barahona et al. 2020
-age.data$familia[is.na(match(age.data$familia, rb.RC.complete.ages$Family))]
+age.data$familia[is.na(match(age.data$familia, rb.UC.conservative.ages$Family))]
 
 ## Adding ages from Ramírez-Barahona et al. 2020
-age.data$rb.RC.complete.stem <- rb.RC.complete.ages$Stem_BEAST[match(age.data$familia, rb.RC.complete.ages$Family)]
+age.data$rb.UC.conservative.stem <- rb.UC.conservative.ages$Stem_BEAST[match(age.data$familia, rb.UC.conservative.ages$Family)]
 
 ## Importing results from random datasets
-load("../output/RB_results_RC_complete.RData")
+load("../output/RB_results_UC_conservative.RData")
 nrep <- 10000
-fullresults <- ldply(1:nrep, function(x){results.RC.complete[[x]][[1]]})
+fullresults <- ldply(1:nrep, function(x){results.UC.conservative[[x]][[1]]})
 
 ## Importing table with rates for plotting
 family.data.gen <- read.csv("../output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
@@ -45,7 +45,7 @@ family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 ## Removing families with unknown mycorrhizal type
 family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
 
-family.data.gen$stem.age <- age.data$rb.RC.complete.stem[match(family.data.gen$family, age.data$familia)]
+family.data.gen$stem.age <- age.data$rb.UC.conservative.stem[match(family.data.gen$family, age.data$familia)]
 family.data.gen$r.e0 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0)
 family.data.gen$r.e05 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.5)
 family.data.gen$r.e09 <- bd.ms(time = family.data.gen$stem.age, n = family.data.gen$rich, crown = FALSE, epsilon = 0.9)
@@ -151,7 +151,7 @@ pvalue.pgls.r09 <-
 
 scatter.mtdi.r09 | ((r2.lm.r09 + pvalue.lm.r09) / (r2.pgls.r09 + pvalue.pgls.r09))
 
-ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_r09_RC_complete.pdf", height = 5.5, width = 13)
+ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_r09_UC_conservative.pdf", height = 5.5, width = 13)
 
 ## Age vs Shannon
 scatter.age.sh <-
@@ -195,7 +195,7 @@ pvalue.lm.age.sh <-
 
 scatter.age.sh | ((r2.pgls.age.sh + pvalue.pgls.age.sh) / (r2.lm.age.sh + pvalue.lm.age.sh))
 
-ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_age_RC_complete.pdf", height = 5.5, width = 13)
+ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_age_UC_conservative.pdf", height = 5.5, width = 13)
 
 
 ## Richness vs Shannon
@@ -241,14 +241,14 @@ pvalue.lm.rich.sh <-
 
 scatter.rich.sh | ((r2.pgls.rich.sh + pvalue.pgls.rich.sh) / (r2.lm.rich.sh + pvalue.lm.rich.sh))
 
-ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_rich_RC_complete.pdf", height = 5.5, width = 13)
+ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_rich_UC_conservative.pdf", height = 5.5, width = 13)
 
 
 ### Boxplots
 ## We aggregate mean rates per type for each random dataset
 
-age.data$r.e0 <- geiger::bd.ms(time = age.data$rb.RC.complete.stem, n = age.data$nro_especies, crown = FALSE, epsilon = 0)
-age.data$r.e09 <- geiger::bd.ms(time = age.data$rb.RC.complete.stem, n = age.data$nro_especies, crown = FALSE, epsilon = 0.9)
+age.data$r.e0 <- geiger::bd.ms(time = age.data$rb.UC.conservative.stem, n = age.data$nro_especies, crown = FALSE, epsilon = 0)
+age.data$r.e09 <- geiger::bd.ms(time = age.data$rb.UC.conservative.stem, n = age.data$nro_especies, crown = FALSE, epsilon = 0.9)
 
 random.data <- lapply(paste0("../output/simulated_datasets/", list.files("../output/simulated_datasets/")), read.csv, stringsAsFactors = FALSE)
 
@@ -290,7 +290,7 @@ box.r09 <-
     theme_cowplot() +
     theme(legend.position = "none")
 
-ggsave(filename = "../output/figs/boxplots_anova_myctype_r09_RC_complete.pdf", box.r09, width = 11, height = 5.5, units = "in")
+ggsave(filename = "../output/figs/boxplots_anova_myctype_r09_UC_conservative.pdf", box.r09, width = 11, height = 5.5, units = "in")
 
 pvalue.phyanova.r09 <-
     ggplot(fullresults) +
@@ -316,7 +316,7 @@ pvalue.anova.r09 <-
 
 (box.r09) / (pvalue.phyanova.r09 + pvalue.anova.r09)
 
-ggsave(filename = "../output/figs/box_hist_anova_myctype_r09_RC_complete.pdf", width = 11, height = 9, units = "in")
+ggsave(filename = "../output/figs/box_hist_anova_myctype_r09_UC_conservative.pdf", width = 11, height = 9, units = "in")
 
 
 anovas.r09.pvalue <-
@@ -327,6 +327,6 @@ anovas.r09.pvalue <-
     labs(x = "Model", y = "p-value") +
     theme_cowplot()
 
-ggsave(filename = "../output/figs/jitter_pvalue_anovas_r09_RC_complete.pdf", anovas.r09.pvalue, width = 11, height = 5.5, units = "in")
+ggsave(filename = "../output/figs/jitter_pvalue_anovas_r09_UC_conservative.pdf", anovas.r09.pvalue, width = 11, height = 5.5, units = "in")
 
 

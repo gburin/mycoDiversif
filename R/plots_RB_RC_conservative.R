@@ -151,7 +151,7 @@ pvalue.pgls.r09 <-
 
 scatter.mtdi.r09 | ((r2.lm.r09 + pvalue.lm.r09) / (r2.pgls.r09 + pvalue.pgls.r09))
 
-ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_r09.pdf", height = 5.5, width = 13)
+ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_r09_RC_conservative.pdf", height = 5.5, width = 13)
 
 ## Age vs Shannon
 scatter.age.sh <-
@@ -195,7 +195,7 @@ pvalue.lm.age.sh <-
 
 scatter.age.sh | ((r2.pgls.age.sh + pvalue.pgls.age.sh) / (r2.lm.age.sh + pvalue.lm.age.sh))
 
-ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_age.pdf", height = 5.5, width = 13)
+ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_age_RC_conservative.pdf", height = 5.5, width = 13)
 
 
 ## Richness vs Shannon
@@ -241,7 +241,7 @@ pvalue.lm.rich.sh <-
 
 scatter.rich.sh | ((r2.pgls.rich.sh + pvalue.pgls.rich.sh) / (r2.lm.rich.sh + pvalue.lm.rich.sh))
 
-ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_rich.pdf", height = 5.5, width = 13)
+ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_rich_RC_conservative.pdf", height = 5.5, width = 13)
 
 
 ### Boxplots
@@ -290,7 +290,7 @@ box.r09 <-
     theme_cowplot() +
     theme(legend.position = "none")
 
-ggsave(filename = "../output/figs/boxplots_anova_myctype_r09.pdf", box.r09, width = 11, height = 5.5, units = "in")
+ggsave(filename = "../output/figs/boxplots_anova_myctype_r09_RC_conservative.pdf", box.r09, width = 11, height = 5.5, units = "in")
 
 pvalue.phyanova.r09 <-
     ggplot(fullresults) +
@@ -316,7 +316,7 @@ pvalue.anova.r09 <-
 
 (box.r09) / (pvalue.phyanova.r09 + pvalue.anova.r09)
 
-ggsave(filename = "../output/figs/box_hist_anova_myctype_r09.pdf", width = 11, height = 9, units = "in")
+ggsave(filename = "../output/figs/box_hist_anova_myctype_r09_RC_conservative.pdf", width = 11, height = 9, units = "in")
 
 
 anovas.r09.pvalue <-
@@ -327,6 +327,6 @@ anovas.r09.pvalue <-
     labs(x = "Model", y = "p-value") +
     theme_cowplot()
 
-ggsave(filename = "../output/figs/jitter_pvalue_anovas_r09.pdf", anovas.r09.pvalue, width = 11, height = 5.5, units = "in")
+ggsave(filename = "../output/figs/jitter_pvalue_anovas_r09_RC_conservative.pdf", anovas.r09.pvalue, width = 11, height = 5.5, units = "in")
 
 
