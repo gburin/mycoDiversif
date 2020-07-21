@@ -146,8 +146,8 @@ main.analysis <- function(x, age, fulltree, calib){
     data.pgls <- comparative.data(tree.pruned, family.data.gen, names.col = "family")
 
     ## Fitting PGLS excluding families with != 100% MIX
-    mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r0.", calib))$lambda)
-    mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r09.", calib))$lambda)
+    mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r0.", calib))$lambda, bounds=list(lambda=c(0,3)))
+    mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r09.", calib))$lambda, bounds=list(lambda=c(0,3)))
 
     ## Fitting standard linear models excluding families with != 100% MIX
     lm.r0 <- lm(r.e0 ~ shannon, data = family.data.gen)
@@ -193,8 +193,8 @@ main.analysis <- function(x, age, fulltree, calib){
     aov.r09.100 <- aov(r.e09 ~ type.100, data = data.aov)
 
     ## Age vs rich
-    pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.rich.", calib))$lambda)
-    pgls.rich.sh <- caper::pgls(rich ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.age.", calib))$lambda)
+    pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.rich.", calib))$lambda, bounds=list(lambda=c(0,3)))
+    pgls.rich.sh <- caper::pgls(rich ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.age.", calib))$lambda, bounds=list(lambda=c(0,3)))
 
     lm.age.sh <- lm(stem.age ~ shannon, data = family.data.gen)
     lm.rich.sh <- lm(rich ~ shannon, data = family.data.gen)
@@ -273,25 +273,25 @@ registerDoMC(50)
 
 ## main.results <- ldply(1:nrep, main.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE)
 
-results.RC.complete.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.complete.pruned, calib = "RC.complete", .parallel = TRUE)
-save(results.RC.complete.large, file = "../output/RB_results_RC_complete_large.RData")
-rm(results.RC.complete)
-results.UC.complete.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.complete.pruned, calib = "UC.complete", .parallel = TRUE)
-save(results.UC.complete.large, file = "../output/RB_results_UC_complete_large.RData")
-rm(results.UC.complete)
-results.CC.complete.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.complete.pruned, calib = "CC.complete", .parallel = TRUE)
-save(results.CC.complete.large, file = "../output/RB_results_CC_complete_large.RData")
-rm(results.CC.complete)
+## results.RC.complete.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.complete.pruned, calib = "RC.complete", .parallel = TRUE)
+## save(results.RC.complete.large, file = "../output/RB_results_RC_complete_large.RData")
+## rm(results.RC.complete)
+## results.UC.complete.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.complete.pruned, calib = "UC.complete", .parallel = TRUE)
+## save(results.UC.complete.large, file = "../output/RB_results_UC_complete_large.RData")
+## rm(results.UC.complete)
+## results.CC.complete.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.complete.pruned, calib = "CC.complete", .parallel = TRUE)
+## save(results.CC.complete.large, file = "../output/RB_results_CC_complete_large.RData")
+## rm(results.CC.complete)
 
 results.RC.conservative.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.conservative.pruned, calib = "RC.conservative", .parallel = TRUE)
-save(results.RC.conservative, file = "../output/RB_results_RC_conservative_large.RData")
-rm(results.RC.conservative)
+save(results.RC.conservative.large, file = "../output/RB_results_RC_conservative_large.RData")
+rm(results.RC.conservative.large)
 results.UC.conservative.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.conservative.pruned, calib = "UC.conservative", .parallel = TRUE)
-save(results.UC.conservative, file = "../output/RB_results_UC_conservative_large.RData")
-rm(results.UC.conservative)
+save(results.UC.conservative.large, file = "../output/RB_results_UC_conservative_large.RData")
+rm(results.UC.conservative.large)
 results.CC.conservative.large <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.conservative.pruned, calib = "CC.conservative", .parallel = TRUE)
-save(results.CC.conservative, file = "../output/RB_results_CC_conservative_large.RData")
-rm(results.CC.conservative)
+save(results.CC.conservative.large, file = "../output/RB_results_CC_conservative_large.RData")
+rm(results.CC.conservative.large)
 
 ## write.table(main.results, file = "./output/fit_data_random_datasets.csv", sep = ",", quote = FALSE, row.names = FALSE)
 

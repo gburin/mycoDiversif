@@ -141,13 +141,14 @@ main.analysis <- function(x, age, fulltree, calib){
     family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
 
     family.data.gen <- family.data.gen[-match(c("Orchidaceae", "Ericaceae", "Diapensiaceae"), family.data.gen$family),]
+    family.data.gen <- family.data.gen[family.data.gen$rich >= 20,]
 
     tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, family.data.gen$family))])
     data.pgls <- comparative.data(tree.pruned, family.data.gen, names.col = "family")
 
     ## Fitting PGLS excluding families with != 100% MIX
-    mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r0.", calib))$lambda)
-    mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r09.", calib))$lambda)
+    mod.r0 <- tryCatch(caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r0.", calib))$lambda, bounds=list(lambda=c(0,3))), error = function(x){NA})
+    mod.r09 <- tryCatch(caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r09.", calib))$lambda, bounds=list(lambda=c(0,3))), error = function(x){NA})
 
     ## Fitting standard linear models excluding families with != 100% MIX
     lm.r0 <- lm(r.e0 ~ shannon, data = family.data.gen)
@@ -193,8 +194,8 @@ main.analysis <- function(x, age, fulltree, calib){
     aov.r09.100 <- aov(r.e09 ~ type.100, data = data.aov)
 
     ## Age vs rich
-    pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.rich.", calib))$lambda)
-    pgls.rich.sh <- caper::pgls(rich ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.age.", calib))$lambda)
+    pgls.age.sh <- tryCatch(caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.rich.", calib))$lambda, bounds=list(lambda=c(0,3))), error = function(x){NA})
+    pgls.rich.sh <- tryCatch(caper::pgls(rich ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.age.", calib))$lambda, bounds=list(lambda=c(0,3))), error = function(x){NA})
 
     lm.age.sh <- lm(stem.age ~ shannon, data = family.data.gen)
     lm.rich.sh <- lm(rich ~ shannon, data = family.data.gen)
