@@ -11,21 +11,19 @@ library("doMC")
 library("reshape2")
 library("plyr")
 
-here::i_am("R/main_analysis_zanne.R")
-
 #######################
 ### Analysis per genera
 #######################
 
-age.data <- read.csv(here::here("data/data_all_families.csv", sep = ";"))
-fulltree <- read.tree(here::here("data/fam_tree_family_full.tre"))
+age.data <- read.csv("../data/data_all_families.csv", sep = ";")
+fulltree <- read.tree("../data/fam_tree_family_full.tre")
 fulltree$node.label <- NULL
 
-nrep = length(list.files(here::here("output/simulated_datasets/")))
+nrep <- sort(sample(1:10000, 1000))
 
-main.analysis <- function(x, age, fulltree){
-    print(paste0("Replica ", x, " of ", length(list.files(here::here("output/simulated_datasets/")))))
-    family.data.gen <- read.csv(here::here(paste0("output/simulated_datasets/random_data_", sprintf("%05d", x), ".csv")), stringsAsFactors = FALSE)
+side.analysis <- function(x, age, fulltree, perc){
+    print(paste0("Replica ", x, " of ", length(list.files("../output/simulated_datasets/"))))
+    family.data.gen <- read.csv(paste0("../output/simulated_datasets/random_data_", sprintf("%05d", x), ".csv"), stringsAsFactors = FALSE)
     family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
     family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 
@@ -39,26 +37,38 @@ main.analysis <- function(x, age, fulltree){
     family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
 
     family.data.gen <- family.data.gen[-match(c("Orchidaceae", "Ericaceae", "Diapensiaceae"), family.data.gen$family),]
+    family.data.gen <- family.data.gen[!is.na(family.data.gen$r.e0),]
 
     tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, family.data.gen$family))])
+    ## Sampling families which will be set to having r = 0
+    family.sub <- sort(sample(1:nrow(family.data.gen), ceiling((perc * nrow(family.data.gen))/100)))
+    family.data.gen$r.e0[family.sub] <- 0
+    family.data.gen$r.e09[family.sub] <- 0
     data.pgls <- comparative.data(tree.pruned, family.data.gen, names.col = "family")
 
-    ## phylosig.r0 <- pgls(r.e0 ~ 1, data = data.pgls, lambda = "ML")
-    ## phylosig.r09 <- pgls(r.e09 ~ 1, data = data.pgls, lambda = "ML")
-    ## phylosig.rich <- pgls(rich ~ 1, data = data.pgls, lambda = "ML")
-    ## phylosig.age <- pgls(stem.age ~ 1, data = data.pgls, lambda = "ML")
+    phylosig.r0 <- pgls(r.e0 ~ 1, data = data.pgls, lambda = "ML")
+    phylosig.r09 <- pgls(r.e09 ~ 1, data = data.pgls, lambda = "ML")
+    phylosig.rich <- pgls(rich ~ 1, data = data.pgls, lambda = "ML")
+    phylosig.age <- pgls(stem.age ~ 1, data = data.pgls, lambda = "ML")
 
     ## Fitting PGLS excluding families with != 100% MIX
-    mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = "ML")
-    mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = "ML")
+    mod.r0 <- caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r0)$param[2], NULL))
+    mod.r09 <- caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.r09)$param[2], NULL))
 
     ## Fitting standard linear models excluding families with != 100% MIX
     lm.r0 <- lm(r.e0 ~ shannon, data = family.data.gen)
     lm.r09 <- lm(r.e09 ~ shannon, data = family.data.gen)
 
+    ## Age vs rich
+    pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.age)$param[2], NULL))
+    pgls.rich.sh <- caper::pgls(rich ~ shannon, data = data.pgls, lambda = setNames(summary(phylosig.rich)$param[2], NULL))
+
+    lm.age.sh <- lm(stem.age ~ shannon, data = family.data.gen)
+    lm.rich.sh <- lm(rich ~ shannon, data = family.data.gen)
+
     ## phylANOVA excluding families with != 100% MIX
-    data.aov <- family.data.gen[-which(is.na(match(family.data.gen$family, fulltree$tip.label))), ]
-    data.aov <- data.aov[-which(is.na(data.aov$r.e0)),]
+    data.aov <- family.data.gen[which(!is.na(match(family.data.gen$family, fulltree$tip.label))), ]
+                                        #data.aov <- data.aov[-which(is.na(data.aov$r.e0)),]
     
     ## Thresholds
 ### 50%
@@ -94,13 +104,6 @@ main.analysis <- function(x, age, fulltree){
 ### 100%
     aov.r0.100 <- aov(r.e0 ~ type.100, data = data.aov)
     aov.r09.100 <- aov(r.e09 ~ type.100, data = data.aov)
-
-    ## Age vs rich
-    pgls.age.sh <- caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = "ML")
-    pgls.rich.sh <- caper::pgls(rich ~ shannon, data = data.pgls, lambda = "ML")
-
-    lm.age.sh <- lm(stem.age ~ shannon, data = family.data.gen)
-    lm.rich.sh <- lm(rich ~ shannon, data = family.data.gen)
 
     results <- data.frame(pgls.int.r0 = coef(mod.r0)[1],
                           pgls.slope.r0 = coef(mod.r0)[2],
@@ -151,7 +154,6 @@ main.analysis <- function(x, age, fulltree){
                           lm.r2.rich.sh = summary(lm.rich.sh)$r.squared,
                           lm.pvalue.rich.sh = summary(lm.rich.sh)$coefficients[2, 4], row.names = NULL)
     
-    ## return(results)
     return(list(results,
                 phyaov.r0.50 = phyaov.r0.50$Pt,
                 phyaov.r09.50 = phyaov.r09.50$Pt,
@@ -170,17 +172,15 @@ main.analysis <- function(x, age, fulltree){
                 aov.r0.100 = TukeyHSD(aov.r0.100)$type.100,
                 aov.r09.100 = TukeyHSD(aov.r09.100)$type.100
                 )
-           )
-                
-    
+           )            
 }
 
-registerDoMC(50)
+registerDoMC(56)
 
-## main.results <- ldply(1:nrep, main.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE)
+## side.results <- ldply(nrep, side.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE, perc = 20)
 
-main.results <- llply(1:nrep, main.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE)
+side.results <- llply(nrep, side.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE, perc = 20)
 
-## write.table(main.results, file = "./output/main_results_zanne_2021.csv", sep = ",", quote = FALSE, row.names = FALSE)
+#write.table(side.results$results, file = "../output/fit_data_random_datasets_side_rabosky_benson.csv", sep = ",", quote = FALSE, row.names = FALSE)
 
-saveRDS(main.results, file = here::here("output/main_results_zanne_2021.RDS"))
+save(side.results, file = "../output/side_analysis_rabosky_benson.RData")
