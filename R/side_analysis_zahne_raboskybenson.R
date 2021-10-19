@@ -179,6 +179,7 @@ registerDoMC(56)
 
 ## side.results <- ldply(nrep, side.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE, perc = 20)
 
+<<<<<<< HEAD
 ## side.results <- llply(nrep, side.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE, perc = 20)
 
 #write.table(side.results$results, file = "../output/fit_data_random_datasets_side_rabosky_benson.csv", sep = ",", quote = FALSE, row.names = FALSE)
@@ -198,3 +199,10 @@ side.results.50 <- llply(nrep, side.analysis, age = age.data, fulltree = fulltre
 #write.table(side.results$results, file = "../output/fit_data_random_datasets_side_rabosky_benson.csv", sep = ",", quote = FALSE, row.names = FALSE)
 
 save(side.results.50, file = "../output/side_analysis_rabosky_benson_50perc.RData")
+=======
+side.results <- llply(nrep, side.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE, perc = 20)
+
+#write.table(side.results$results, file = "../output/fit_data_random_datasets_side_rabosky_benson.csv", sep = ",", quote = FALSE, row.names = FALSE)
+
+save(side.results, file = "../output/side_analysis_rabosky_benson.RData")
+>>>>>>> bbdaf89a73601db1cc58d27bf83f2ac10b69a157

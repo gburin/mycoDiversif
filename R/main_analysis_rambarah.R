@@ -15,14 +15,14 @@ library("plyr")
 ### Analysis per genera
 #######################
 
-age.data <- read.csv("../data/data_all_families.csv", sep = ";")
-RB.tree.RC.complete <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_RC_complete_MCCv_2.tre")
-RB.tree.UC.complete <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_UC_complete_MCCv_2.tre")
-RB.tree.CC.complete <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_CC_complete_MCCv_2.tre")
+age.data <- read.csv(here::here("data/data_all_families.csv", sep = ";"))
+RB.tree.RC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_RC_complete_MCCv_2.tre"))
+RB.tree.UC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_UC_complete_MCCv_2.tre"))
+RB.tree.CC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_CC_complete_MCCv_2.tre"))
 
-RB.tree.RC.conservative <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_RC_conservative_MCCv_2.tre")
-RB.tree.UC.conservative <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_UC_conservative_MCCv_2.tre")
-RB.tree.CC.conservative <- read.nexus("../data/ramirez_barahona_data/ramirez_barahona_CC_conservative_MCCv_2.tre")
+RB.tree.RC.conservative <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_RC_conservative_MCCv_2.tre"))
+RB.tree.UC.conservative <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_UC_conservative_MCCv_2.tre"))
+RB.tree.CC.conservative <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_CC_conservative_MCCv_2.tre"))
 
 ## Extracting families from tip information
 
@@ -69,13 +69,13 @@ for(i in 2:length(RB.family.list)){
 RB.tree.CC.conservative.pruned$tip.label <- setNames(sapply(RB.tree.CC.conservative.pruned$tip.label, function(x){strsplit(x, split = "_")[[1]][2]}), NULL)
 
 
-rb.RC.complete.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_RC_complete.csv", as.is = TRUE)
-rb.UC.complete.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_UC_complete.csv", as.is = TRUE)
-rb.CC.complete.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_CC_complete.csv", as.is = TRUE)
+rb.RC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_RC_complete.csv", as.is = TRUE))
+rb.UC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_UC_complete.csv", as.is = TRUE))
+rb.CC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_CC_complete.csv", as.is = TRUE))
 
-rb.RC.conservative.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_RC_conservative.csv", as.is = TRUE)
-rb.UC.conservative.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_UC_conservative.csv", as.is = TRUE)
-rb.CC.conservative.ages <- read.csv("../data/ramirez_barahona_data/ramirez_barahona_Ages_CC_conservative.csv", as.is = TRUE)
+rb.RC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_RC_conservative.csv", as.is = TRUE))
+rb.UC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_UC_conservative.csv", as.is = TRUE))
+rb.CC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_CC_conservative.csv", as.is = TRUE))
 
 
 ## Missing families from Ramírez-Barahona et al. 2020
@@ -91,12 +91,12 @@ age.data$rb.UC.conservative.stem <- rb.RC.conservative.ages$Stem_BEAST[match(age
 age.data$rb.CC.conservative.stem <- rb.RC.conservative.ages$Stem_BEAST[match(age.data$familia, rb.CC.conservative.ages$Family)]
 
 
-nrep = length(list.files("../output/simulated_datasets/"))
+nrep = length(list.files(here::here("output/simulated_datasets/")))
 
 
 ### Calculating phylogenetic signal to be used in PGLS/phylANOVA only once to speed up the script
 
-family.data.gen <- read.csv("../output/simulated_datasets/random_data_00001.csv", stringsAsFactors = FALSE)
+family.data.gen <- read.csv(here::here("output/simulated_datasets/random_data_00001.csv"), stringsAsFactors = FALSE)
 family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
 family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 ## Removing families with unknown mycorrhizal type
@@ -104,6 +104,16 @@ family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
 
 calibs <- c("RC.complete", "UC.complete", "CC.complete", "RC.conservative", "UC.conservative", "CC.conservative")
 
+family.data.gen <- cbind(family.data.gen,
+                         data.frame(
+                             RC.complete = rep(NA, nrow(family.data.gen)),
+                             UC.complete = rep(NA, nrow(family.data.gen)),
+                             CC.complete = rep(NA, nrow(family.data.gen)),
+                             RC.conservative = rep(NA, nrow(family.data.gen)),
+                             UC.conservative = rep(NA, nrow(family.data.gen)),
+                             CC.conservative = rep(NA, nrow(family.data.gen))
+                         ))
+                         
 for(i in 1:length(calibs)){
     family.data.gen[, calibs[i]] <- age.data[match(family.data.gen$family, age.data$familia), paste0("rb.", calibs[i], ".stem")]
     family.data.gen[, paste0(calibs[i], ".r.e0")] <- bd.ms(time = family.data.gen[, calibs[i]], n = family.data.gen$rich, crown = FALSE, epsilon = 0)
@@ -127,8 +137,8 @@ for(i in 1:length(calibs)){
 }
 
 main.analysis <- function(x, age, fulltree, calib){
-    print(paste0("Replica ", x, " of ", length(list.files("../output/simulated_datasets/"))))
-    family.data.gen <- read.csv(paste0("../output/simulated_datasets/random_data_", sprintf("%05d", x), ".csv"), stringsAsFactors = FALSE)
+    print(paste0("Replica ", x, " of ", length(list.files(here::here("output/simulated_datasets/")))))
+    family.data.gen <- read.csv(here::here(paste0("output/simulated_datasets/random_data_", sprintf("%05d", x), ".csv")), stringsAsFactors = FALSE)
     family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
     family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
     ## Removing families with unknown mycorrhizal type
@@ -141,14 +151,14 @@ main.analysis <- function(x, age, fulltree, calib){
     family.data.gen$shannon <- vegan::diversity(family.data.gen[, 3:7])
 
     family.data.gen <- family.data.gen[-match(c("Orchidaceae", "Ericaceae", "Diapensiaceae"), family.data.gen$family),]
-    family.data.gen <- family.data.gen[family.data.gen$rich >= 20,]
+    #family.data.gen <- family.data.gen[family.data.gen$rich >= 20,]
 
     tree.pruned <- drop.tip(fulltree, tip = fulltree$tip.label[is.na(match(fulltree$tip.label, family.data.gen$family))])
     data.pgls <- comparative.data(tree.pruned, family.data.gen, names.col = "family")
 
     ## Fitting PGLS excluding families with != 100% MIX
-    mod.r0 <- tryCatch(caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r0.", calib))$lambda, bounds=list(lambda=c(0,3))), error = function(x){NA})
-    mod.r09 <- tryCatch(caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.r09.", calib))$lambda, bounds=list(lambda=c(0,3))), error = function(x){NA})
+    mod.r0 <- tryCatch(caper::pgls(r.e0 ~ shannon, data = data.pgls, lambda = "ML"), error = function(x){NA})
+    mod.r09 <- tryCatch(caper::pgls(r.e09 ~ shannon, data = data.pgls, lambda = "ML"), error = function(x){NA})
 
     ## Fitting standard linear models excluding families with != 100% MIX
     lm.r0 <- lm(r.e0 ~ shannon, data = family.data.gen)
@@ -194,8 +204,8 @@ main.analysis <- function(x, age, fulltree, calib){
     aov.r09.100 <- aov(r.e09 ~ type.100, data = data.aov)
 
     ## Age vs rich
-    pgls.age.sh <- tryCatch(caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.rich.", calib))$lambda, bounds=list(lambda=c(0,3))), error = function(x){NA})
-    pgls.rich.sh <- tryCatch(caper::pgls(rich ~ shannon, data = data.pgls, lambda = get(paste0("phylosig.age.", calib))$lambda, bounds=list(lambda=c(0,3))), error = function(x){NA})
+    pgls.age.sh <- tryCatch(caper::pgls(stem.age ~ shannon, data = data.pgls, lambda = "ML"), error = function(x){NA})
+    pgls.rich.sh <- tryCatch(caper::pgls(rich ~ shannon, data = data.pgls, lambda = "ML"), error = function(x){NA})
 
     lm.age.sh <- lm(stem.age ~ shannon, data = family.data.gen)
     lm.rich.sh <- lm(rich ~ shannon, data = family.data.gen)
@@ -275,25 +285,25 @@ registerDoMC(50)
 ## main.results <- ldply(1:nrep, main.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE)
 
 results.RC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.complete.pruned, calib = "RC.complete", .parallel = TRUE)
-save(results.RC.complete, file = "../output/RB_results_RC_complete.RData")
+save(results.RC.complete, file = here::here("output/RB_results_RC_complete.RData"))
 rm(results.RC.complete)
 results.UC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.complete.pruned, calib = "UC.complete", .parallel = TRUE)
-save(results.UC.complete, file = "../output/RB_results_UC_complete.RData")
+save(results.UC.complete, file = here::here("output/RB_results_UC_complete.RData"))
 rm(results.UC.complete)
 results.CC.complete <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.complete.pruned, calib = "CC.complete", .parallel = TRUE)
-save(results.CC.complete, file = "../output/RB_results_CC_complete.RData")
+save(results.CC.complete, file = here::here("output/RB_results_CC_complete.RData"))
 rm(results.CC.complete)
 
 results.RC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.RC.conservative.pruned, calib = "RC.conservative", .parallel = TRUE)
-save(results.RC.conservative, file = "../output/RB_results_RC_conservative.RData")
+save(results.RC.conservative, file = here::here("output/RB_results_RC_conservative.RData"))
 rm(results.RC.conservative)
 results.UC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.UC.conservative.pruned, calib = "UC.conservative", .parallel = TRUE)
-save(results.UC.conservative, file = "../output/RB_results_UC_conservative.RData")
+save(results.UC.conservative, file = here::here("output/RB_results_UC_conservative.RData"))
 rm(results.UC.conservative)
 results.CC.conservative <- llply(1:nrep, main.analysis, age = age.data, fulltree = RB.tree.CC.conservative.pruned, calib = "CC.conservative", .parallel = TRUE)
-save(results.CC.conservative, file = "../output/RB_results_CC_conservative.RData")
+save(results.CC.conservative, file = here::here("output/RB_results_CC_conservative.RData"))
 rm(results.CC.conservative)
 
 ## write.table(main.results, file = "./output/fit_data_random_datasets.csv", sep = ",", quote = FALSE, row.names = FALSE)
 
-## save(main.results, file = "./output/anova_posthoc_tables.RData")
+## saveRDS(main.results, file = "./output/main_results_rambarah_2021.RDS")
