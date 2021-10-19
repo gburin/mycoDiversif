@@ -1,21 +1,23 @@
 ###
 library("caper")
-library("tidyverse")
-library("cowplot")
+#library("tidyverse")
+#library("cowplot")
 library("RColorBrewer")
 library("geiger")
 library("phytools")
 #library("ggrepel")
 library("foreach")
 library("doMC")
-library("reshape2")
+#library("reshape2")
 library("plyr")
 
 #######################
 ### Analysis per genera
 #######################
 
-age.data <- read.csv(here::here("data/data_all_families.csv", sep = ";"))
+here::i_am("R/main_analysis_rambarah.R")
+
+age.data <- read.csv(here::here("data/data_all_families.csv"), sep = ";")
 RB.tree.RC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_RC_complete_MCCv_2.tre"))
 RB.tree.UC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_UC_complete_MCCv_2.tre"))
 RB.tree.CC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_CC_complete_MCCv_2.tre"))
@@ -69,13 +71,13 @@ for(i in 2:length(RB.family.list)){
 RB.tree.CC.conservative.pruned$tip.label <- setNames(sapply(RB.tree.CC.conservative.pruned$tip.label, function(x){strsplit(x, split = "_")[[1]][2]}), NULL)
 
 
-rb.RC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_RC_complete.csv", as.is = TRUE))
-rb.UC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_UC_complete.csv", as.is = TRUE))
-rb.CC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_CC_complete.csv", as.is = TRUE))
+rb.RC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_RC_complete.csv"), as.is = TRUE)
+rb.UC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_UC_complete.csv"), as.is = TRUE)
+rb.CC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_CC_complete.csv"), as.is = TRUE)
 
-rb.RC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_RC_conservative.csv", as.is = TRUE))
-rb.UC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_UC_conservative.csv", as.is = TRUE))
-rb.CC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_CC_conservative.csv", as.is = TRUE))
+rb.RC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_RC_conservative.csv"), as.is = TRUE)
+rb.UC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_UC_conservative.csv"), as.is = TRUE)
+rb.CC.conservative.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_CC_conservative.csv"), as.is = TRUE)
 
 
 ## Missing families from Ramírez-Barahona et al. 2020
