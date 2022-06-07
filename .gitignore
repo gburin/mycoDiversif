@@ -56,3 +56,15 @@ rsconnect/
 
 # Large RData files
 *.RData
+
+# PDF outputs
+*.pdf
+/output/*.pdf
+
+# Compressed files
+*.zip
+*.tar*
+
+# Output images
+/output/*.png
+/output/*.jpg

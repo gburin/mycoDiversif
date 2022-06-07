@@ -39,22 +39,22 @@ options(digits = 3)
 
 # Comparison with background rates
 
-```{r fig.caption = "Relationship between number of species and age for each lineage when compared to the confidence intervals based on the global diversification rate of seed plants.  The solid and dashed lines represent the expected richness for epsilon = 0 and epsilon = 0.9, respectively. The color of the points represents the mycorrhizal state for the 60% threshold."}
+```{r}
 
 ## Importing tree
-fulltree <- read.tree("./data/fam_tree_family_full.tre")
+fulltree <- read.tree("../data/fam_tree_family_full.tre")
 fulltree$node.label <- NULL
-fulltree.vasc <- read.tree("./data/Vascular_Plants_rooted.dated.tre")
+fulltree.vasc <- read.tree("../data/Vascular_Plants_rooted.dated.tre")
 
 ## Importing results from random datasets
-fullresults <- read.csv("./output/fit_data_random_datasets.csv")
+fullresults <- read.csv("../output/fit_data_random_datasets.csv")
 
 ## Importing table with rates for plotting
-family.data.gen <- read.csv("./output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
+family.data.gen <- read.csv("../output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
 family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
 family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 
-age.data <- read.csv("./data/data_all_families.csv", sep = ";")
+age.data <- read.csv("../data/data_all_families.csv", sep = ";")
 
 ## Removing families with unknown mycorrhizal type
 family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
@@ -189,7 +189,7 @@ pvalue.lm.rich.sh <-
 
 ### 20% analysis
 
-load("./output/results_20perc.RData")
+load("../output/results_20perc.RData")
 
 ## r_epsilon = 0
 hist.pgls.r2.r0 <-
@@ -236,8 +236,6 @@ hist.lm.slope.r0 <-
 
 
 (hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
-
-
 
 ```
 
@@ -943,10 +941,14 @@ main.data.reg <- data.frame(
     R2 = c(0.1251, 0.1307, 0.1524, 0.1527)
 )
 
+pvalue.reg <- read.csv("../output/results_20perc.csv")
+
 pvalue.20perc.reg <-
     ggplot(data = pvalue.reg) +
-    geom_histogram(aes(x = log10(pvalue), y = ..density.., fill = model), alpha = 0.3, colour = "white") +
-    geom_density(aes(x = log10(pvalue), colour = model, fill = model), alpha = 0.3) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09), y = ..density.., fill = RColorBrewer::brewer.pal(3, "Set1")[2]), alpha = 0.3, colour = "white") +
+    geom_histogram(aes(x = log10(lm.pvalue.r09), y = ..density.., fill = RColorBrewer::brewer.pal(3, "Set1")[1]), alpha = 0.3, colour = "white") +
+    geom_density(aes(x = log10(pgls.pvalue.r09), y = ..density.., fill = RColorBrewer::brewer.pal(3, "Set1")[2]), alpha = 0.3, colour = "white") +
+    geom_density(aes(x = log10(lm.pvalue.r09), y = ..density.., fill = RColorBrewer::brewer.pal(3, "Set1")[1]), alpha = 0.3, colour = "white") +
     geom_vline(data = main.data.reg, aes(xintercept = log10(pvalue), group = model), colour = "black", linetype = "dashed") +
     facet_grid(model ~ epsilon) +
     scale_colour_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
@@ -957,8 +959,8 @@ pvalue.20perc.reg <-
 
 pvalue.20perc.r2 <-
     ggplot(data = pvalue.reg) +
-    geom_histogram(aes(x = R2, y = ..density.., fill = model), alpha = 0.3, colour = "white") +
-    geom_density(aes(x = R2, fill = model, colour = model), alpha = 0.3) +
+    geom_histogram(aes(x = pgls.r2.09, y = ..density.., fill = model), alpha = 0.3, colour = "white") +
+    geom_density(aes(x = , fill = model, colour = model), alpha = 0.3) +
     geom_vline(data = main.data.reg, aes(xintercept = R2, group = model), colour = "black", linetype = "dashed") +
     facet_grid(model ~ epsilon) +
     scale_colour_manual(values = RColorBrewer::brewer.pal(3, "Set1")[2:1]) +
@@ -1835,5 +1837,346 @@ kable(x = np.sum,
                 full_width = F) %>%
   add_header_above(c(" ", "Regression" = 2, "ANOVA" = 1, "Regression" = 2, "ANOVA" = 1)) %>%
   add_header_above(c(" ", "e = 0" = 3, "e = 0.9" = 3))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+# Assigning random families a net diversification of 0 to test for limitations raised by Rabosky \& Benson 2021
+
+## 5% of families
+
+```{r}
+
+### 20% analysis
+
+load("../output/side_analysis_rabosky_benson_5perc.RData")
+
+side.results <- plyr::ldply(1:length(side.results.5), function(x){side.results.5[[x]][[1]]})
+
+## r_epsilon = 0
+hist.pgls.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r0 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    scale_x_continuous(breaks = seq(floor(min(log10(side.results$pgls.pvalue.r0 + 1e-16))), ceiling(max(log10(side.results$pgls.pvalue.r0 + 1e-16))), by = 2)) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r0))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
+
+```
+
+```{r}
+
+## r_epslion = 0.9
+hist.pgls.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r09 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    #scale_x_continuous(breaks = c(-12.5, -10, -7.5, -5), labels = c(bquote('10' ^-12.5), bquote('10' ^-10), bquote('10' ^-7.5), bquote('10' ^-5))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r09))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r09 + hist.lm.r2.r09 + hist.lm.slope.r09) / (hist.pgls.pvalue.r09 + hist.pgls.r2.r09 + hist.pgls.slope.r09)
+
+```
+
+
+
+
+## 20% of families
+
+```{r}
+
+### 20% analysis
+
+load("../output/side_analysis_rabosky_benson_20perc.RData")
+
+side.results <- plyr::ldply(1:length(side.results), function(x){side.results[[x]][[1]]})
+
+## r_epsilon = 0
+hist.pgls.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r0 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    scale_x_continuous(breaks = seq(floor(min(log10(side.results$pgls.pvalue.r0 + 1e-16))), ceiling(max(log10(side.results$pgls.pvalue.r0 + 1e-16))), by = 2)) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r0))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
+
+```
+
+```{r}
+
+## r_epslion = 0.9
+hist.pgls.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r09 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    #scale_x_continuous(breaks = c(-12.5, -10, -7.5, -5), labels = c(bquote('10' ^-12.5), bquote('10' ^-10), bquote('10' ^-7.5), bquote('10' ^-5))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r09))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r09 + hist.lm.r2.r09 + hist.lm.slope.r09) / (hist.pgls.pvalue.r09 + hist.pgls.r2.r09 + hist.pgls.slope.r09)
+
+```
+
+
+## 50% of families
+
+```{r}
+
+### 20% analysis
+
+load("../output/side_analysis_rabosky_benson_50perc.RData")
+
+side.results <- plyr::ldply(1:length(side.results.50), function(x){side.results.50[[x]][[1]]})
+
+## r_epsilon = 0
+hist.pgls.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r0 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    scale_x_continuous(breaks = seq(floor(min(log10(side.results$pgls.pvalue.r0 + 1e-16))), ceiling(max(log10(side.results$pgls.pvalue.r0 + 1e-16))), by = 2)) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r0))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
+
+```
+
+```{r}
+
+## r_epslion = 0.9
+hist.pgls.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r09 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    #scale_x_continuous(breaks = c(-12.5, -10, -7.5, -5), labels = c(bquote('10' ^-12.5), bquote('10' ^-10), bquote('10' ^-7.5), bquote('10' ^-5))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r09))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r09 + hist.lm.r2.r09 + hist.lm.slope.r09) / (hist.pgls.pvalue.r09 + hist.pgls.r2.r09 + hist.pgls.slope.r09)
 
 ```

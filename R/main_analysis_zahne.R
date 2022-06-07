@@ -17,7 +17,7 @@ here::i_am("R/main_analysis_zanne.R")
 ### Analysis per genera
 #######################
 
-age.data <- read.csv(here::here("data/data_all_families.csv", sep = ";"))
+age.data <- read.csv(here::here("data/data_all_families.csv"), sep = ";")
 fulltree <- read.tree(here::here("data/fam_tree_family_full.tre"))
 fulltree$node.label <- NULL
 

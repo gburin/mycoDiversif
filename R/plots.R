@@ -8,20 +8,23 @@ library("ggrepel")
 library("caper")
 library("patchwork")
 
+here::i_am("R/plots.R")
+
 ## Importing tree
-fulltree <- read.tree("../data/fam_tree_family_full.tre")
+fulltree <- read.tree(here::here("data/fam_tree_family_full.tre"))
 fulltree$node.label <- NULL
-fulltree.vasc <- read.tree("../data/Vascular_Plants_rooted.dated.tre")
+fulltree.vasc <- read.tree(here::here("data/Vascular_Plants_rooted.dated.tre"))
 
 ## Importing results from random datasets
-fullresults <- read.csv("../output/fit_data_random_datasets.csv")
+fullresults.raw <- readRDS(here::here("output/main_results_zanne_2021.RDS"))
+fullresults <- plyr::ldply(fullresults.raw, function(x){x[[1]]})
 
 ## Importing table with rates for plotting
-family.data.gen <- read.csv("../output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
+family.data.gen <- read.csv(here::here("output/simulated_datasets/random_data_09986.csv"), stringsAsFactors = FALSE)
 family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
 family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 
-age.data <- read.csv("../data/data_all_families.csv", sep = ";")
+age.data <- read.csv(here::here("data/data_all_families.csv"), sep = ";")
 
 ## Removing families with unknown mycorrhizal type
 family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
@@ -88,13 +91,13 @@ ggsave(filename = "../output/figs/magsand_stem_nolabel.pdf")
 scatter.mtdi.r09 <-
     ggplot(fullresults) +
     geom_abline(mapping = aes(intercept = pgls.int.r09, slope = pgls.slope.r09, colour = brewer.pal(3, "Set1")[1]), show.legend = TRUE, alpha = 1) +
-    geom_abline(mapping = aes(intercept = lm.int.r09, slope = lm.slope.r09, colour = brewer.pal(3, "Set1")[2]), show.legend = TRUE, alpha = 1) +
+    #geom_abline(mapping = aes(intercept = lm.int.r09, slope = lm.slope.r09, colour = brewer.pal(3, "Set1")[2]), show.legend = TRUE, alpha = 1) +
     geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = r.e09), size = 2, alpha = 0.5) +
     labs(x = "Mycorrhizal State Diversity Index", y = "Diversification Rate", col = "Model Type", title = "A") +
     #xlim(0, 1) +
-    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    scale_colour_brewer(palette = "Set1", labels = c("PGLS"), direction = -1) +
     theme_cowplot() +
-    theme(legend.position = "top")
+    theme(legend.position = "none")
 
 r2.lm.r09 <-
     ggplot(fullresults) +
@@ -115,19 +118,20 @@ r2.pgls.r09 <-
     ggplot(fullresults) +
     geom_histogram(aes(x = pgls.r2.r09), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = median(fullresults$pgls.r2.r09), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    labs(y = "Frequency", x = bquote('R' ^2), title = "C")+
+    labs(y = "Frequency", x = bquote('R' ^2), title = "B")+
     theme_cowplot()
 
 pvalue.pgls.r09 <-
     ggplot(fullresults) +
     geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
     geom_vline(xintercept = log10(median(fullresults$pgls.pvalue.r09)), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    labs(y = "Frequency", x = "p-value (log10)") +
+    labs(y = "Frequency", x = "p-value (log10)", , title = "C") +
     #scale_x_continuous(breaks = c(-12, -10, -8), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8))) +
     theme_cowplot()
 
 
-scatter.mtdi.r09 | ((r2.lm.r09 + pvalue.lm.r09) / (r2.pgls.r09 + pvalue.pgls.r09))
+scatter.mtdi.r09 |
+    (r2.pgls.r09 / pvalue.pgls.r09)
 
 ggsave(filename = "../output/figs/scatterplots_lm_pgls_stem_r09.pdf", height = 5.5, width = 13)
 
@@ -308,3 +312,4 @@ anovas.r09.pvalue <-
 ggsave(filename = "../output/figs/jitter_pvalue_anovas_r09.pdf", anovas.r09.pvalue, width = 11, height = 5.5, units = "in")
 
 
+load(here::here("output/anova_boxplots.RData"))

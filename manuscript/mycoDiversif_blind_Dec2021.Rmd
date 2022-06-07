@@ -1,0 +1,309 @@
+---
+output:
+  pdf_document:
+    latex_engine: xelatex
+indent: true
+mainfont: Arial
+keep_tex: false
+header-includes:
+  - \usepackage[left]{lineno}
+  - \linenumbers
+  - \usepackage{setspace}
+  - \doublespacing
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+  - \usepackage{indentfirst}
+  - \usepackage{fixltx2e}
+  - \usepackage{booktabs}
+fontsize: 12pt
+bibliography: mycoDiversif.bib
+---
+
+**Article title** : Seed plant families with diverse mycorrhizal states have higher diversification rates
+
+**Short running title** : Higher diversification in mycorrhizal diverse plant families
+
+**Authors** : María Isabel Mujica \textsuperscript{1,2}*, Gustavo Burin\textsuperscript{3,4}, María Fernanda Pérez\textsuperscript{1,2} & Tiago Quental\textsuperscript{3}
+
+\textsuperscript{1} Departamento de Ecología, Pontificia Universidad Católica de Chile, 8331150, Santiago,
+Chile.
+\textsuperscript{2} Instituto de Ecología y Biodiversidad (IEB), Santiago, Chile. 
+\textsuperscript{3} Departamento de Ecologia, Instituto de Biociências, Universidade de São Paulo, 11294, 05422-970 São Paulo, Brazil.
+\textsuperscript{4} Department of Life Sciences, Natural History Museum, London SW7 5BD
+*Corresponding Author: imujica@bio.puc.cl phone: +56223541934
+
+**Author contributions**: MIM, TQ and MFP designed the research; MIM and GB compiled the data, GB, MIM and TQ analyzed the data, GB made the figures; and all the authors wrote the manuscript.
+
+**Acknowledgements**: We thank all members of the Lab MeMe in the Institute of BioSciences at the University of São Paulo for discussions and suggestions. TQ thanks FAPESP for financial support (grants # 2012/04072-3 and #2018/05462-6), GB thanks FAPESP (grant # 2018/04821-2) and Leverhulme Trust (grant # RPG-2019-323) for financial support and MIM thanks CONICYT for the doctoral scholarship # 21151009.
+
+**Data Accessibility**: All data, R scripts, and documents related to this manuscript are available at [https://github.com/gburin/mycoDiversif]
+
+**Keywords**: diversification rates, mycorrhizal states, seed plants, key innovation, mycorrhizal diversity
+
+**Type of article**: Article
+
+**Number of words**: Abstract (243), Main Text (6465)
+
+**Number of references**: 61
+
+**Number of figures**: 3
+
+**Number of tables**: 1
+
+
+\pagebreak
+
+# Abstract
+
+A crucial innovation in plant evolution was the association with soil fungi during land colonization. Today, this symbiotic interaction is present in most plants species and can be classified in four types: arbuscular (AM), Ecto (EM), Orchid (OM) and Ericoid Mycorrhiza (ER). Since the AM ancestral state, some plants lineages have switched partner (EM, OM and ER) or lost the association (no­association: NM). Evolutionary transitions to a novel mycorrhizal state (MS) might allow plant lineages to access new resources, enhancing diversification rates. However, some clades are not restricted to one MS, and this variability might promote diversification. In this study we address the relationship between MS and diversification rates of seed plant families. For this, we used the recently published FungalRoot database, which compiled data for 14,870 species and their mycorrhizal partners. We assigned a MS to each plant family, calculated the MS heterogeneity and estimated their diversification rates using the method­of­moments. Families with mixed MS had the highest diversification rates and there was a positive relationship between MS heterogeneity and diversification rates. These results support the hypothesis that MS lability promotes diversification and highlight the importance of the association with soil fungi for the diversification of plants. Robustness of our results was tested using a series of sensitive analysis, including the use of different databases and phylogeny, and the intentional introduction of up to 20% of mistaken records on our mycorrhizal association database, or up to 50% changes in estimated diversification rates.
+
+# Introduction
+
+Understanding the basis of the exceptional plant diversity has been a matter of interest for ecologist and evolutionary biologist since Darwin. Great focus has been placed on estimating plants diversification rates and identifying the factors that could influence them (Eriksson and Bremer 1992; Moore and Donoghue 2007; O’Meara et al. 2016; Vamosi et al. 2018). The acquisition of novel traits (sometimes referred to as “key innovations”), such as pollination by animals (Eriksson and Bremer 1992) or physiological seed dormancy (Willis et al. 2014), have been proposed to promote diversification of plant lineages. This “key innovation” perspective suggests that the acquisition of a novel trait might allow a given lineage to exploit the environment in a significantly different way, potentially resulting in an explosive radiation. A crucial innovation in plant evolution was the association with soil fungi during land colonization (Pirozynski and Malloch 1975; Selosse and Le Tacon 1998; Strullu­Derrien et al. 2018). Before plant colonization, land was hostile, with extreme drought and temperatures, and barren rocky substrate; hence, the association with terrestrial fungi allowed the algae ancestors of plants to successfully colonize the land (Selosse et al. 2015). This initial symbiotic association was the prelude of modern mycorrhizas (Feijen et al. 2018), the association between fungi and root plants in which plants transfer carbon to fungi and receive nutrients in return (Smith and Read 2008). Today, this symbiosis is present in 86% of land plants species (Heijden et al. 2015) and based on their structure and function can be classified in four major types: arbuscular mycorrhiza (AM), ectomycorrhiza (EM), orchid mycorrhizal (OM) and ericoid mycorrhizal (ER) (Brundrett 2002).	
+
+Ancestral state estimation and the fossil record suggest that the ancestor of seed plants probably had an AM association (Redecker et al. 2000; Maherali et al. 2016). This is the most frequent mycorrhizal type in plants (74% of extant plant species) and is characterized by an association with Glomeromycete fungi (Heijden et al. 2015). Between 100 and 200 million years ago, some lineages switched fungal partners to several lineages of Basidiomycetes, forming what is described as the EM associations (Strullu-Derrien et al. 2018). The acquisition of EM resulted in new root functional capabilities as freezing tolerance (Lehto et al. 2008), which seem related to the dominance of EM angiosperms and gymnosperm in cool forests (Brundrett 2002). Similarly, Orchidaceae and species within the Ericaceae family recruited new fungal lineages and formed OM and ER associations respectively. Orchids associate with fungal families Ceratobasidiaceae, Tulasnellaceae and Sebacinaceae, which in addition to nutrient exchange, promote seed germination which cannot germinate without mycorrhizal support (Rasmussen 2002). Ericoid mycorrhizal associations (ER), on the other hand, involve mainly fungi from Sebacinales and Helotiales and are mostly frequent under acidic and infertile heathland conditions (Perotto et al. 2002; Heijden et al. 2015). Finally, some lineages have lost their mycorrhizal associations and became non­mycorrhizal (NM). This transition has frequently occurred through an intermediate state of facultative arbuscular mycorrhiza (AM) plants (Maherali et al. 2016). Some of NM lineages evolved alternative resource­acquisition strategies (Werner et al. 2018) like cluster­roots in Proteaceae (Neumann and Martinoia 2002) or parasitism in Loranthaceae (Wilson and Calvin 2006). Therefore, since the AM ancestral state some plant lineages have followed different mycorrhizal evolutionary pathways: completely switched partner (EM, OM and ER) or lost the association (Werner et al. 2018). Evolutionary transitions to a novel mycorrhizal state might allow plant lineages to access unexplored ecological resources, facilitating them to colonize environments that were not available before, and possibly enhancing their diversification rates. However, there are lineages in which some species acquire a new mycorrhizal state and at the same time, other species retain the ancestral state (AM) (Brundrett, 2002) increasing the variability of mycorrhizal states, which might in fact promote diversification of these lineages. 
+
+Although there are several traits known to influence plant diversification (Vamosi et al. 2018; Hernández-Hernández and Wiens 2020), and mycorrhizal symbiosis has been pointed out as a key factor in the evolution and diversification of land plants (Brundrett and Tedersoo 2018; Feijen et al. 2018) the effect of mycorrhizal symbiosis on plant diversification has not been evaluated before. Hence the hypotheses that switching or adding new partners might increase diversification rates of plant lineages have not been formally evaluated. The few studies available from the fungal perspective suggest that shifts in mycorrhizal associations might affect diversification of involved partners (Sánchez­García and Matheny 2017; Sato et al. 2017). 
+
+Our aim was to specifically evaluate whether and how mycorrhizal associations may affect plant diversification dynamics rather than to identify all possible traits that might have promoted the diversification of plants. For this, we address the following questions: (1) Do the lineages that established derived mycorrhizal associations present higher diversification rates than the ones that retained the ancestral mycorrhizal state? This investigates the idea of a key innovation mechanism of diversification; and (2) Is there a relationship between mycorrhizal variability and diversification rates among different plant lineages? This would investigate the idea that evolutionary lability might increase diversification dynamics. To answer these questions, we explored the relationship between the mycorrhizal state and the diversification rates of most of seed plant families.
+
+# Materials and Methods
+  
+## Mycorrhizal state database
+
+To obtain information of plant species and their mycorrhizal state, we used the FungalRoot database, a global databank of plant mycorrhizal associations (Soudzilovskaia et al. 2020). This database compiles previous lists and surveys of plant species and their mycorrhizal associations, including 36,303 records for 14,870 plant species. Additionally, based on these empirical records and on expert opinion, the authors proposed a list of mycorrhizal status at the plant genus level, which contains 14,541 total genera, from which 12,558 correspond to seed plant genera, that results in information for 295,221 seed plant species. Given that it comprises information for a much larger number of species, we used the genus-level list for our main analyses, but we note it assumes no variation within genera. An alternative dataset constructed directly at the species level (representing a smaller dataset) was also used (see below) and their results, which are congruent to our main analysis, are presented at the supplementary information.
+
+The genus­level list from FungalRoot database includes information for genera belonging to 413 seed plant families. In this list, genera were classified as AM, EM, NM, OM, ER, or with multiple mycorrhizal status (i.e. AM­EM, AM­NM, named MIX genera). From those families, 33 families were discarded because either they had their entire richness classified as unknown type (21), had no data on stem age (7), represented states with no or few evolutionary replicas (3 - namely Orchidaceae, Ericaceae and Diapensiaceae), or for being represented by two different tips in the phylogeny (2). These 33 families are also listed in the Table S12 (Appendix S12). We then used a base dataset containing 380 plant families for the entirety of the paper.
+
+## Addressing caveats and uncertainties in the Database
+
+We used the FungalRoot database to assign a unique mycorrhizal state to each seed plant family and to calculate the proportion of mycorrhizal states within them (see below). However, this database presents some uncertainties about plants mycorrhizal states (Bueno et al. 2021) that were addressed to mitigate any potential biases that could affect the classification of families. 
+
+First, for genera with multiple mycorrhizal status (MIX genera) there is no information about how mycorrhizal states are distributed among its constituent species. Instead of using multiple mycorrhizal status as a separate state, we divided the species richness of those genera classified as MIX into the mycorrhizal states that composed its category (e.g. AM-NM was divided into AM and NM states). To avoid possible biases derived from choosing an arbitrary proportion of species for each state and also to properly address the uncertainty regarding the proportions of species in each category for MIX genera, we generated 10000 datasets, each of which contained a random division of the total richness of each MIX genus among their corresponding unique types (e.g. if one genus had 100 species and was classified originally as AM­NM, we would sample a number between 1 and 100 and then assign this sampled number of species to the AM category and the remaining species to the NM category prior to grouping all data per family). We obtained the richness of each genus from The Plant List ([theplantlist.org] including only accepted names), and then calculated the number of species with each mycorrhizal state within each family, discarding those genera that had unknown mycorrhizal type. All steps described below were applied individually to each of the 10000 datasets.
+
+Second, Brundrett and Tedersoo (2019) pointed out potential mistakes in mycorrhizal type identification on large databases, and how these misdiagnoses might lead to wrong conclusions. Although the approach used by these authors to determine these errors (taxonomic approach; Brundrett (2017)) is controversial (Bueno et al. 2019; Sun et al. 2019), and the proportion of errors they detected in databases is relatively low (circa 5%, Brundrett 2009), Brundrett and Tedersoo (2019) are right to point out that caution must be taken when analyzing large databases of plant mycorrhizal status. Therefore, to assess the effect of mycorrhizal misassignment in the genus­level dataset, we introduced errors to the mycorrhizal state on 20% of plant species (one order of magnitude higher than the error estimated from Brundrett and Tedersoo (2019)). This was done by randomly choosing 52826 species (corresponding to 20% of total plant richness) and reassigning them a new mycorrhizal state (that was assured to be different than the original). We replicated this procedure 10 times for each of the 10000 datasets used in the main analysis resulting in 100000 random datasets that were then submitted to the same analysis protocol of the main analysis. The results obtained with the “misassigned databases” were similar to those derived from original data (Appendix S3 in Supporting Information). 
+
+Third, we evaluated if the results derived from the genus-based dataset were maintained when using only empirical data directly collected from the species­level list, which has considerably less species, but more precise information. Additionally, in the species­level list, the authors included remarks for 3,954 plant records (out of 36,303), indicating potential mistakes or misidentification of mycorrhizal associations in the original publication (see details in Table “Media 3” in Soudzilovskaia et al. (2020)). Then, to test the effect of potential errors in the species database, we conducted the analyses (i) excluding and (ii) without excluding plant records at the species level that had remarks (see Appendix S4).
+
+## Family mycorrhizal state and diversity
+
+To test the “key innovation hypothesis”, for each of the 10000 datasets, each family was assigned with a unique mycorrhizal state (AM, EM, NM, ER or OM) when more than 60% of species sampled belonged to this mycorrhizal state. If no single state were present in more than 60% of species, the family was assigned as “MIX”, to indicate no dominance of any mycorrhizal association. Nevertheless, because it is an arbitrary decision, other thresholds for the assignment of family mycorrhizal state were tested and the pattern was similar (50%, 80% and 100%, Appendix S5). To investigate if evolutionary lability might increase diversification dynamics, we tested for a potential linear association between mycorrhizal diversity and diversification rate. To characterize evolutionary lability, we estimated the “Mycorrhizal State Diversity Index” (MSDI), which does not depend on our categorical criteria of mycorrhizal state assignment and is calculated by estimating the heterogeneity of the mycorrhizal states in each family using the Shannon diversity index. MSDI was calculated independently for each family using each of the 10000 datasets.
+
+## Diversification rates
+
+First, to explore existence of rate heterogeneity among families of plant seed, we assessed the association between age and richness among seed plant families. Thus, following Sánchez­Reyes et al. (2017), we evaluated the association between stem age and richness, including all seed plant families available (i.e. without removing families lacking information on mycorrhizal states) and taking into account the phylogenetic structure. Stem group ages of the families were obtained from the dated molecular phylogeny of seed plants of Zanne et al. (2014) and the number of species of each family was obtained from The Plant List ([http://www.theplantlist.org]) as previously mentioned. No association was found between stem group age and richness (R2=0.009; Appendix S1, Fig. S1), suggesting that diversification rates significantly vary among clades (Sánchez­Reyes et al. 2017). This has been demonstrated also in several studies (Igea et al. 2017; Diaz et al. 2019; Magallón et al. 2019) and thus justifies further investigation to explain such heterogeneity. Diversification rates for each seed plant family were estimated using the method­of­moments from Magallón and Sanderson (2001) and stem group ages. We are aware of other methods to investigate the association between trait states and diversification dynamics (e.g. BAMM; Rabosky, (2014)), however most of them would be unusable here, given that they require detailed species-level phylogenies, and the most complete resolved seed plant phylogeny is massively under-sampled at this level (it has molecular data for less than 23% of species, Smith and Brown, 2018). Because the relative contribution of extinction is unknown, we used three distinct scenarios to characterize the relative extinction rates (ϵ) in the estimation of diversification rates, one with no extinction, ϵ = 0.0, one with medium extinction ϵ = 0.5, and another with high extinction, ϵ = 0.9. Here we report the results obtained with the two extreme values of extinction, but in Table S12 (Appendix S12) the estimates of diversification rates with the three values of extinction for all families are shown. 
+
+Finally, several studies have recently described some mathematical properties of the models used in macroevolution that undermine the reliability of diversification rate estimates (Louca and Pennel 2020, Rabosky and Benson 2021). More directly related to our study, Rabosky and Benson (2021) have shown that the method-of-moments is unidentifiable, in particular that any positive rate (or even a rate of zero) is equally as likely to produce a given pair of age and species richness. This property emerges because there is no information on the data that allows researchers to distinguish between different values of extinction fraction, making this value an assumption rather than a result. In our study the aim is not to describe individually estimated diversification rates for each family, but rather estimate how these values vary across families and test their relationship with MSDI. In that respect what we are after is the relative relationship between rates, and not their absolute values. We note that Gilinsky (1994) showed a correlation coefficient between origination and extinction probabilities of 0.973 or 0. 935 when considering extinct and extant invertebrate families or only the extant ones, respectively. In this respect, this correlation (also highlighted by Stanley et al. 1990) helps to back up our assumption of identical values of extinction fraction for all families (regardless of them being 0 or 0.9) a reasonable one. Nonetheless, to assess how much our results are determined by these limitations and assumptions, we ran two final sets of analyses. In the first, we randomly selected 5%, 20% and 50% of the families and replaced their true diversification rate for 0, and replicated the main protocol; in the second set, we selected the same percentages of families but instead replaced the true diversification rate for a rate calculated using a random value of epsilon within the interval [0, 1], and repeated the main protocol. Both these sets were run for a random subset of 1000 datasets from the 10000 used in the main analysis.
+
+The seed plant phylogeny used in this study (Zanne et al. 2014) was built using a Maximum Likelihood framework, and therefore consists in a single topology, not allowing phylogenetic uncertainty to be readily incorporated. That said, the uncertainty of relationships among lineages at the scale we used (relationship between families) should not influence the results as much as on where the uncertainty at the species level (which might be a lot higher) is a crucial aspect. More importantly, we replicated the same procedure using a different family­level phylogeny (Harris and Davies 2016), allowing some level of phylogenetic uncertainty to be addressed. We used their phylogeny and rate estimates to run a similar analysis. Their estimates of diversification rates used the same source of information for species richness per family (theplantlist.org), but their stem age estimates for plant families are different. This results in slightly different rate estimates from our estimates. As expected, the results are virtually identical (Appendix S6). We also performed the same analyses using the phylogeny from Ramirez-Barahona et al. (2020), in which the rates were estimated by the authors using the same source for species richness as our main analysis, and the stem ages were obtained from their phylogeny. The results are also identical (Appendix S9), but we could not use this phylogeny in the main analyses since it only includes Angiosperms, thus here we show only the results using the phylogeny from the Zanne et al. (2014).
+
+## Phylogenetic signal
+
+To estimate the phylogenetic signal of all traits of interest, including the residuals (described below, and in the next section), the seed plant phylogeny (Zanne et al. 2014) was pruned to obtain a family level phylogeny, with one species per family as tips. For the continuous variables ­ MSDI and diversification rates ­ we calculated phylogenetic signal using Pagel’s Lambda (Pagel 1999) using the function phylosig in the package phytools in R (Revell 2012). For the categorical variable, mycorrhizal state, we estimated the phylogenetic signal using the D parameter (Fritz and Purvis 2010) with the function phylo.d in caper package in R (Orme et al. 2018). In the case of MSDI and mycorrhizal states, phylogenetic signal was calculated using the 10000 datasets, thus a distribution of lambda values and D parameter were obtained for each variable (see Appendix S7).
+
+## Statistical analysis
+
+Using the 10000 datasets of plant mycorrhizal states (see above), we performed two main analyses: (1) ANOVAs to test for potential differences in diversification rates among plant families with different mycorrhizal states and (2) regressions to evaluate the relationship between mycorrhizal diversity (MDSI) and diversification rates. Since some (but not all) of the mycorrhizal traits and diversification rates showed significant phylogenetic signal (Appendix S7), we evaluated the effect of mycorrhizal associations on diversification rates by considering the phylogenetic structure in the residuals. Then, for the first analysis we used phylogenetic ANOVA using the function phylanova from phytools in R, where mycorrhizal state was used as factor and diversification rate as response variable. Because the mycorrhizal states OR and ER only had one and two family respectively, those were removed from this analysis. Likewise, in the second analysis we performed a linear model and a PGLS regression in the R package caper (Orme et al. 2018), with diversification rates as response variable and mycorrhizal heterogeneity as explanatory variable. For the PGLS models we estimated the phylogenetic signal of the residuals using a maximum likelihood approach, implemented within the function pgls from the package caper. To further explore the potential confounding effect on the association between mycorrhizal association and diversification dynamics, we performed PGLS regressions to assess the relationship between mycorrhizal diversity index, age and species richness. Given that all these analyses were performed 10000 times (using each dataset of mycorrhizal states), we obtained a distribution of p-values and R2.
+
+# Results
+
+According to our classification, and using 60% threshold for mycorrhizal state assignment, from the 380 families used in the analyses, a median of 270 families were AM (for example, Amaryllidaceae, Asteraceae and Lamiaceae), 10 were EM (like Fagaceae, Nothofagaceae, Betulaceae and Pinaceae), 56 were NM (such as Brassicaceae, Caryophyllaceae and Juncaginaceae) and 26 were mixed (for example, Nyctaginaceae, Polygonaceae, Juncaceae and Cyperaceae) (Table 1 and Fig. 1. All details can be found in Table S12). Mixed families contain species that retained the ancestral state (AM) and species that present a different mycorrhizal state (EM or NM). The phylogenetic signal strength differs among mycorrhizal states, but all mycorrhizal states are phylogenetically clustered to some extent (Fig S21). Likewise, the phylogenetic signal of diversification rates was significantly different from a random structure in rϵ = 0.0 and rϵ = 0.9 (Table S11). Therefore, statistical analyses were performed correcting for phylogeny.
+
+When using the 60% threshold, there was a significant difference in diversification rates among mycorrhizal states (Fig. 2A), which is observed in the distribution of p-values of 10000 phylogenetic ANOVAs (median of p-values was 0.018; Fig. 2B). These differences are maintained with ϵ (relative extinction rates) = 0.0 (median p-value=0.016; Fig.S10). The a posteriori analysis of the ANOVA showed that diversification of MIX families was significantly higher than that of AM and NM families (Table S8). Sensitive analyses to explore the effect of the threshold to define the different categories suggest that increasing the threshold (80% or 100%) results in an even stronger difference between the MIX families and the other categories (Fig. S15 and S16), while a less stringent categorization (only 50% of a certain kind would suffice to define it) results in non-significant differences (Fig. S9 and S13).
+
+The higher values of mycorrhizal state diversity index (MSDI) were found in Nyctaginaceae (median=1.09), Polygonaceae (0.98) and Rhizophoraceae (0.726), while the lowest value was zero and it was observed in 275 families that have all species in the same mycorrhizal state, like in Pinaceae (EM, n = 255), Araucariaceae (AM, n = 38) and Droseraceae (NM, n = 189). There was a positive correlation between mycorrhizal diversity index and diversification rates, observed under the two scenarios of extinction (the correlation with rϵ = 0.9 is shown in Figure 3 and with rϵ = 0.0 is shown in Figure S17). The median of R2 for both scenarios of extinction was 0.105, whereas the median of p-values was around 1x10-11 (Table S9). MSDI had no correlation with age and a significant but very low correlation with species richness (Fig. S2). 
+
+The additional analyses of adding a mycorrhizal misidentification to 20% of the species, supported our main conclusions, which are the positive association between mycorrhizal diversity index and diversification rates, and MIX families having higher diversification rates (Figs S3 and S4). These results are also observed when we use the phylogeny of Harris and Davis (2016; Appendix S6). The additional analyses using the species level dataset also showed a positive association between mycorrhizal diversity index and diversification rates (Appendix S4). Although the ANOVA analysis at the species level showed a similar tendency for most comparisons, it did not show significant differences on diversification rates among different mycorrhizal states for all thresholds (Tables S1 and S4). 
+
+## Discussion
+
+The association with mycorrhizal fungi has been indicated as a key acquisition in the evolution of plants, nevertheless its effect on plants diversification has not been evaluated before. Here we presented the first attempt to assess the relationship between mycorrhizal associations and diversification rates of plants. Due to the under-sampling of seed plants phylogeny and mycorrhizal state database, we used a simple and conservative approach that allows us to tackle this question, using families as comparative units. The analysis of families could be problematic if mycorrhizal shifts have occurred above this taxonomic level, however most of them have occurred at family level or below. In the case of ectomycorrhizas, for example, there have been at least 19 independent clades that evolved this mycorrhizal type in seed plants, most of them at family or genus level (Koele et al. 2012). In respect of losing the association, there has been estimated that there are 30– 50 separate evolutionary origins of NM or AMNM plants, including several occasions within some families (Brundrett and Tedersoo 2019). Moreover, in the three cases in which this shift occurred above family level (Brassicales, Caryophylales and Santalales), these orders contain families that highly varied in their evolutionary trajectories, some families recovered the AM associations, some remained NM and some are MIX (AMNM).
+
+Our results showed that there was no difference on diversification rates between AM, EM and NM families (Fig. 2; Table S8). This shows that families that acquired novel mycorrhizal associations (EM and NM) do not have higher diversification rates than families that retained the ancestral state (AM), contrary to what was expected in a scenario of key innovation in mycorrhizal associations as a mechanism of diversification. Thus, regarding our first question, the lineages that established derived mycorrhizal associations do not differ in their diversification rates from AM families. Contrary, our analyses showed that families with mixed mycorrhizal state have higher diversification rates than AM and NM families (Fig. 2, Table S8). It is interesting to notice that mycorrhizal diverse families have not only higher diversification when compared to families with the ancestral state, but also higher rates than families that have switched from the ancestral state to one novel mycorrhizal state. Accordingly, the correlation between age and richness of the families (shown in Fig. S1) showed that all MIX families fall in the upper part of distribution, meaning that this group exhibit higher diversification rates. Among the MIX category we can find families like Nyctaginaceae and Polygonaceae (r=0.9: 0.1 and 0.08 respectively), that contain ectomycorrhizal, arbuscular and non-mycorrhizal species; or families like Juncaceae, Santalaceae and Cyperaceae (r=0.9: 0.08, 0.11 and 0.13 respectively), containing species that form arbuscular mycorrhizas, facultative species (AMNM) and non-mycorrhizal species. Interestingly, there are not MIX families that present only ectomycorrhizal and non-mycorrhizal species, which agrees with Maherali et al. (2016), that estimated direct transitions among EM and NM states in seed plants to be zero or very close to zero.
+
+In addition, there was a positive and significant association between mycorrhizal state diversity index and diversification rates, which does not depend on our categorical criteria of mycorrhizal state assignment to families. These associations with diversification rates, are observed under different scenarios of extinction, and even with ϵ = 0.0, where extinction is absent, the relationship is conserved. Given that diversification rates are determined by age and richness of the family, the effect of those variables could in theory have driven the relationship between mycorrhizal heterogeneity (MSDI) and diversification rates. Age could be positively related with the diversity of mycorrhizal states present in a family, since older families would have more time to acquire novel mycorrhizal associations. Nevertheless, there is no relationship between age and MSDI (Appendix S2 panels A and B). Similarly, one could expect that richer families would present higher diversity of mycorrhizal states simply as an artifact of richness. However, we observed no significant correlation between MSDI and richness (see Appendix S2 panels C and D). In addition, we took the empirical richness of all families and simulated the distribution of mycorrhizal states in each family (we randomly assign one of the five possible mycorrhizal states with equal probabilities to each species of each family), and observed that because the number of categories is relatively low, the relationship between richness and MSDI saturates at very low richness, which means that in families with more than ~10 species (78% of the families in the dataset), there is no correlation between richness and MSDI.  Then, the variation in richness does not explain the variation in MSDI. Both results support that mycorrhizal heterogeneity is mainly associated with diversification rates, and that not with age or richness per se. In addition, these patterns are also observed when we analyzed the species­level data (Appendix S4), which although has a lot less datapoints but is supposedly more precise. 
+
+The mycorrhizal diversity index might not capture well the effects of mycorrhizal shifts on diversification rates if shifts occurred only once within each family. However, we observed that mycorrhizal shifts in MIX families occurred multiple times, because more than 97% of MIX families contain genera that have multiple mycorrhizal states, which means that the different mycorrhizal states do not form monophyletic sub­clades and shifts occur even below the genus level (see also Appendix S8). This suggests that diversification rates are not the result of a single mycorrhizal shift, but a result of high lability of the mycorrhizal states within MIX families. 
+
+Most of families that present high diversification rates and high mycorrhizal variability, contain AM, AMNM and NM species. Maherali et al. (2016) suggested that NM state could be associated with elevated speciation rates, since they observed that abandonment of the mutualism appears to give rise to entire lineages that also lack the ability to form the symbiosis. However, our results suggest that is not the NM state itself that promote diversification, because NM families do not show significantly higher diversification rates than AM, NM or MIX families (Fig. 2), with many of them showing relatively low diversification rates (for example: Droseraceae, Juncaginaceae, Loasaceae and Proteaceae). In addition, the percentage of NM species in a family is not associated with higher diversification rates (data not shown). Contrary, those families that are not entirely NM but also contain species that retained the AM states showed the higher diversification rates (for example: Cyperaceae, Orobanchaceae, Acanthaceae and Amaranthaceae), suggesting that the plasticity to gain or lose the association is more related with higher diversification than just the abandonment. Finally, there are two families that encompass AM, EM and NM species (Nyctaginaceae and Polygonaceae), and show high diversification rates. Of course, these families possess other traits that could be also related to higher diversification rates, for example, several AM-NM families are mostly dominated by herbs, which is related to higher rates of diversification due to short generation times (Eriksson and Bremer 1992). Further studies might explore other potential traits related to diversification rate. 
+
+Both results, the ANOVA for family mycorrhizal state and the association between mycorrhizal heterogeneity (MSDI) and diversification, suggest that independent of which mycorrhizal state is involved, a higher heterogeneity of mycorrhizal states in a family might promote diversification rates. These results together suggest that rather than a key innovation scenario, it is the evolutionary variability of mycorrhizal state what promotes diversification rates of plant seed families. We interpret mycorrhizal heterogeneity to result from a higher evolutionary lability of the mycorrhizal states within these families, which has been suggested to promote diversification in other biotic interactions (Hardy and Otto 2014). Different mycorrhizal state provides advantages to plants in certain environments but not in others (Brundrett, 2002), thus families that are composed by species with different mycorrhizal states might have been able to switch states in evolutionary time, making them able to evolve a higher diversity of niches which would result in a higher diversification rate. Under this scenario, mycorrhizal diverse families would have had more chances to take advantage of a new ecological opportunity, than families with most species within a single mycorrhizal state, potentially resulting in broader range sizes, which is associated with diversification rates among seed plant families (Hernández-Hernández and Wiens, 2020). Indeed, at the species level, facultatively mycorrhizal (AM-NM) species show the widest geographic and ecological amplitude (Hampel et al. 2013) and are more successful during naturalization than those with obligate mycorrhizal associations (Pysek et al. 2019). In our study, MIX families, most of which contained a high proportion of AMNM species or genera, presented the highest diversification rates (for example: Plantaginaceae, Acanthaceae, Cyperaceae and Orobanchaceae). Similarly, species that present facultative dual (EM-AM) associations have the higher percentage of naturalization outside their native ranges (Moyano et al. 2020) and it has been suggested that the ability of species to form AM and EM associations may contribute to its wide geographic distribution, since they could use a wider range of habitats (Teste et al. 2019). The association between multiple mycorrhizal states and wider ranges observed at the species level is expected to occur also at genus and family level, since families containing species with different mycorrhizal states will be able to colonize a higher diversity of environmental conditions. Moreover, our results highlight the evolutionary role of specialization at different organization levels: even if species are mycorrhizal specialized within a mixed family, the possibility to switch to different mycorrhizal states might increase the diversification of the family.
+
+Finally, the relationship observed between diversification rates and mycorrhizal diversity index (MSDI) does not necessarily imply causality and can lead to the “egg-and-hen” problem: is it mycorrhizal diversity causing higher diversification rates or are higher diversification rates resulting in higher mycorrhizal diversity? The mechanism by which mycorrhizal diversity could positively influence diversification has been discussed above but to elucidate if higher diversification might result in higher mycorrhizal diversity, we have to consider the genetic basis of mycorrhizal symbiosis. The establishment of mycorrhizal symbiosis relies on a set of genes highly conserved among land plants known as ‘symbiotic toolkit’ (Delaux et al. 2013). The transition between mycorrhizal states is sometimes coupled with losses of these symbiotic genes (Delaux et al. 2014, García et al. 2015), which in some lineages is relatively frequent, with repeated events of mycorrhizal abandonment and recovery through intermediate states (Maherali et al. 2016), while in other lineages the mycorrhizal state is highly conserved (exclusively AM families), or the gene loss preclude the reversion to the ancestral state (exclusively NM families or EM gymnosperms; Delaux et al. 2014, García et al. 2015). Accordingly, lineages that are not able to switch mycorrhizal states due to genetic restrictions will have very low probabilities of developing novel mycorrhizal types, even if they have high diversification rates. There is even a third possible scenario: a co-process in which higher diversity of mycorrhizal states (proxy for flexibility) would result in higher diversification rates and in turn, this increased diversification would promote mycorrhizal diversity but mostly in families predisposed to shift mycorrhizal states, because in each event of speciation, those lineages might have high probabilities of switching mycorrhizal states. Instead, in families constrained to a single mycorrhizal state, the probability to develop novel mycorrhizal states is expected to be low, even if diversification rates are high. Although we cannot discern those hypotheses with our current data, the development of more complete phylogenies and mycorrhizal databases might eventually allow it to be tested in the future.
+
+### Robustness of results
+
+Since large database can potentially present some uncertainties, it is necessary to take them into account in order to test the robustness of the results. In this study we performed several sensitivity analyses to evaluate whether the results were maintained under different scenarios. In particular, we (1) generated 10000 datasets to properly address the uncertainty regarding the proportions of species in each mycorrhizal state for mixed genera; (2) introduced errors to the classification of mycorrhizal state on 20% of plant species (one order of magnitude higher than previous estimates of error for similar mycorrhizal databases); (3) tested different thresholds for mycorrhizal state assignation for each family; and (4) performed a similar analyses using the species-level database from the FungalRoot. Given that the observed patterns were maintained across all these tests, the sensitivity analysis suggest our results are extremely robust. We suggest that this approach to handle uncertainty can serve to the discussion of ways towards dealing with large datasets, in which one does not need to make arbitrary decisions but rather try different scenarios to investigate if the same patterns can be observed when taking into account different potential limitations of large datasets.
+
+### Methodological caveats
+
+Because biodiversity dynamics could be rather complex, with clades either expanding, at equilibrium and even declining in diversity, simple metrics like the average rate of diversification might not be able to separate them (Quental and Marshall 2010; Louca and Pennell 2020; Rabosky and Benson 2021). The use of an average rate as a descriptor of a clade diversification dynamics assumes (or at least equates to) a scenario of expanding diversity (Quental and Marshall 2010), and it might be especially problematic if lineages have a carrying capacity because the average rate might be diluted as time goes by (Rabosky 2009). Moreover, with an average rate is not possible to distinguish between speciation and extinction rates or to test directly the effect of one trait on shifts in diversification rates. In addition, the method-of-moments has been recently criticized by Rabosky and Benson (2021), which demonstrated mathematically that this “age-richness rate” (ARR) estimator is not able to distinguish a process with positive net diversification from one where net diversification is zero.  Although we consider that age-richness rate estimations are useful to compare among clades, we explored some of the limitations of this method to evaluate our results. We tested if the relationship between mycorrhizal diversity and diversification rates was maintained even if some plant families had diversification rates equal to zero (Appendix S10), and if diversification rates were replaced with a rate calculated using a random value of epsilon between 0 and 1 (Appendix S11). We found that in both sets all correlations are still significant, although the variance explained by the model drastically decreases with increasing noise (i.e. percentage of families with replaced diversification rate). When we introduced a change in rates to up to 20% the decrease in R² is very discrete in both sets of analyses, indicating that our results are robust to a considerable variation in both the unidentifiability of diversification rates, and the extinction fraction across families. Given the known strong correlation between origination and extinction in the fossil record (Stanley et al. 1990; Gillinsky 1994), we believe that the results present in our main analysis can be interpreted with a fair degree of trust (Appendices S10 and S11).
+
+Ideally one would use more complex tests, but that would require a lot of more phylogenetic data than what is currently available. Overall, we used a relatively simple and limited macroevolutionary method that allowed us to compare diversification rates across clades with different mycorrhizal states and to evaluate the correlation between mycorrhizal heterogeneity and diversification, and our conclusions arose from a limited ecological and phylogenetic data. These conclusions might be revisited in future studies, when more data on mycorrhizal states and more complete phylogenies of plants are available. 
+
+## Conclusions
+
+Acknowledging the limitations of our study, the results showed a positive relationship between mycorrhizal state diversity and diversification rates of seed plant families. This relationship was observed classifying families into a single mycorrhizal state (AM, EM, NM or MIX) and by calculating the heterogeneity of states using MSDI, both using the genus-level list and the species-level list from the Fungal Root database. The pattern is maintained including random errors into both lists and testing different thresholds for family mycorrhizal state assignation. Finally, the results are also maintained when we performed same analyses using another seed plant phylogeny. The robustness of the results suggest that a higher diversity of mycorrhizal states promotes diversification of lineages, possibly related with new ecological opportunities that each mycorrhizal state provides to plants, this high diversification might in turn promote mycorrhizal diversity in flexible families, but this hypothesis remain to be tested. Our results finally suggest that the associations between soil fungi and plants have been key for plant diversification, not only due to the foundational association that allows plants colonize land (Pirozynski and Malloch 1975) but also for further diversification of seed plant lineages.
+
+# References
+
+Brundrett, M. C. 2002. Coevolution of roots and mycorrhizas of land plants. The New Phytologist 154: 275–304.
+
+Brundrett, M. C. 2008. Mycorrhizal associations: The web resource. https://mycorrhizas.info/ 
+
+Brundrett, M. C. 2009. Mycorrhizal associations and other means of nutrition of vascular plants: understanding the global diversity of host plants by resolving conflicting information and developing reliable means of diagnosis. Plant and Soil, 320: 37-77.
+
+Brundrett, M. C. 2017. Global diversity and importance of mycorrhizal and nonmycorrhizal plants. Pages 533–556 in L. Tedersoo, ed. Biogeography of mycorrhizal symbiosis, Ecological studies (Vol. 230). Springer International Publishing, Cham.
+
+Brundrett, M. C., and L. Tedersoo. 2018. Evolutionary history of mycorrhizal symbioses and global host plant diversity. The New Phytologist 220:1108–1115.
+
+Brundrett, M. C., and L. Tedersoo. 2019. Misdiagnosis of mycorrhizas and inappropriate recycling of data can lead to false conclusions. The New Phytologist 221:18–24.
+
+Bueno, C. G., M. Gerz, M. Zobel, and M. Moora. 2019. Conceptual differences lead to divergent trait estimates in empirical and taxonomic approaches to plant mycorrhizal trait assignment. Mycorrhiza 29:1–11.
+
+Bueno, C. G., J. Davison, D. Leon, Y. Meng, M. Öpik, M. Zobel, M. Moora. 2021. Towards a consistent benchmark for plant mycorrhizal association databases. New Phytologist 231: 913-916.
+
+Delaux, P.M., N. Séjalon-Delmas, G. Bécard, J-M. Ané. 2013. Evolution of the plant–microbe symbiotic ‘toolkit’. Trends in Plant Science 18: 298-304. 
+
+Delaux, P.M., K. Varala, P.E. Edger, G.M. Coruzzi, J.C. Pires, J-M.Ané. 2014. Comparative Phylogenomics Uncovers the Impact of Symbiotic Associations on Host Genome Evolution. PLoS Genet 10(7): e1004487. 
+
+Eriksson, O., and B. Bremer. 1992. Pollination systems, dispersal modes, life forms, and diversification rates in angiosperm families. Evolution 46:258–266.
+
+Feijen, F. A. A., R. A. Vos, J. Nuytinck, and V. S. F. T. Merckx. 2018. Evolutionary dynamics of mycorrhizal symbiosis in land plant diversification. Scientific Reports 8:10698.
+
+Fritz, S. A., and A. Purvis. 2010. Selectivity in mammalian extinction risk and threat types: A new measure of phylogenetic signal strength in binary traits. Conservation Biology 24: 1042–1051.
+
+García, K., P.-M. Delaux, K. R. Cope, J.-M Ané. 2015. Molecular signals required for the establishment and maintenance of ectomycorrhizal symbioses. New Phytologist 208: 79–87.
+
+Gilinsky, N.L., 1994. Volatility and the Phanerozoic decline of background extinction intensity. Paleobiology 20: 445-458.
+
+Hampel, S., L. Gôtzenberger, I. Kûhn, S.G. Michalski, M.C Rilling, M. Zobel, M. Moora. 2013. Mycorrhizas in the Central European flora: relationships with plant life history traits and ecology. Ecology 94: 1389-1399.
+
+Hardy, N. B., and S. P. Otto. 2014. Specialization and generalization in the diversification of phytophagous insects: Tests of the musical chairs and oscillation hypotheses. Proceedings of the Royal Society B 281: 20132960
+
+Harris, L. W., and T. J. Davies. 2016. A complete fossil­calibrated phylogeny of seed plant families as a tool for comparative analyses: Testing the “time for speciation” hypothesis. PLoS One 11:e0162907.
+
+Heijden, M. G. A. van der, F. M. Martin, M.­A. Selosse, and I. R. Sanders. 2015. Mycorrhizal ecology and evolution: The past, the present, and the future. The New Phytologist 205: 1406–1423.
+
+Hernández-Hernández T. and J.J. Wiens. 2019. Why are there so many flowering plants? A multi-scale analysis of plant diversification. The American Naturalist 195: 948–963. 
+
+Igea, J., E.F., Miller, A.S.T., Papadopulos and A.J. Tanentzap. 2017. Seed size and its rate of evolution correlate with species diversification across angiosperms. PLoS Biol 15: e2002792.
+
+Koele N., I.A. Dickie, J. Oleksyn, S.J. Richardson, P.B. Reich. 2012. No globally consistent effect of ectomycorrhizal status on foliar traits. New Phytologist 196: 845–852.
+
+Lehto, T., A. Brosinsky, H. Heinonen­Tanski, and T. Repo. 2008. Freezing tolerance of ectomycorrhizal fungi in pure culture. Mycorrhiza 18: 385–392.
+
+Louca, S., and Pennell, M. W. 2020. Extant time trees are consistent with a myriad of diversification histories. Nature 580: 502-505.
+
+Magallón, S., and M. J. Sanderson. 2001. Absolute diversification rates in angiosperm clades. Evolution 55: 1762–1780.
+
+Magallón, S., L.L. Sánchez-Reyes, S.L. Gómez-Acevedo. 2019. Thirty clues to the exceptional diversification of flowering plants. Annals of Botany 123: 497-503.
+
+Maherali, H., B. Oberle, P. F. Stevens, W. K. Cornwell, and D. J. McGlinn. 2016. Mutualism persistence and abandonment during the evolution of the mycorrhizal symbiosis. The American Naturalist 188: E113–E125.
+
+Moore, B. R., and M. J. Donoghue. 2007. Correlates of diversification in the plant clade dipsacales: Geographic movement and evolutionary innovations. The American Naturalist 170: 28–55.
+
+Moyano, J., Dickie, I.A., Rodriguez-Cabal M.A. and Nuñez M.A. 2020. Patterns of plant naturalization show that facultative mycorrhizal plants are more likely to succeed outside their native Eurasian ranges. Ecography 43: 648-659.
+
+Neumann, G., and E. Martinoia. 2002. Cluster roots–an underground adaptation for survival in extreme environments. Trends in Plant Science 7:162–167.
+
+O’Meara, B. C., S. D. Smith, W. S. Armbruster, L. D. Harder, C. R. Hardy, L. C. Hileman, L. Hufford, et al. 2016. Non­equilibrium dynamics and floral trait interactions shape extant angiosperm diversity. Proceedings of the the Royal Society B 283: 20152304.
+
+Orme, D., R. Freckleton, G. Thomas, T. Petzoldt, S. Fritz, N. Isaac, and W. Pearse. 2018. Caper: Comparative analyses of phylogenetics and evolution in R. computer software. 
+
+Pagel, M. 1999. Inferring the historical patterns of biological evolution. Nature 401:877–884.
+
+Perotto, S., M. Girlanda, and E. Martino. 2002. Ericoid mycorrhizal fungi: Some new perspectives on old acquaintances. Pages 41–53 in S. E. Smith and F. A. Smith, eds. Diversity and integration in mycorrhizas. Springer Netherlands, Dordrecht.
+
+Pirozynski, K. A., and D. W. Malloch. 1975. The origin of land plants: A matter of mycotrophism. BioSystems 6:153–164.
+
+Pysek, P., W.-Y. Guo, K. Stajerova, M. Moora, C. G. Bueno, W. Dawson, F. Essl, M. Gerz, H. Kreft, J. Pergl, M. van Kleunen, P. Weigelt, M. Winter, and M. Zobel. 2019. Facultative mycorrhizal associations promote plant naturalization worldwide. Ecosphere 10: e02937. 
+
+Quental, T. B., and C. R. Marshall. 2010. Diversity dynamics: Molecular phylogenies need the fossil record. Trends in Ecology & Evolution 25:434–441.
+
+Rabosky, D. L. 2009. Ecological limits and diversification rate: Alternative paradigms to explain the variation in species richness among clades and regions. Ecology Letters 12:735–743.
+
+Rabosky, D. L. 2014. Automatic detection of key innovations, rate shifts, and diversity­dependence on phylogenetic trees. Plos One 9:e89543.
+
+Raboski, D.L., and R.B.J. Benson. 2021. Ecological and biogeographic drivers of biodiversity cannot be resolved using clade age-richness data. Nature Communications 2: 2945.
+
+Ramírez-Baraohna, S., Sauquet, H., Magallón, S. 2020. The delayed and geographically heterogeneous diversification of flowering plant families. Nature Ecology & Evolution 4: 1232-1238.
+
+Rasmussen, H. N. 2002. Recent developments in the study of orchid mycorrhiza. Pages 149–163 in S.E. Smith and F. A. Smith, eds. Diversity and integration in mycorrhizas. Springer Netherlands, Dordrecht.
+
+R Core Team.	2019.	R: A language and environment for statistical computing.	Computer software. R Foundation for Statistical Computing, Vienna, Austria.
+
+Redecker, D., R. Kodner, and L. E. Graham. 2000. Glomalean fungi from the Ordovician. Science 289: 1920–1921.
+
+Revell, L. J. 2012. Phytools: An r package for phylogenetic comparative biology (and other things). Methods in Ecology and Evolution 3: 217–223.
+
+Sánchez­García, M., and P. B. Matheny. 2017. Is the switch to an ectomycorrhizal state an evolutionary key innovation in mushroom­forming fungi? A case study in the Tricholomatineae (Agaricales). Evolution 71: 51–65.
+
+Sánchez­Reyes, L. L., H. Morlon, and S. Magallón. 2017. Uncovering higher­taxon diversification dynamics from clade age and species­richness data. Systematic Biology 66: 367–378.
+
+Sato, H., A. S. Tanabe, and H. Toju. 2017. Host shifts enhance diversification of ectomycorrhizal fungi: Diversification rate analysis of the ectomycorrhizal fungal genera Strobilomyces and Afroboletus with an 80­gene phylogeny. The New Phytologist 214:443–454.
+
+Selosse, M. A., and F. Le Tacon. 1998. The land flora: A phototroph­fungus partnership? Trends in Ecology & Evolution 13:15–20.
+
+Selosse, M.­A., C. Strullu­Derrien, F. M. Martin, S. Kamoun, and P. Kenrick. 2015. Plants, fungi and oomycetes: A 400­million year affair that shapes the biosphere. The New Phytologist 206:501–506.
+
+Smith, S. E., and D. J. Read. 2008. Mycorrhizal symbiosis. Elsevier.
+
+Soudzilovskaia, N. A., S. Vaessen, M. Barcelo, J. He, S. Rahimlou, K. Abarenkov, M. C. Brundrett, et al. 2020. FungalRoot: Global online database of plant mycorrhizal associations. The New Phytologist 227: 955–966.
+
+Stanley, S.M., Ross, R.M. and Allmon, W.D., 1990. The general correlation between rate of speciation and rate of extinction: fortuitous causal linkages. Causes of evolution: a paleontological perspective. University of Chicago Press, Chicago, pp.103-127.
+
+Strullu­Derrien, C., M.­A. Selosse, P. Kenrick, and F. M. Martin. 2018. The origin and evolution of mycorrhizal symbioses: From palaeomycology to phylogenomics. The New Phytologist 220: 1012–1030.
+
+Sun, T., H. Zhang, and Z. Wang. 2019. Reply to Tedersoo et al.: plant species within the same family or genus can have different mycorrhizal types? Proceedings of the National Academy of Sciences of the United States of America 116: 12141-12142
+
+Teste, F.P., Jones, M.D. and Dickie I.A. 2020. Dual-mycorrhizal plants: their ecology and relevance. The New Phytologist 225: 1835–1851.
+
+Vamosi, J. C., S. Magallón, I. Mayrose, S. P. Otto, and H. Sauquet. 2018. Macroevolutionary patterns of flowering plant speciation and extinction. Annual Review of Plant Biology 69: 685–706.
+
+Werner, G. D. A., J. H. C. Cornelissen, W. K. Cornwell, N. A. Soudzilovskaia, J. Kattge, S. A. West, and E. T. Kiers. 2018. Symbiont switching and alternative resource acquisition strategies drive mutualism breakdown. Proceedings of the National Academy of Sciences of the United States of America 115: 5229–5234.
+
+Willis, C. G., C. C. Baskin, J. M. Baskin, J. R. Auld, D. L. Venable, J. Cavender­Bares, K. Donohue, et al. 2014. The evolution of seed dormancy: Environmental cues, evolutionary hubs, and diversification of the seed plants. The New Phytologist 203: 300–309.
+
+Wilson, C. A., and C. L. Calvin. 2006. An origin of aerial branch parasitism in the mistletoe family, Loranthaceae. American Journal of Botany 93: 787–796.
+
+Zanne, A. E., D. C. Tank, W. K. Cornwell, J. M. Eastman, S. A. Smith, R. G. FitzJohn, D. J. McGlinn, et al. 2014. Three keys to the radiation of angiosperms into freezing environments. Nature 506: 89–92.
+
+\newpage
+
+# Figure captions
+
+Figure 1. Family­level, time­calibrated phylogeny for the 405 seed plant families (based on Zanne et al 2014) and mycorrhizal data from Fungal Root database. Families with symbols were excluded from main analyses due to low or lack of mycorrhizal state replication (▲, three families: one OM and two ER) or unknown mycorrhizal states (●, N=21). For each family, the proportion of species within each mycorrhizal state is represented in the rose­to­red boxes, AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non­mycorrhizal and MIX: multiple mycorrhizal states. The mycorrhizal state diversity index (MSDI) is represented in the purple boxes and the diversification rates (r) are shown in the green boxes, for both extinction scenarios. To illustrate the timescale of the phylogeny, the width of concentric white and gray circles represents 50 million years.
+
+Figure 2. Relationship between mycorrhizal state and diversification rates using 10000 datasets of seed plant mycorrhizal states. a) Boxplot using one dataset of mycorrhizal states as example to show differences on diversification rates among families with different mycorrhizal states. Diversification rate was estimated with ϵ (relative extinction fraction) = 0.9. AM: Arbuscular mycorrhiza, EM: Ectomycorrhiza, NM: non­mycorrhizal and MIX (families with no dominance of any specific mycorrhizal association). The size of the points indicates the Mycorrhizal State Diversity Index (MSDI) value for each family. Panels b and c show the frequency distribution of p-values for (b) the phylogenetic ANOVAs and (c) the a posteriori comparisons among mycorrhizal states. The black dashed lines show the 0.05 value, histograms correspond to results of phylogenetic ANOVAs. 
+
+Figure 3. (a) Scatterplots showing an exemplar (1 out of 10000) relationship between mycorrhizal state diversity index and diversification rates estimated with ϵ (relative extinction fraction) = 0.9. The red lines indicate the results of phylogenetic generalized least squares (PGLS) fit for 10000 datasets of seed plant mycorrhizal states. (b) Frequency distribution of R2 and (c) p-values of PGLS (red bars), dashed lines show the median for each distribution.
+
+
+\newpage
+
+# Tables
+
+\begin{table}[H]
+\caption{Median, minimum and maximum number of families with each mycorrhizal state in the 10000 datasets. The values were calculated with the classification using a 60\% threshold for mycorrhizal state assignment.}
+\label{tab:my-table}
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+        & AM  & EM & ER & MIX & NM & OM \\ \midrule
+Minimum & 260 & 9  & 1  & 13  & 46 & 1  \\
+Median  & 270 & 10 & 1  & 26  & 56 & 1  \\
+Maximum & 281 & 13 & 1  & 38  & 69 & 1  \\ \bottomrule
+\end{tabular}
+\end{table}
+
+# Figures
+
+![](../output/figs/ordered/fig1.pdf)
+
+\newpage
+
+![](../output/figs/ordered/fig2.pdf)
+
+\newpage
+
+![](../output/figs/ordered/fig3.pdf)

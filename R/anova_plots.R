@@ -9,10 +9,10 @@ library("caper")
 library("patchwork")
 library("plyr")
 library("reshape2")
-load("../output/anova_posthoc_tables.RData")
+load(here::here("output/anova_posthoc_tables.RData"))
 
 ## Importing results from random datasets
-fullresults <- read.csv("../output/fit_data_random_datasets.csv")
+fullresults <- read.csv(here::here("output/fit_data_random_datasets.csv"))
 
 matrix.mutator <- function(x){
     temp <- matrix(NA, 4, 4, dimnames = list(c("AM", "EM", "MIX", "NM"), c("AM", "EM", "MIX", "NM")))
@@ -50,136 +50,136 @@ r09.100 <- na.omit(data.frame(rbind(phyaov.r09.100, aov.r09.100), class = rep(c(
 
 posthoc.r0.50 <-
     ggplot() +
-    geom_histogram(data = subset(r0.50, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(data = subset(r0.50, class == "phy"), aes(x = value, y = -..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    #geom_histogram(data = subset(r0.50, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(data = subset(r0.50, class == "phy"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
     geom_vline(xintercept = 0.05, linetype = "dashed") +
     #geom_hline(yintercept = 0, size = 0.5) +
     #coord_flip() +
-    scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
-    scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
     labs(x = "p-value", y = "Density", colour = "Model Type", fill = "Model Type", title = "C") +
     facet_grid(type.2 ~ variable, drop = TRUE) +
     theme_cowplot() +
-    theme(legend.position = "bottom", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
+    theme(legend.position = "none", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
 
 
 posthoc.r0.60 <-
     ggplot() +
-    geom_histogram(data = subset(r0.60, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(data = subset(r0.60, class == "phy"), aes(x = value, y = -..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    #geom_histogram(data = subset(r0.60, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(data = subset(r0.60, class == "phy"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
     geom_vline(xintercept = 0.05, linetype = "dashed") +
     #geom_hline(yintercept = 0, size = 0.5) +
     #coord_flip() +
-    scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
-    scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
     labs(x = "p-value", y = "Density", colour = "Model Type", fill = "Model Type", title = "C") +
     facet_grid(type.2 ~ variable) +
     theme_cowplot() +
-    theme(legend.position = "bottom", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
+    theme(legend.position = "none", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
 
 
 posthoc.r0.80 <-
     ggplot() +
-    geom_histogram(data = subset(r0.80, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(data = subset(r0.80, class == "phy"), aes(x = value, y = -..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    #geom_histogram(data = subset(r0.80, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(data = subset(r0.80, class == "phy"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
     geom_vline(xintercept = 0.05, linetype = "dashed") +
     #geom_hline(yintercept = 0, size = 0.5) +
     #coord_flip() +
-    scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
-    scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
     labs(x = "p-value", y = "Density", colour = "Model Type", fill = "Model Type", title = "C") +
     facet_grid(type.2 ~ variable) +
     theme_cowplot() +
-    theme(legend.position = "bottom", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
+    theme(legend.position = "none", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
 
 posthoc.r0.100 <-
     ggplot() +
-    geom_histogram(data = subset(r0.100, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(data = subset(r0.100, class == "phy"), aes(x = value, y = -..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    #geom_histogram(data = subset(r0.100, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(data = subset(r0.100, class == "phy"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
     geom_vline(xintercept = 0.05, linetype = "dashed") +
     #geom_hline(yintercept = 0, size = 0.5) +
     #coord_flip() +
-    scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
-    scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
     labs(x = "p-value", y = "Density", colour = "Model Type", fill = "Model Type", title = "C") +
     facet_grid(type.2 ~ variable) +
     theme_cowplot() +
-    theme(legend.position = "bottom", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
+    theme(legend.position = "none", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
 
 
 
 
 posthoc.r09.50 <-
     ggplot() +
-    geom_histogram(data = subset(r09.50, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(data = subset(r09.50, class == "phy"), aes(x = value, y = -..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    #geom_histogram(data = subset(r09.50, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(data = subset(r09.50, class == "phy"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
     geom_vline(xintercept = 0.05, linetype = "dashed") +
     #geom_hline(yintercept = 0, size = 0.5) +
-                                        #coord_flip() +
-    scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
-    scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #coord_flip() +
+    #scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
     labs(x = "p-value", y = "Density", colour = "Model Type", fill = "Model Type", title = "C") +
     facet_grid(type.2 ~ variable) +
     theme_cowplot() +
-    theme(legend.position = "bottom", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
+    theme(legend.position = "none", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
 
 
 posthoc.r09.60 <-
     ggplot() +
-    geom_histogram(data = subset(r09.60, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, bins = 50) +
-    geom_histogram(data = subset(r09.60, class == "phy"), aes(x = value, y = -..density.., fill = class), colour = NA, bins = 50) +
+    #geom_histogram(data = subset(r09.60, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, bins = 50) +
+    geom_histogram(data = subset(r09.60, class == "phy"), aes(x = value, y = ..density.., fill = class), colour = NA, bins = 50) +
     geom_vline(xintercept = 0.05, linetype = "dashed") +
     #geom_hline(yintercept = 0, size = 0.5) +
-                                        #coord_flip() +
-    scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
-    scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #coord_flip() +
+    #scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
     labs(x = "p-value", y = "Density", colour = "Model Type", fill = "Model Type", title = "C") +
     facet_grid(type.2 ~ variable) +
     theme_cowplot() +
-    theme(legend.position = "bottom", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
+    theme(legend.position = "none", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
 
 posthoc.r09.80 <-
     ggplot() +
-    geom_histogram(data = subset(r09.80, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(data = subset(r09.80, class == "phy"), aes(x = value, y = -..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    #geom_histogram(data = subset(r09.80, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(data = subset(r09.80, class == "phy"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
     geom_vline(xintercept = 0.05, linetype = "dashed") +
     #geom_hline(yintercept = 0, size = 0.5) +
-                                        #coord_flip() +
-    scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
-    scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #coord_flip() +
+    #scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
     labs(x = "p-value", y = "Density", colour = "Model Type", fill = "Model Type", title = "C") +
     facet_grid(type.2 ~ variable) +
     theme_cowplot() +
-    theme(legend.position = "bottom", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
+    theme(legend.position = "none", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
 
 posthoc.r09.100 <-
     ggplot() +
-    geom_histogram(data = subset(r09.100, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(data = subset(r09.100, class == "phy"), aes(x = value, y = -..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    #geom_histogram(data = subset(r09.100, class == "lm"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(data = subset(r09.100, class == "phy"), aes(x = value, y = ..density.., fill = class), colour = NA, alpha = 0.5, bins = 50) +
     geom_vline(xintercept = 0.05, linetype = "dashed") +
     #geom_hline(yintercept = 0, size = 0.5) +
-                                        #coord_flip() +
-    scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
-    scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #coord_flip() +
+    #scale_colour_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
+    #scale_fill_brewer(palette = "Set1", direction = -1, labels = c("Linear", "Phylogenetic")) +
     labs(x = "p-value", y = "Density", colour = "Model Type", fill = "Model Type", title = "C") +
     facet_grid(type.2 ~ variable) +
     theme_cowplot() +
-    theme(legend.position = "bottom", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
+    theme(legend.position = "none", axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 10))
 
 
 
 
 ## Importing tree
-fulltree <- read.tree("../data/fam_tree_family_full.tre")
+fulltree <- read.tree(here::here("data/fam_tree_family_full.tre"))
 fulltree$node.label <- NULL
-fulltree.vasc <- read.tree("../data/Vascular_Plants_rooted.dated.tre")
+fulltree.vasc <- read.tree(here::here("data/Vascular_Plants_rooted.dated.tre"))
 
 ## Importing table with rates for plotting
-family.data.gen <- read.csv("../output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
+family.data.gen <- read.csv(here::here("output/simulated_datasets/random_data_09986.csv"), stringsAsFactors = FALSE)
 family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
 family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 
-age.data <- read.csv("../data/data_all_families.csv", sep = ";")
+age.data <- read.csv(here::here("data/data_all_families.csv"), sep = ";")
 
 ## Removing families with unknown mycorrhizal type
 family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
@@ -223,17 +223,17 @@ pvalue.phyanova.r0.50 <-
     theme_cowplot() +
     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
-pvalue.anova.r0.50 <-
-    ggplot(fullresults) +
-    #geom_histogram(aes(x = phyaov.pvalue.r0.50), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(aes(x = aov.pvalue.r0.50), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
-    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r0.50), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    #geom_vline(xintercept = median(fullresults$aov.pvalue.r0.50), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    #xlim(-0.005, 0.2) + 
-    theme_cowplot() +
-    theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
+## pvalue.anova.r0.50 <-
+##     ggplot(fullresults) +
+##     #geom_histogram(aes(x = phyaov.pvalue.r0.50), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+##     geom_histogram(aes(x = aov.pvalue.r0.50), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+##     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r0.50), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+##     #geom_vline(xintercept = median(fullresults$aov.pvalue.r0.50), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+##     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+##     labs(y = element_blank(), x = "p-value") +
+##     #xlim(-0.005, 0.2) + 
+##     theme_cowplot() +
+##     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
 
 
@@ -259,17 +259,17 @@ pvalue.phyanova.r0.60 <-
     theme_cowplot() +
     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
-pvalue.anova.r0.60 <-
-    ggplot(fullresults) +
-    #geom_histogram(aes(x = phyaov.pvalue.r0.60), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(aes(x = aov.pvalue.r0.60), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
-    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r0.60), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    #geom_vline(xintercept = median(fullresults$aov.pvalue.r0.60), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    #xlim(-0.005, 0.2) + 
-    theme_cowplot() +
-    theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
+## pvalue.anova.r0.60 <-
+##     ggplot(fullresults) +
+##     #geom_histogram(aes(x = phyaov.pvalue.r0.60), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+##     geom_histogram(aes(x = aov.pvalue.r0.60), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+##     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r0.60), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+##     #geom_vline(xintercept = median(fullresults$aov.pvalue.r0.60), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+##     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+##     labs(y = element_blank(), x = "p-value") +
+##     #xlim(-0.005, 0.2) + 
+##     theme_cowplot() +
+##     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
 
 
@@ -295,17 +295,17 @@ pvalue.phyanova.r0.80 <-
     theme_cowplot() +
     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
-pvalue.anova.r0.80 <-
-    ggplot(fullresults) +
-    #geom_histogram(aes(x = phyaov.pvalue.r0.80), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(aes(x = aov.pvalue.r0.80), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
-    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r0.80), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    #geom_vline(xintercept = median(fullresults$aov.pvalue.r0.80), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    #xlim(-0.005, 0.2) + 
-    theme_cowplot() +
-    theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
+## pvalue.anova.r0.80 <-
+##     ggplot(fullresults) +
+##     #geom_histogram(aes(x = phyaov.pvalue.r0.80), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+##     geom_histogram(aes(x = aov.pvalue.r0.80), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+##     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r0.80), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+##     #geom_vline(xintercept = median(fullresults$aov.pvalue.r0.80), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+##     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+##     labs(y = element_blank(), x = "p-value") +
+##     #xlim(-0.005, 0.2) + 
+##     theme_cowplot() +
+##     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
 
 
@@ -331,17 +331,17 @@ pvalue.phyanova.r0.100 <-
     theme_cowplot() +
     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
-pvalue.anova.r0.100 <-
-    ggplot(fullresults) +
-    #geom_histogram(aes(x = phyaov.pvalue.r0.100), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(aes(x = aov.pvalue.r0.100), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
-    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r0.100), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    #geom_vline(xintercept = median(fullresults$aov.pvalue.r0.100), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    #xlim(-0.005, 0.2) + 
-    theme_cowplot() +
-    theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
+## pvalue.anova.r0.100 <-
+##     ggplot(fullresults) +
+##     #geom_histogram(aes(x = phyaov.pvalue.r0.100), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+##     geom_histogram(aes(x = aov.pvalue.r0.100), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+##     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r0.100), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+##     #geom_vline(xintercept = median(fullresults$aov.pvalue.r0.100), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+##     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+##     labs(y = element_blank(), x = "p-value") +
+##     #xlim(-0.005, 0.2) + 
+##     theme_cowplot() +
+##     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
 
 
@@ -371,17 +371,17 @@ pvalue.phyanova.r09.50 <-
     theme_cowplot() +
     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
-pvalue.anova.r09.50 <-
-    ggplot(fullresults) +
-    #geom_histogram(aes(x = phyaov.pvalue.r09.50), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(aes(x = aov.pvalue.r09.50), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
-    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.50), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.50), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    #xlim(-0.005, 0.2) + 
-    theme_cowplot() +
-    theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
+## pvalue.anova.r09.50 <-
+##     ggplot(fullresults) +
+##     #geom_histogram(aes(x = phyaov.pvalue.r09.50), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+##     geom_histogram(aes(x = aov.pvalue.r09.50), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+##     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.50), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+##     #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.50), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+##     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+##     labs(y = element_blank(), x = "p-value") +
+##     #xlim(-0.005, 0.2) + 
+##     theme_cowplot() +
+##     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
 
 
@@ -407,17 +407,17 @@ pvalue.phyanova.r09.60 <-
     theme_cowplot() +
     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
-pvalue.anova.r09.60 <-
-    ggplot(fullresults) +
-    #geom_histogram(aes(x = phyaov.pvalue.r09.60), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(aes(x = aov.pvalue.r09.60), fill = brewer.pal(3, "Set1")[2], colour = NA, bins = 50) +
-    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    #xlim(-0.005, 0.2) + 
-    theme_cowplot() +
-    theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
+## pvalue.anova.r09.60 <-
+##     ggplot(fullresults) +
+##     #geom_histogram(aes(x = phyaov.pvalue.r09.60), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+##     geom_histogram(aes(x = aov.pvalue.r09.60), fill = brewer.pal(3, "Set1")[2], colour = NA, bins = 50) +
+##     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+##     #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.60), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+##     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+##     labs(y = element_blank(), x = "p-value") +
+##     #xlim(-0.005, 0.2) + 
+##     theme_cowplot() +
+##     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
 
 
@@ -443,17 +443,17 @@ pvalue.phyanova.r09.80 <-
     theme_cowplot() +
     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
-pvalue.anova.r09.80 <-
-    ggplot(fullresults) +
-    #geom_histogram(aes(x = phyaov.pvalue.r09.80), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(aes(x = aov.pvalue.r09.80), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
-    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.80), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.80), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    #xlim(-0.005, 0.2) + 
-    theme_cowplot() +
-    theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
+## pvalue.anova.r09.80 <-
+##     ggplot(fullresults) +
+##     #geom_histogram(aes(x = phyaov.pvalue.r09.80), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+##     geom_histogram(aes(x = aov.pvalue.r09.80), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+##     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.80), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+##     #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.80), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+##     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+##     labs(y = element_blank(), x = "p-value") +
+##     #xlim(-0.005, 0.2) + 
+##     theme_cowplot() +
+##     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
 
 
@@ -479,47 +479,47 @@ pvalue.phyanova.r09.100 <-
     theme_cowplot() +
     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
-pvalue.anova.r09.100 <-
-    ggplot(fullresults) +
-    #geom_histogram(aes(x = phyaov.pvalue.r09.100), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
-    geom_histogram(aes(x = aov.pvalue.r09.100), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
-    #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.100), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
-    #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.100), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
-    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
-    labs(y = element_blank(), x = "p-value") +
-    #xlim(-0.005, 0.2) + 
-    theme_cowplot() +
-    theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
+## pvalue.anova.r09.100 <-
+##     ggplot(fullresults) +
+##     #geom_histogram(aes(x = phyaov.pvalue.r09.100), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+##     geom_histogram(aes(x = aov.pvalue.r09.100), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+##     #geom_vline(xintercept = median(fullresults$phyaov.pvalue.r09.100), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+##     #geom_vline(xintercept = median(fullresults$aov.pvalue.r09.100), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+##     geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+##     labs(y = element_blank(), x = "p-value") +
+##     #xlim(-0.005, 0.2) + 
+##     theme_cowplot() +
+##     theme(axis.text.y = element_text(size = 10), axis.text.x = element_text(size = 8))
 
 
-save.image("../output/anova_boxplots.RData")
+save.image(here::here("output/anova_boxplots.RData"))
 
 
-(box.r0.50) + (((pvalue.phyanova.r0.50 + pvalue.anova.r0.50) / posthoc.r0.50) + plot_layout(heights = c(3, 7))) +
-    plot_layout(widths = c(6, 4))
+## (box.r0.50) + (((pvalue.phyanova.r0.50 + pvalue.anova.r0.50) / posthoc.r0.50) + plot_layout(heights = c(3, 7))) +
+##     plot_layout(widths = c(6, 4))
 
-(box.r0.60) + (((pvalue.phyanova.r0.60 + pvalue.anova.r0.60) / posthoc.r0.60) + plot_layout(heights = c(3, 7))) +
-    plot_layout(widths = c(6, 4))
+## (box.r0.60) + (((pvalue.phyanova.r0.60) / posthoc.r0.60) + plot_layout(heights = c(3, 7))) +
+##     plot_layout(widths = c(6, 4))
 
-(box.r0.80) + (((pvalue.phyanova.r0.60 + pvalue.anova.r0.60) / posthoc.r0.80) + plot_layout(heights = c(3, 7))) +
-    plot_layout(widths = c(6, 4))
+## (box.r0.80) + (((pvalue.phyanova.r0.60 + pvalue.anova.r0.60) / posthoc.r0.80) + plot_layout(heights = c(3, 7))) +
+##     plot_layout(widths = c(6, 4))
 
-(box.r0.100) + (((pvalue.phyanova.r0.60 + pvalue.anova.r0.60) / posthoc.r0.100) + plot_layout(heights = c(3, 7))) +
-    plot_layout(widths = c(6, 4))
-
-
+## (box.r0.100) + (((pvalue.phyanova.r0.60 + pvalue.anova.r0.60) / posthoc.r0.100) + plot_layout(heights = c(3, 7))) +
+##     plot_layout(widths = c(6, 4))
 
 
-(box.r09.50) + (((pvalue.phyanova.r09.50 + pvalue.anova.r09.50) / posthoc.r09.50) + plot_layout(heights = c(3, 7))) +
-    plot_layout(widths = c(6, 4))
 
-(box.r09.60) + (((pvalue.phyanova.r09.60 + pvalue.anova.r09.60) / posthoc.r09.60) + plot_layout(heights = c(3, 7))) +
-    plot_layout(widths = c(6, 4))
+
+## (box.r09.50) + (((pvalue.phyanova.r09.50 + pvalue.anova.r09.50) / posthoc.r09.50) + plot_layout(heights = c(3, 7))) +
+##     plot_layout(widths = c(6, 4))
+
+## (box.r09.60) + (((pvalue.phyanova.r09.60) / posthoc.r09.60) + plot_layout(heights = c(3, 7))) +
+##     plot_layout(widths = c(6, 4))
 
 ## ggsave(filename = "../output/figs/anova_results_main.pdf", width = 11, height = 7)
 
-(box.r09.80) + (((pvalue.phyanova.r09.60 + pvalue.anova.r09.60) / posthoc.r09.80) + plot_layout(heights = c(3, 7))) +
-    plot_layout(widths = c(6, 4))
+## (box.r09.80) + (((pvalue.phyanova.r09.60 + pvalue.anova.r09.60) / posthoc.r09.80) + plot_layout(heights = c(3, 7))) +
+##     plot_layout(widths = c(6, 4))
 
-(box.r09.100) + (((pvalue.phyanova.r09.60 + pvalue.anova.r09.60) / posthoc.r09.100) + plot_layout(heights = c(3, 7))) +
-    plot_layout(widths = c(6, 4))
+## (box.r09.100) + (((pvalue.phyanova.r09.60 + pvalue.anova.r09.60) / posthoc.r09.100) + plot_layout(heights = c(3, 7))) +
+##     plot_layout(widths = c(6, 4))

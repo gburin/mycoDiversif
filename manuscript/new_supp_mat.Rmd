@@ -31,8 +31,11 @@ library("geiger")
 library("phytools")
 library("ggrepel")
 library("patchwork")
+library("plyr")
+library("here")
+here::i_am("manuscript/new_supp_mat.Rmd")
 rm(list = ls())
-load("../output/main_results.RData")
+load(here::here("output/main_results.RData"))
 sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 options(digits = 3)
 
@@ -47,19 +50,19 @@ options(digits = 3)
 ```{r fig.height = 6, fig.cap = "Relationship between number of species and age for each lineage when compared to the confidence intervals based on the global diversification rate of seed plants. The solid and dashed lines represent the expected richness for $\\epsilon$ = 0 and $\\epsilon$ = 0.9, respectively. The color of the points represents the mycorrhizal state for the 60% threshold."}
 
 ## Importing tree
-fulltree <- read.tree("../data/fam_tree_family_full.tre")
+fulltree <- read.tree(here::here("data/fam_tree_family_full.tre"))
 fulltree$node.label <- NULL
-fulltree.vasc <- read.tree("../data/Vascular_Plants_rooted.dated.tre")
+fulltree.vasc <- read.tree(here::here("data/Vascular_Plants_rooted.dated.tre"))
 
 ## Importing results from random datasets
-fullresults <- read.csv("../output/fit_data_random_datasets.csv")
+fullresults <- read.csv(here::here("output/fit_data_random_datasets.csv"))
 
 ## Importing table with rates for plotting
-family.data.gen <- read.csv("../output/simulated_datasets/random_data_09986.csv", stringsAsFactors = FALSE)
+family.data.gen <- read.csv(here::here("output/simulated_datasets/random_data_09986.csv"), stringsAsFactors = FALSE)
 family.data.gen$family[family.data.gen$family == "Leguminosae"] <- "Fabaceae"
 family.data.gen$family[family.data.gen$family == "Compositae"] <- "Asteraceae"
 
-age.data <- read.csv("../data/data_all_families.csv", sep = ";")
+age.data <- read.csv(here::here("data/data_all_families.csv"), sep = ";")
 
 ## Removing families with unknown mycorrhizal type
 family.data.gen <- family.data.gen[-which(family.data.gen$UNK.perc == 1),]
@@ -201,7 +204,7 @@ pvalue.lm.rich.sh <-
 
 ### 20% analysis
 rm(list = ls())
-load("../output/hist_20perc.RData")
+load(here::here("output/hist_20perc.RData"))
 
 (hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
 
@@ -219,7 +222,7 @@ load("../output/hist_20perc.RData")
 
 ## This step is mandatory to avoid problems with overlapping object names
 rm(list = ls())
-load("../output/suppdata_species_noremarks.RData")
+load(here::here("output/suppdata_species_noremarks.RData"))
 sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
 ```
@@ -523,7 +526,7 @@ kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylo
 
 ## This step is mandatory to avoid problems with overlapping object names
 rm(list = ls())
-load("../output/suppdata_species_withremarks.RData")
+load(here::here("output/suppdata_species_withremarks.RData"))
 sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
 ```
@@ -768,7 +771,7 @@ kable(x = sum.aov, format = "latex", caption = "Pairwise Corrected p-values for 
 
 ```{r fig.height = 5, fig.cap = "Scatterplots showing the relationship between mycorrhizal diversity index and diversification rates using the species-level dataset with species with remarks. Diversification rates were estimated with $\\epsilon$ = 0 (a) and with $\\epsilon$ = 0.9 (b). The red and blue lines indicate the results of a linear model and a phylogenetic generalized least squares (PGLS) fit, respectively."}
 
-load("../output/scatter_boxplots_remarks.RData")
+load(here::here("output/scatter_boxplots_remarks.RData"))
 
 plot_grid(raw.r0.rem,
           raw.r09.rem,
@@ -805,8 +808,8 @@ kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylo
 
 ## This step is mandatory to avoid problems with overlapping object names
 rm(list = ls())
-load("../output/suppdata_genus_full.RData")
-load("../output/anova_boxplots.RData")
+load(here::here("output/suppdata_genus_full.RData"))
+load(here::here("output/anova_boxplots.RData"))
 ##source("../R/anova_plots.R")
 sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
@@ -974,7 +977,7 @@ kable(x = sum.aov, format = "latex", caption = "Summary statistics for pairwise 
 ```{r fig.height = 5, fig.cap = "Scatterplots showing a randomly selected dataset replicate (out of 10000) to show the relationship between mycorrhizal state diversity index and diversification rates estimated with $\\epsilon$ (relative extinction fraction) = 0.9. The red and blue lines indicate the linear models and phylogenetic generalized least squares (PGLS) fit, respectively, for 1000 datasets of seed plant mycorrhizal states.  Panels b and c show the frequency distribution of R2 and p-values of (b) linear models (blue bars) and (c) PGLS (red bars), dashed lines show the median for each distribution."}
 
 ## Scatter - MTDI vs. Net Diversification
-load("../output/scatter_r0.RData")
+load(here::here("output/scatter_r0.RData"))
 scatter.mtdi.r0 | ((r2.lm.r0 + pvalue.lm.r0) / (r2.pgls.r0 + pvalue.pgls.r0))
 
 ```
@@ -1008,7 +1011,7 @@ kable(x = reg.sum, format = "latex", caption = "Summary statistics for p-value a
 ```{r}
 
 rm(list = ls())
-load("../output/harris_davies_results.RData")
+load(here::here("output/harris_davies_results.RData"))
 sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
 ```
@@ -1123,7 +1126,7 @@ kable(x = np.sum,
 ```{r}
 
 rm(list = ls())
-load("../output/main_results.RData")
+load(here::here("output/main_results.RData"))
 sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.05, TRUE, FALSE))}
 
 ```
@@ -1235,7 +1238,7 @@ sig.formatter <- function(x){cell_spec(x, format = "latex", bold = ifelse(x < 0.
 
 ## doMC::registerDoMC(56)
 ## phylod.table <- plyr::ldply(1:10000, phylosig, age = age.data, fulltree = fulltree)
-load("../output/phylod_table.RData")
+load(here::here("output/phylod_table.RData"))
 #phylod.table[, 4:7] <- apply(phylod.table[, 4:7], 2, sig.formatter)
 
 phylod.AM <-
@@ -1304,7 +1307,7 @@ kable_styling(kable(x = data.frame(Variable = c("r (epsilon = 0)", "r (epsilon =
 ```{r fig.width = 11, fig.height = 7, fig.cap = "Distribution of percentage of species in each family that are classified as MIX. Zoom panel indicates the same distribution but excluding families without any MIX species."}
 
 library("ggforce")
-mix.sp <- read.csv("../data/family_data_genus_final.csv", stringsAsFactors = FALSE)
+mix.sp <- read.csv(here::here("data/family_data_genus_final.csv"), stringsAsFactors = FALSE)
 mix.sp$zoom.bin <- "a"
 mix.sp$zoom.bin[mix.sp$MIX.raw.perc != 0] <- "b"
 
@@ -1326,5 +1329,601 @@ mix.hist <-
 fullhist + annotation_custom(grob = ggplotGrob(mix.hist), xmin = 0.3, xmax = 1, ymin = 100, ymax = 300)
 
 ## ggsave(filename = "./output/figs/hist_mix_proportion.pdf")
+
+```
+
+# Replicating main analyses with all trees from Ramirez-Barahona \textit{et al.} (2020)
+
+```{r rambarah_results, echo = FALSE, fig.cap = "Main analyses replicated using Ramirez-Barahona \textit{et al.} (2020) phylogeny. The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. Panels A: scatterplot with linear and phylogenetic regressions plotted; panel B: histograms of R2 and p-value of linear and phylogenetic regressions. Red lines/bars: PGLS fit; blue lines/bars: LM fit."}
+
+age.data <- read.csv(here::here("data/data_all_families.csv"), sep = ";")
+RB.tree.RC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_RC_complete_MCCv_2.tre"))
+RB.tree.RC.conservative <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_RC_conservative_MCCv_2.tre"))
+RB.tree.UC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_UC_complete_MCCv_2.tre"))
+RB.tree.UC.conservative <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_UC_conservative_MCCv_2.tre"))
+RB.tree.CC.complete <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_CC_complete_MCCv_2.tre"))
+RB.tree.CC.conservative <- read.nexus(here::here("data/ramirez_barahona_data/ramirez_barahona_CC_conservative_MCCv_2.tre"))
+
+## Extracting families from tip information
+
+RB.tip.list <- RB.tree.CC.complete$tip.label
+RB.family.list <- unique(setNames(sapply(RB.tip.list, function(x){strsplit(x, split = "_")[[1]][2]}), NULL))
+
+## Replacing species name by the family, and dropping repeated tips
+RB.tree.CC.complete.pruned <- drop.tip(RB.tree.CC.complete, tip = grep(RB.family.list[1], RB.tree.CC.complete$tip.label)[-1])
+for(i in 2:length(RB.family.list)){
+    RB.tree.CC.complete.pruned <- drop.tip(RB.tree.CC.complete.pruned, tip = grep(RB.family.list[i], RB.tree.CC.complete.pruned$tip.label)[-1])
+}
+RB.tree.CC.complete.pruned$tip.label <- setNames(sapply(RB.tree.CC.complete.pruned$tip.label, function(x){strsplit(x, split = "_")[[1]][2]}), NULL)
+
+rb.CC.complete.ages <- read.csv(here::here("data/ramirez_barahona_data/ramirez_barahona_Ages_CC_complete.csv"), as.is = TRUE)
+
+## Missing families from Ramírez-Barahona \textit{et al.} 2020
+age.data$familia[is.na(match(age.data$familia, rb.CC.complete.ages$Family))]
+
+## Adding ages from Ramírez-Barahona \textit{et al.} 2020
+age.data$rb.CC.complete.stem <- rb.CC.complete.ages$Stem_BEAST[match(age.data$familia, rb.CC.complete.ages$Family)]
+
+## Importing results from random datasets
+load(here::here("output/RB_results_RC_complete.RData"))
+load(here::here("output/RB_results_RC_conservative.RData"))
+load(here::here("output/RB_results_UC_complete.RData"))
+load(here::here("output/RB_results_UC_conservative.RData"))
+load(here::here("output/RB_results_CC_complete.RData"))
+load(here::here("output/RB_results_CC_conservative.RData"))
+nrep <- 10000
+
+fullresults.RC.complete <- ldply(1:nrep, function(x){results.RC.complete[[x]][[1]]})
+fullresults.RC.conservative <- ldply(1:nrep, function(x){results.RC.conservative[[x]][[1]]})
+fullresults.UC.complete <- ldply(1:nrep, function(x){results.UC.complete[[x]][[1]]})
+fullresults.UC.conservative <- ldply(1:nrep, function(x){results.UC.conservative[[x]][[1]]})
+fullresults.CC.complete <- ldply(1:nrep, function(x){results.CC.complete[[x]][[1]]})
+fullresults.CC.conservative <- ldply(1:nrep, function(x){results.CC.conservative[[x]][[1]]})
+
+fullresults <- bind_rows(list(fullresults.RC.complete,
+                              fullresults.RC.conservative,
+                              fullresults.UC.complete,
+                              fullresults.UC.conservative,
+                              fullresults.CC.complete,
+                              fullresults.CC.conservative))
+
+fullresults$tree <- rep(c("RC Complete", "RC Conservative", "UC Complete", "UC Conservative", "CC Complete", "CC Conservative"), each = 10000)
+
+## Scatter - MTDI vs. Net Diversification
+
+## Using replica 9986 (with R2 closer to the median) just to represent points
+
+scatter.mtdi.r09.rambarah <-
+    ggplot(fullresults) +
+    geom_abline(mapping = aes(intercept = pgls.int.r09, slope = pgls.slope.r09, colour = brewer.pal(3, "Set1")[1]), show.legend = TRUE, alpha = 1) +
+    geom_abline(mapping = aes(intercept = lm.int.r09, slope = lm.slope.r09, colour = brewer.pal(3, "Set1")[2]), show.legend = TRUE, alpha = 1) +
+    geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = r.e09), size = 2, alpha = 0.5) +
+    labs(x = "Mycorrhizal State Diversity Index", y = "Diversification Rate", col = "Model Type", title = "A") +
+    facet_wrap(. ~ tree, ncol = 2) +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+r2.r09.rambarah <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = lm.r2.r09), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    ## geom_vline(aes(xintercept = median(lm.r2.r09)), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    ## geom_vline(aes(xintercept = median(pgls.r2.r09)), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    facet_wrap(. ~ tree, ncol = 2) +
+    labs(y = "Frequency", x = bquote('R' ^2), title = "B") +
+    theme_cowplot()
+
+pvalue.r09.rambarah <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    ## geom_vline(xintercept = log10(median(fullresults$lm.pvalue.r09)), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    ## geom_vline(xintercept = log10(median(fullresults$pgls.pvalue.r09)), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = "Frequency", x = "p-value (log10)") +
+    facet_wrap(. ~ tree, ncol = 2) +
+    theme_cowplot()
+
+(scatter.mtdi.r09.rambarah | (r2.r09.rambarah + pvalue.r09.rambarah)) + plot_annotation(tag_levels = "A")
+
+```
+
+```{r echo = FALSE, fig.cap = "Analysis of the relationship between age and MTDI replicated using Ramirez-Barahona \textit{et al.} (2020) phylogeny. The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. Panel A: scatterplots with linear and phylogenetic regressions plotted; panel B: histograms of R2 and p-value of linear and phylogenetic regressions. Red lines/bars: PGLS fit; blue lines/bars: LM fit."}
+
+## Age vs Shannon
+scatter.age.sh.rambarah <-
+    ggplot(fullresults) +
+    geom_abline(mapping = aes(intercept = pgls.int.age.sh, slope = pgls.slope.age.sh), colour = brewer.pal(3, "Set1")[1], show.legend = TRUE, alpha = 0.01) +
+    geom_abline(mapping = aes(intercept = lm.int.age.sh, slope = lm.slope.age.sh), colour = brewer.pal(3, "Set1")[2], show.legend = TRUE, alpha = 0.01) +
+    geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = stem.age), size = 2, alpha = 0.5) +
+    labs(x = "Mycorrhizal State Shannon Index", y = "Stem Age", col = "Model Type") +
+    facet_wrap(. ~ tree, ncol = 2) +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+r2.age.sh.rambarah <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.r2.age.sh), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = lm.r2.age.sh), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    ## geom_vline(xintercept = median(fullresults$pgls.r2.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    ## geom_vline(xintercept = median(fullresults$lm.r2.age.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(x = bquote('R' ^2), y = "Frequency") +
+    facet_wrap(. ~ tree, ncol = 2) +
+    theme_cowplot()
+
+pvalue.age.sh.rambarah <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.pvalue.age.sh), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = lm.pvalue.age.sh), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    ## geom_vline(xintercept = median(fullresults$pgls.pvalue.age.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    ## geom_vline(xintercept = median(fullresults$lm.pvalue.age.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = "Frequency", x = "p-value") +
+    facet_wrap(. ~ tree, ncol = 2) +
+    theme_cowplot()
+
+(scatter.age.sh.rambarah | (r2.age.sh.rambarah + pvalue.age.sh.rambarah)) + plot_annotation(tag_levels = "A")
+
+```
+
+```{r echo = FALSE, fig.cap = "Analysis of the relationship between richness and MTDI replicated using Ramirez-Barahona \textit{et al.} (2020) phylogeny. The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. Panel A: scatterplots with linear and phylogenetic regressions plotted; panel B: histograms of R2 and p-value of linear and phylogenetic regressions. Red lines/bars: PGLS fit; blue lines/bars: LM fit."}
+
+## Richness vs Shannon
+scatter.rich.sh.rambarah <-
+    ggplot(fullresults) +
+    geom_abline(mapping = aes(intercept = pgls.int.rich.sh, slope = pgls.slope.rich.sh), colour = brewer.pal(3, "Set1")[1], show.legend = TRUE, alpha = 0.01) +
+    geom_abline(mapping = aes(intercept = lm.int.rich.sh, slope = lm.slope.rich.sh), colour = brewer.pal(3, "Set1")[2], show.legend = TRUE, alpha = 0.01) +
+    geom_point(data = na.omit(family.data.gen), aes(x = shannon, y = rich), size = 2, alpha = 0.5) +
+    labs(x = "Mycorrhizal State Shannon Index", y = "Species Richness per Family", col = "Model Type") +
+    scale_colour_brewer(palette = "Set1", labels = c("Linear Model", "PGLS"), direction = -1) +
+    facet_wrap(. ~ tree, ncol = 2) +
+    #scale_y_continuous(breaks = c(10, 50, 100, 500, 1000, 10000, 20000, 30000)) +
+    theme_cowplot() +
+    theme(legend.position = "top")
+
+r2.rich.sh.rambarah <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.r2.rich.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = lm.r2.rich.sh, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    ## geom_vline(xintercept = median(fullresults$pgls.r2.rich.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    ## geom_vline(xintercept = median(fullresults$lm.r2.rich.sh), colour = brewer.pal(3, "Set1")[2], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = bquote('R' ^2))+
+    facet_wrap(. ~ tree, ncol = 2) +
+    theme(axis.text.x = element_text(size = 6)) +
+    theme_cowplot()
+
+pvalue.rich.sh.rambarah <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = pgls.pvalue.rich.sh, y = ..density..), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 100) +
+    geom_histogram(aes(x = lm.pvalue.rich.sh, y = ..density..), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 100) +
+    ## geom_vline(xintercept = median(fullresults$pgls.pvalue.rich.sh), colour = brewer.pal(3, "Set1")[1], linetype = "dashed", size = 1.5) +
+    labs(y = element_blank(), x = "p-value") +
+    facet_wrap(. ~ tree, ncol = 2) +
+    theme(axis.text.x = element_text(size = 6)) +
+    theme_cowplot()
+
+(scatter.rich.sh.rambarah | (r2.rich.sh.rambarah + pvalue.rich.sh.rambarah)) + plot_annotation(tag_levels = "A")
+
+```
+
+
+```{r echo = FALSE, fig.cap = "Distribution of p-values of linear (blue bars) and phylogenetic (red bars) ANOVA using different thresholds for classification. A: 50%, B: 60%, C: 80%, D: 100%."}
+
+### Boxplots
+## We aggregate mean rates per type for each random dataset
+
+age.data$r.e0 <- geiger::bd.ms(time = age.data$rb.CC.complete.stem, n = age.data$nro_especies, crown = FALSE, epsilon = 0)
+age.data$r.e09 <- geiger::bd.ms(time = age.data$rb.CC.complete.stem, n = age.data$nro_especies, crown = FALSE, epsilon = 0.9)
+
+random.data <- lapply(here::here(paste0("output/simulated_datasets/", list.files(here::here("output/simulated_datasets/")))), read.csv, stringsAsFactors = FALSE)
+
+random.types <- data.frame(
+    family = age.data$familia,
+    r.e0 = age.data$r.e0,
+    r.e09 = age.data$r.e09
+)
+
+for(i in 1:length(random.data)){
+    random.types <- cbind(random.types,
+                          random.data[[i]]$type.60
+                          )
+}
+
+## Removing families that are 100% UNK
+random.types <- random.types[-which(random.types[,4] == "UNK"),]
+
+anova.data.r0 <- plyr::ldply(random.types[4:10003], function(x){aggregate(random.types$r.e0, by = list(x), FUN = mean)})
+anova.data.r09 <- plyr::ldply(random.types[4:10003], function(x){aggregate(random.types$r.e09, by = list(x), FUN = mean)})
+
+
+## box.r09 <-
+##     ggplot(data = anova.data.r09[is.na(match(anova.data.r09$Group.1, c("OM", "ER"))),]) +
+##     geom_boxplot(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, outlier.alpha = 1, outlier.shape = 3, size = 1) +
+##     geom_point(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), alpha = 0.05, position = position_jitterdodge(jitter.width = 2.2, dodge.width = 1)) +
+##     stat_summary(aes(x = factor(Group.1, levels = c("AM", "EM", "NM", "MIX")), y = x, colour = factor(Group.1, levels = c("AM", "EM", "NM", "MIX"))), fun.y = mean, geom = "point", colour = "black", size = 2) +
+##     theme_cowplot() +
+##     theme(legend.position = "none") +
+##     scale_colour_manual(values = brewer.pal(5, "Set1")[c(1:3, 5)]) +
+##     labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"))
+
+## box.r09 <-
+##     ggplot(data = family.data.gen[is.na(match(family.data.gen$type.60, c("OM", "ER"))),]) +
+##     geom_boxplot(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX"))), fill = NA, size = 1.5, outlier.shape = 3, alpha = 0.5) +
+##     geom_jitter(aes(x = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), y = r.e09, colour = factor(type.60, levels = c("AM", "EM", "NM", "MIX")), size = shannon), alpha = 0.5) +
+##     labs(x = "Mycorrhizal State", y = expression("Diversification Rate ("~epsilon~" = 0.9 )"), title = "A") +
+##     scale_colour_manual(values = brewer.pal(5, "Set1")[-4]) +
+##     theme_cowplot() +
+##     theme(legend.position = "none")
+
+## ggsave(filename = "../output/figs/boxplots_anova_myctype_r09_combined.pdf", box.r09, width = 11, height = 5.5, units = "in")
+
+pvalue.phyanova.r09.50 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = phyaov.pvalue.r09.50), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(aes(x = aov.pvalue.r09.50), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+    labs(y = "Frequency", x = "p-value") +
+    xlim(-0.005, 1.005) + 
+    theme_cowplot()
+
+pvalue.phyanova.r09.60 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = phyaov.pvalue.r09.60), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(aes(x = aov.pvalue.r09.60), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+    labs(y = "Frequency", x = "p-value") +
+    xlim(-0.005, 1.005) + 
+    theme_cowplot()
+
+pvalue.phyanova.r09.80 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = phyaov.pvalue.r09.80), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(aes(x = aov.pvalue.r09.80), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+    labs(y = "Frequency", x = "p-value") +
+    xlim(-0.05, 1.005) + 
+    theme_cowplot()
+
+pvalue.phyanova.r09.100 <-
+    ggplot(fullresults) +
+    geom_histogram(aes(x = phyaov.pvalue.r09.100), fill = brewer.pal(3, "Set1")[1], colour = NA, alpha = 0.5, bins = 50) +
+    geom_histogram(aes(x = aov.pvalue.r09.100), fill = brewer.pal(3, "Set1")[2], colour = NA, alpha = 0.5, bins = 50) +
+    geom_vline(xintercept = 0.05, colour = "black", linetype = "dashed", size = 1.5) +
+    labs(y = "Frequency", x = "p-value") +
+    xlim(-0.05, 1.005) + 
+    theme_cowplot()
+
+((pvalue.phyanova.r09.50 + pvalue.phyanova.r09.60) / (pvalue.phyanova.r09.80 + pvalue.phyanova.r09.100)) + plot_annotation(tag_levels = "A")
+
+```
+
+
+# Assigning random families a net diversification of 0 to test for limitations raised by Rabosky \& Benson 2021
+
+## 5% of families
+
+```{r}
+
+### 20% analysis
+
+load(here::here("output/side_analysis_rabosky_benson_5perc.RData"))
+
+side.results <- plyr::ldply(1:length(side.results.5), function(x){side.results.5[[x]][[1]]})
+
+## r_epsilon = 0
+hist.pgls.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r0 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    scale_x_continuous(breaks = seq(floor(min(log10(side.results$pgls.pvalue.r0 + 1e-16))), ceiling(max(log10(side.results$pgls.pvalue.r0 + 1e-16))), by = 2)) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r0))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
+
+```
+
+```{r}
+
+## r_epslion = 0.9
+hist.pgls.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r09 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    #scale_x_continuous(breaks = c(-12.5, -10, -7.5, -5), labels = c(bquote('10' ^-12.5), bquote('10' ^-10), bquote('10' ^-7.5), bquote('10' ^-5))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r09))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r09 + hist.lm.r2.r09 + hist.lm.slope.r09) / (hist.pgls.pvalue.r09 + hist.pgls.r2.r09 + hist.pgls.slope.r09)
+
+```
+
+
+
+
+## 20% of families
+
+```{r}
+
+### 20% analysis
+
+load(here::here("output/side_analysis_rabosky_benson_20perc.RData"))
+
+side.results <- plyr::ldply(1:length(side.results), function(x){side.results[[x]][[1]]})
+
+## r_epsilon = 0
+hist.pgls.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r0 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    scale_x_continuous(breaks = seq(floor(min(log10(side.results$pgls.pvalue.r0 + 1e-16))), ceiling(max(log10(side.results$pgls.pvalue.r0 + 1e-16))), by = 2)) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r0))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
+
+```
+
+```{r}
+
+## r_epslion = 0.9
+hist.pgls.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r09 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    #scale_x_continuous(breaks = c(-12.5, -10, -7.5, -5), labels = c(bquote('10' ^-12.5), bquote('10' ^-10), bquote('10' ^-7.5), bquote('10' ^-5))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r09))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r09 + hist.lm.r2.r09 + hist.lm.slope.r09) / (hist.pgls.pvalue.r09 + hist.pgls.r2.r09 + hist.pgls.slope.r09)
+
+```
+
+
+## 50% of families
+
+```{r}
+
+### 20% analysis
+
+load(here::here("output/side_analysis_rabosky_benson_50perc.RData"))
+
+side.results <- plyr::ldply(1:length(side.results.50), function(x){side.results.50[[x]][[1]]})
+
+## r_epsilon = 0
+hist.pgls.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r0)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r0 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    scale_x_continuous(breaks = seq(floor(min(log10(side.results$pgls.pvalue.r0 + 1e-16))), ceiling(max(log10(side.results$pgls.pvalue.r0 + 1e-16))), by = 2)) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r0)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r0))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r0), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r0)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r0 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r0), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r0)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r0 + hist.lm.r2.r0 + hist.lm.slope.r0) / (hist.pgls.pvalue.r0 + hist.pgls.r2.r0 + hist.pgls.slope.r0)
+
+```
+
+```{r}
+
+## r_epslion = 0.9
+hist.pgls.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.r2.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.r2.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.pgls.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(pgls.pvalue.r09)), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(pgls.pvalue.r09 + 1e-16))), linetype = "dashed", size = 2, colour = "red") +
+    #scale_x_continuous(breaks = c(-12.5, -10, -7.5, -5), labels = c(bquote('10' ^-12.5), bquote('10' ^-10), bquote('10' ^-7.5), bquote('10' ^-5))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+hist.lm.r2.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.r2.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.r2.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+hist.lm.pvalue.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = log10(lm.pvalue.r09)), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(log10(lm.pvalue.r09))), linetype = "dashed", size = 2, colour = "blue") +
+    #scale_x_continuous(breaks = c(-12, -10, -8, -6, -4), labels = c(bquote('10' ^-12), bquote('10' ^-10), bquote('10' ^-8), bquote('10' ^-6), bquote('10' ^-4))) +
+    labs(x = "p-value", y = element_blank()) +
+    theme_cowplot()
+
+
+
+hist.pgls.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = pgls.slope.r09), fill = "red", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(pgls.slope.r09)), linetype = "dashed", size = 2, colour = "red") +
+    theme_cowplot()
+
+hist.lm.slope.r09 <-
+    ggplot(data = side.results) +
+    geom_histogram(aes(x = lm.slope.r09), fill = "blue", colour = NA, alpha = 0.3, bins = 100) +
+    geom_vline(aes(xintercept = mean(lm.slope.r09)), linetype = "dashed", size = 2, colour = "blue") +
+    theme_cowplot()
+
+
+(hist.lm.pvalue.r09 + hist.lm.r2.r09 + hist.lm.slope.r09) / (hist.pgls.pvalue.r09 + hist.pgls.r2.r09 + hist.pgls.slope.r09)
 
 ```
