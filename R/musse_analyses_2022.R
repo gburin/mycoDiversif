@@ -141,6 +141,12 @@ genus.full$trait.num <- match(genus.full$new.trait, sort(unique(genus.full$new.t
 genus.mol.noomer$trait.num <- match(genus.mol.noomer$new.trait, sort(unique(genus.mol.noomer$new.trait)))
 genus.full.noomer$trait.num <- match(genus.full.noomer$new.trait, sort(unique(genus.full.noomer$new.trait)))
 
+fulltree.mol.ultra <- multi2di(fulltree.mol)
+
+genus.tree <- drop.tip(fulltree.mol.ultra, fulltree.mol.ultra$tip.label[!(fulltree.mol.ultra$tip.label %in% genus.mol.noomer$species)])
+
+write.tree(genus.tree, file = here::here("output/musse/genus_data/moltree.tre"))
+
 ## write.table(genus.mol[, c(1, 5)], file = here::here("output/musse/genus_data/moldata.txt"), quote = FALSE, row.names = FALSE, sep = "\t")
 ## write.table(genus.full[, c(1, 5)], file = here::here("output/musse/genus_data/fulldata.txt"), quote = FALSE, row.names = FALSE, sep = "\t")
 

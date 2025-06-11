@@ -198,7 +198,7 @@ pvalue.pgls.rich.sh <-
 
 ```
 
-# Appendix S3 - Randomly adding 20% of misassignment of mycorrhizal type into the data obtained from genus-level list
+# Appendix S3 - Randomly adding 20% of misassignment of mycorrhizal type into the data obtained from genus-level list, with rates calculated using Zanne et al. 2014
 
 ```{r fig.height = 4, fig.cap = "Distribution of R\\textsuperscript{2}, p-value and slope value distributions for $\\epsilon$ = 0 after adding 20% misassignment of mycorrhizal type."}
 
@@ -218,7 +218,42 @@ load(here::here("output/hist_20perc.RData"))
 
 ```
 
-# Appendix S4 - Analyses with the Species-level dataset
+# Appendix S3 - Randomly adding 20% of misassignment of mycorrhizal type into the data obtained from genus-level list, using rates from Igea & Tanentzap (20XX)
+
+```{r fig.height = 4, fig.cap = "Distribution of R\\textsuperscript{2}, p-value and slope value distributions for $\\lambda$ after adding 20% misassignment of mycorrhizal type."}
+
+### 20% analysis
+rm(list = ls())
+load(here::here("output/hist_20perc_igeatanen_2023.RData"))
+
+(hist.pgls.pvalue.lambda + hist.pgls.r2.lambda + hist.pgls.slope.lambda) +
+    plot_annotation(tag_levels = "A")
+
+```
+
+```{r fig.height = 4, fig.cap = "Distribution of R\\textsuperscript{2}, p-value and slope value distributions for $\\mu after adding 20% misassignment of mycorrhizal type."}
+
+### 20% analysis
+rm(list = ls())
+load(here::here("output/hist_20perc_igeatanen_2023.RData"))
+
+(hist.pgls.pvalue.mu + hist.pgls.r2.mu + hist.pgls.slope.mu) +
+    plot_annotation(tag_levels = "A")
+
+```
+
+```{r fig.height = 4, fig.cap = "Distribution of R\\textsuperscript{2}, p-value and slope value distributions for $r$ after adding 20% misassignment of mycorrhizal type."}
+
+### 20% analysis
+rm(list = ls())
+load(here::here("output/hist_20perc_igeatanen_2023.RData"))
+
+(hist.pgls.pvalue.netdiv + hist.pgls.r2.netdiv + hist.pgls.slope.netdiv) +
+    plot_annotation(tag_levels = "A")
+
+```
+
+# Appendix S5 - Analyses with the Species-level dataset
 
 ```{r}
 
@@ -727,7 +762,7 @@ kable(x = reg.sum, format = "latex", caption = "Summary statistics for the phylo
 
 ```
 
-# Appendix S5 - Analyses with the genus-level dataset
+# Appendix S6 - Analyses with the genus-level dataset
 
 ## Thresholds for mycorrhizal state assignment
 
@@ -895,7 +930,7 @@ kable(x = reg.sum, format = "latex", caption = "Summary statistics for p-value a
 
 ```
 
-# Appendix S6 - Replicating main analyses with tree from Harris and Davies (2016)
+# Appendix S7 - Replicating main analyses with tree from Harris and Davies (2016)
 
 ```{r}
 
@@ -1010,7 +1045,7 @@ kable(x = np.sum,
 
 ```
 
-# Appendix S7 - Phylogenetic signal of diversification rates, age, and richness
+# Appendix S8 - Phylogenetic signal of diversification rates, age, and richness
 
 ```{r}
 
@@ -1189,7 +1224,7 @@ kable_styling(kable(summary(fullresults[, grep("lambda", names(fullresults))]), 
 ```
 
 
-# Appendix S8 - Percentage of MIX species
+# Appendix S9 - Percentage of MIX species
 
 ```{r fig.width = 11, fig.height = 7, fig.cap = "Distribution of percentage of species in each family that are classified as MIX. Zoom panel indicates the same distribution but excluding families without any MIX species."}
 
@@ -1219,7 +1254,7 @@ fullhist + annotation_custom(grob = ggplotGrob(mix.hist), xmin = 0.3, xmax = 1, 
 
 ```
 
-# Appendix 9 - Replicating main analyses with all trees from Ramirez-Barahona \textit{et al.} (2020)
+# Appendix S10 - Replicating main analyses with all trees from Ramirez-Barahona \textit{et al.} (2020)
 
 ```{r rambarah_results, echo = FALSE, fig.cap = "Main analyses replicated using Ramirez-Barahona \\textit{et al.} (2020) phylogeny. The rates were estimated by the authors using the same source for species richness as the main analysis, and the stem ages were obtained from their phylogeny. Panels A: scatterplot with linear and phylogenetic regressions plotted; panel B: histograms of R2 and p-value of linear and phylogenetic regressions."}
 
@@ -1485,7 +1520,7 @@ pvalue.phyanova.r09.100 <-
 ```
 
 
-# Appendix 10 - Assigning random families a net diversification of 0 to test for limitations raised by Rabosky \& Benson 2021
+# Appendix S11 - Assigning random families a net diversification of 0 to test for limitations raised by Rabosky \& Benson 2021
 
 ## Substituting the diversification rates of 5% of the families by 0
 
@@ -1835,7 +1870,7 @@ hist.pgls.slope.r09 <-
 
 
 
-# Appendix 11 - Assigning random families different values of epsilon to test for limitations raised by Rabosky \& Benson 2021
+# Appendix S12 - Assigning random families different values of epsilon to test for limitations raised by Rabosky \& Benson 2021
 
 ## Substituting the epsilon of 5% of the families by random value between [0, 1)
 

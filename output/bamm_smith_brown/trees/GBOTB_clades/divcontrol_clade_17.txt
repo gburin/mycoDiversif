@@ -59,7 +59,7 @@ sampleProbsFilename = clade_17_sampling.txt
 # Seed for the random number generator. 
 # If not specified (or is -1), a seed is obtained from the system clock
 
-overwrite = 0
+overwrite = 1
 # If True (1), the program will overwrite any output files in the current
 # directory (if present)
 
@@ -68,7 +68,7 @@ overwrite = 0
 # PRIORS
 ################################################################################
 
-poissonRatePrior = 0.02
+poissonRatePrior = 0.002
 # The rate parameter of the exponential prior on the rate parameter of the
 # Poisson process. Smaller values favor greater numbers of distinct
 # evolutionary regimes on the tree
@@ -193,6 +193,8 @@ muInit0 = 0.005
 initialNumberEvents = 0
 # Initial number of non-root processes
 
+extinctionProbMax = 0.99999
+# based on this: https://groups.google.com/g/bamm-project/c/X4m5BQkl7ls/m/4u6799eKHr8J
 
 ################################################################################
 # METROPOLIS COUPLED MCMC
