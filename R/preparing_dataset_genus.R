@@ -1,5 +1,7 @@
 library("reshape2")
-genus.soudz <- read.csv("./data/richness_mico_genera_soudz_mujica.csv", stringsAsFactors = FALSE)[, 2:5]
+here::i_am("R/preparing_dataset_genus.R")
+
+genus.soudz <- read.csv(here::here("data/richness_mico_genera_soudz_mujica.csv"), stringsAsFactors = FALSE)[, 2:5]
 
 genus.soudz <- genus.soudz[-which(genus.soudz$genus == "Thysanotus"),]
 
@@ -44,19 +46,23 @@ family.data <- data.frame(
 family.data <- cbind(family.data, family.data[, 3:7]/apply(family.data[, 3:7], 1, sum))
 names(family.data)[8:12] <- paste0(names(family.data)[3:7], ".perc")
 
-weigh.type <- function(x){data <- x
+weigh.type <- function(x){
+    data <- x
     types.raw <- rep(data$mico.new, times = data$richness)
     types.agg <- table(types.raw)
     return(types.agg)
 }
 
+family.data[, 13:16] <- NA
 for(i in 1:length(unique(family.data$family))){
-    family.data[i, 13:19] <- unlist(weigh.type(genus.soudz[genus.soudz$family == unique(genus.soudz$family)[i],]))
+    tmp <- unlist(weigh.type(genus.soudz[genus.soudz$family == unique(genus.soudz$family)[i],]))
+    tmp <- setNames(tmp[match(c("AM", "MIX", "NM", "UNK"), names(tmp))], c("AM", "MIX", "NM", "UNK"))
+    family.data[i, 13:16] <- tmp
 }
 
-names(family.data)[13:19] <- paste0(names(weigh.type(genus.soudz[genus.soudz$family == unique(genus.soudz$family)[1],])), ".raw")
+names(family.data)[13:16] <- paste0(names(weigh.type(genus.soudz[genus.soudz$family == unique(genus.soudz$family)[1],])), ".raw")
 
-family.data <- cbind(family.data, setNames(family.data[, 13:19] / apply(family.data[, 13:19], 1, FUN = sum), paste0(names(family.data)[13:19], ".perc")))
+family.data <- cbind(family.data, setNames(family.data[, 13:16] / apply(family.data[, 13:16], 1, FUN = sum), paste0(names(family.data)[13:16], ".perc")))
 
 
 
@@ -75,9 +81,10 @@ mico.classificator <- function(x, thresh = 0.5){
 
 
 
-family.data$type.50 <- apply(family.data[, 8:12], 1, mico.classificator, thresh = 0.5)
-family.data$type.60 <- apply(family.data[, 8:12], 1, mico.classificator, thresh = 0.6)
+## family.data$type.50 <- apply(family.data[, 8:12], 1, mico.classificator, thresh = 0.5)
+## family.data$type.60 <- apply(family.data[, 8:12], 1, mico.classificator, thresh = 0.6)
 family.data$type.80 <- apply(family.data[, 8:12], 1, mico.classificator, thresh = 0.8)
+family.data$type.90 <- apply(family.data[, 8:12], 1, mico.classificator, thresh = 0.9)
 family.data$type.100 <- apply(family.data[, 8:12], 1, mico.classificator, thresh = 0.99999999)
 
-write.table(family.data, "./data/family_data_genus_classif.csv", sep = ",", quote = FALSE, row.names = FALSE)
+write.table(family.data, here::here("data/family_data_genus_classif.csv"), sep = ",", quote = FALSE, row.names = FALSE)

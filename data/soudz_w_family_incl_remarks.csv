@@ -2402,12 +2402,12 @@ Androsace	Androsace_villosa_subkoso-poljanskii	AM	NA	Primulaceae
 Androsace	Androsace_villosa_var._incana	AM; others not addressed	15	Primulaceae
 Androstoma	Androstoma_empetrifolia	ErM	NA	Ericaceae
 Anelsonia	Anelsonia_eurycarpa	non-mycorrhizal (checked for all types)	NA	Brassicaceae
-Anemia	Anemia_phyllitidis	AM; others not addressed	NA	Saururaceae
-Anemia	Anemia_phyllitidis	AM; no others	NA	Saururaceae
-Anemia	Anemia_phyllitidis	AM; no others	NA	Saururaceae
-Anemia	Anemia_tomentosa	AM; no others	3	Saururaceae
-Anemia	Anemia_tomentosa	AM; others not addressed	NA	Saururaceae
-Anemia	Anemia_tomentosa	AM; no others	NA	Saururaceae
+Anemia	Anemia_phyllitidis	AM; others not addressed	NA	Schizaeaceae
+Anemia	Anemia_phyllitidis	AM; no others	NA	Schizaeaceae
+Anemia	Anemia_phyllitidis	AM; no others	NA	Schizaeaceae
+Anemia	Anemia_tomentosa	AM; no others	3	Schizaeaceae
+Anemia	Anemia_tomentosa	AM; others not addressed	NA	Schizaeaceae
+Anemia	Anemia_tomentosa	AM; no others	NA	Schizaeaceae
 Anemocarpa	Anemocarpa_podolepidium	AM; no others	NA	Asteraceae
 Anemone	Anemone_alpina	AM; others not addressed	NA	Ranunculaceae
 Anemone	Anemone_alpina_subapiifolia	AM; others not addressed	NA	Ranunculaceae
@@ -2508,14 +2508,14 @@ Angelica	Angelica_sylvestris	AM; others not addressed	NA	Apiaceae
 Angelica	Angelica_sylvestris	AM; others not addressed	NA	Apiaceae
 Angelica	Angelica_sylvestris	AM; others not addressed	NA	Apiaceae
 Angianthus	Angianthus_cunninghamii	AM; no others	NA	Asteraceae
-Angiopteris	Angiopteris_caudatiformis	AM; others not addressed	5	Marattiaceae
-Angiopteris	Angiopteris_evecta	AM; others not addressed	NA	Marattiaceae
-Angiopteris	Angiopteris_evecta	AM; others not addressed	NA	Marattiaceae
-Angiopteris	Angiopteris_evecta	AM; no others	NA	Marattiaceae
-Angiopteris	Angiopteris_hokouensis	AM; others not addressed	11	Marattiaceae
-Angiopteris	Angiopteris_suboppositifolia	AM; others not addressed	NA	Marattiaceae
-Angiopteris	Angiopteris_wangii	AM; others not addressed	14	Marattiaceae
-Angiopteris	Angiopteris_yunnanensis	AM; others not addressed	9	Marattiaceae
+Angiopteris	Angiopteris_caudatiformis	AM; others not addressed	5	Woodsiaceae
+Angiopteris	Angiopteris_evecta	AM; others not addressed	NA	Woodsiaceae
+Angiopteris	Angiopteris_evecta	AM; others not addressed	NA	Woodsiaceae
+Angiopteris	Angiopteris_evecta	AM; no others	NA	Woodsiaceae
+Angiopteris	Angiopteris_hokouensis	AM; others not addressed	11	Woodsiaceae
+Angiopteris	Angiopteris_suboppositifolia	AM; others not addressed	NA	Woodsiaceae
+Angiopteris	Angiopteris_wangii	AM; others not addressed	14	Woodsiaceae
+Angiopteris	Angiopteris_yunnanensis	AM; others not addressed	9	Woodsiaceae
 Aniba	Aniba	AM; no others	NA	Lauraceae
 Aniba	Aniba_citrifolia	AM; no others	NA	Lauraceae
 Aniba	Aniba_rosaeodora	AM; others not addressed	NA	Lauraceae
@@ -3527,7 +3527,7 @@ Asparagus	Asparagus_racemosus	AM; others not addressed	NA	Asparagaceae
 Asparagus	Asparagus_racemosus	AM; no others	NA	Asparagaceae
 Asparagus	Asparagus_setaceus	AM; others not addressed	NA	Asparagaceae
 Asparagus	Asparagus_setaceus	AM; others not addressed	NA	Asparagaceae
-Aspera	Aspera	AM; others not addressed	NA	Blechnaceae
+Aspera	Aspera	AM; others not addressed	NA	Rubiaceae
 Asperugo	Asperugo_procumbens	AM; others not addressed	NA	Boraginaceae
 Asperugo	Asperugo_procumbens	non-mycorrhizal (checked for all types)	NA	Boraginaceae
 Asperugo	Asperugo_procumbens	non-mycorrhizal (checked for all types)	NA	Boraginaceae
@@ -16426,8 +16426,8 @@ Homogyne	Homogyne_alpina	AM; others not addressed	NA	Asteraceae
 Homogyne	Homogyne_alpina	AM; others not addressed	NA	Asteraceae
 Homogyne	Homogyne_alpina	AM; others not addressed	NA	Asteraceae
 Homolepis	Homolepis_aturensis	AM; others not addressed	NA	Poaceae
-Honkenya	Honkenya_peploides	non-mycorrhizal (checked for all types)	NA	Caryophyllaceae
-Honkenya	Honkenya_peploides	non-mycorrhizal (checked for all types)	NA	Caryophyllaceae
+Honkenya	Honkenya_peploides	non-mycorrhizal (checked for all types)	NA	Tiliaceae
+Honkenya	Honkenya_peploides	non-mycorrhizal (checked for all types)	NA	Tiliaceae
 Hopea	Hopea	EcM; others not addressed	NA	Dipterocarpaceae
 Hopea	Hopea	EcM; others not addressed	1	Dipterocarpaceae
 Hopea	Hopea_dryobalanoides	EcM; no others	NA	Dipterocarpaceae
@@ -16814,26 +16814,26 @@ Hypochoeris	Hypochoeris_tenuifolia	AM; no others	NA	Asteraceae
 Hypodaphnis	Hypodaphnis_zenkeri	AM; no others	NA	Lauraceae
 Hypodaphnis	Hypodaphnis_zenkeri	AM; no others	NA	Lauraceae
 Hypodaphnis	Hypodaphnis_zenkeri	AM	NA	Lauraceae
-Hypodematium	Hypodematium_crenatum	AM; others not addressed	NA	Orchidaceae
-Hypodematium	Hypodematium_crenatum	AM; others not addressed	3	Orchidaceae
-Hypodematium	Hypodematium_crenatum	AM; others not addressed	NA	Orchidaceae
+Hypodematium	Hypodematium_crenatum	AM; others not addressed	NA	Woodsiaceae
+Hypodematium	Hypodematium_crenatum	AM; others not addressed	3	Woodsiaceae
+Hypodematium	Hypodematium_crenatum	AM; others not addressed	NA	Woodsiaceae
 Hypodiscus	Hypodiscus_willdenowia	non-mycorrhizal (checked for all types)	NA	Restionaceae
 Hypoestes	Hypoestes_forskaolii	non-mycorrhizal (checked for all types)	NA	Acanthaceae
 Hypogomphia	Hypogomphia_turkestana	AM; others not addressed	NA	Lamiaceae
 Hypogomphia	Hypogomphia_turkestana	AM; others not addressed	NA	Lamiaceae
-Hypolepis	Hypolepis_bogotensis	AM; no others	NA	Cyperaceae
-Hypolepis	Hypolepis_bogotensis	AM; no others	NA	Cyperaceae
-Hypolepis	Hypolepis_bogotensis	AM; no others	NA	Cyperaceae
-Hypolepis	Hypolepis_crassa	AM; no others	NA	Cyperaceae
-Hypolepis	Hypolepis_crassa	AM; no others	NA	Cyperaceae
-Hypolepis	Hypolepis_distans	AM; no others	1	Cyperaceae
-Hypolepis	Hypolepis_glandulifera	AM; no others	NA	Cyperaceae
-Hypolepis	Hypolepis_hostilis	AM; no others	NA	Cyperaceae
-Hypolepis	Hypolepis_hostilis	AM; no others	NA	Cyperaceae
-Hypolepis	Hypolepis_millefolium	AM; no others	3	Cyperaceae
-Hypolepis	Hypolepis_punctata	AM; others not addressed	2	Cyperaceae
-Hypolepis	Hypolepis_rugulosa	AM; no others	2	Cyperaceae
-Hypolepis	Hypolepis_tenuifolia	AM; no others	7	Cyperaceae
+Hypolepis	Hypolepis_bogotensis	AM; no others	NA	Dennstaedtiaceae
+Hypolepis	Hypolepis_bogotensis	AM; no others	NA	Dennstaedtiaceae
+Hypolepis	Hypolepis_bogotensis	AM; no others	NA	Dennstaedtiaceae
+Hypolepis	Hypolepis_crassa	AM; no others	NA	Dennstaedtiaceae
+Hypolepis	Hypolepis_crassa	AM; no others	NA	Dennstaedtiaceae
+Hypolepis	Hypolepis_distans	AM; no others	1	Dennstaedtiaceae
+Hypolepis	Hypolepis_glandulifera	AM; no others	NA	Dennstaedtiaceae
+Hypolepis	Hypolepis_hostilis	AM; no others	NA	Dennstaedtiaceae
+Hypolepis	Hypolepis_hostilis	AM; no others	NA	Dennstaedtiaceae
+Hypolepis	Hypolepis_millefolium	AM; no others	3	Dennstaedtiaceae
+Hypolepis	Hypolepis_punctata	AM; others not addressed	2	Dennstaedtiaceae
+Hypolepis	Hypolepis_rugulosa	AM; no others	2	Dennstaedtiaceae
+Hypolepis	Hypolepis_tenuifolia	AM; no others	7	Dennstaedtiaceae
 Hypolytrum	Hypolytrum_bullatum	AM; others not addressed	NA	Cyperaceae
 Hypolytrum	Hypolytrum_nemorum	NM	NA	Cyperaceae
 Hypolytrum	Hypolytrum_pulchrum	AM; others not addressed	NA	Cyperaceae
@@ -17258,15 +17258,15 @@ Isodon	Isodon_japonicus	AM; others not addressed	3	Lamiaceae
 Isodon	Isodon_sculponeatus	AM; others not addressed	NA	Lamiaceae
 Isodon	Isodon_sculponeatus	AM; others not addressed	NA	Lamiaceae
 Isodon	Isodon_wightii	AM	NA	Lamiaceae
-Isoetes	Isoetes_echinospora	non-mycorrhizal (checked for all types)	NA	Isoetaceae
-Isoetes	Isoetes_japonica	non-mycorrhizal (checked for all types)	NA	Isoetaceae
-Isoetes	Isoetes_japonica	NM	NA	Isoetaceae
-Isoetes	Isoetes_kirkii	NM	NA	Isoetaceae
-Isoetes	Isoetes_lacustris	non-mycorrhizal (checked for all types)	NA	Isoetaceae
-Isoetes	Isoetes_lacustris	non-mycorrhizal (checked for all types)	NA	Isoetaceae
-Isoetes	Isoetes_lacustris	non-mycorrhizal (checked for all types)	NA	Isoetaceae
-Isoetes	Isoetes_lacustris	non-mycorrhizal (checked for all types)	NA	Isoetaceae
-Isoetes	Isoetes_transvaalensis	non-mycorrhizal (checked for all types)	2	Isoetaceae
+Isoetes	Isoetes_echinospora	non-mycorrhizal (checked for all types)	NA	Juncaceae
+Isoetes	Isoetes_japonica	non-mycorrhizal (checked for all types)	NA	Juncaceae
+Isoetes	Isoetes_japonica	NM	NA	Juncaceae
+Isoetes	Isoetes_kirkii	NM	NA	Juncaceae
+Isoetes	Isoetes_lacustris	non-mycorrhizal (checked for all types)	NA	Juncaceae
+Isoetes	Isoetes_lacustris	non-mycorrhizal (checked for all types)	NA	Juncaceae
+Isoetes	Isoetes_lacustris	non-mycorrhizal (checked for all types)	NA	Juncaceae
+Isoetes	Isoetes_lacustris	non-mycorrhizal (checked for all types)	NA	Juncaceae
+Isoetes	Isoetes_transvaalensis	non-mycorrhizal (checked for all types)	2	Juncaceae
 Isolepis	Isolepis_antarctica	non-mycorrhizal (checked for all types)	NA	Cyperaceae
 Isolepis	Isolepis_antarctica	non-mycorrhizal (checked for all types)	NA	Cyperaceae
 Isolepis	Isolepis_aucklandica	non-mycorrhizal (checked for all types)	NA	Cyperaceae
@@ -17850,7 +17850,7 @@ Kunzea	Kunzea_parvifolia	EcM,AM	NA	Myrtaceae
 Kunzea	Kunzea_parvifolia	EcM,AM	NA	Myrtaceae
 Kupea	Kupea_jonii	AM; others not addressed	NA	Triuridaceae
 Kupea	Kupea_martinetugei	AM; others not addressed	NA	Triuridaceae
-Kurrimia	Kurrimia_ceylanica	AM; no others	NA	Celastraceae
+Kurrimia	Kurrimia_ceylanica	AM; no others	NA	Escalloniaceae
 Kyllinga	Kyllinga_brevifolia	non-AM; others not addressed	NA	Cyperaceae
 Kyllinga	Kyllinga_brevifolia	non-AM; others not addressed	NA	Cyperaceae
 Kyllinga	Kyllinga_brevifolia	AM; others not addressed	3	Cyperaceae
@@ -18576,7 +18576,7 @@ Leptodermis	Leptodermis_oblonga	AM; others not addressed	NA	Rubiaceae
 Leptolaena	Leptolaena_pauciflora	EcM; others not addressed	1	Sarcolaenaceae
 Leptolepia	Leptolepia_novae-zelandiae	AM; no others	3	Dennstaedtiaceae
 Leptonychia	Leptonychia_echinocarpa	AM; no others	NA	Malvaceae
-Leptopteris	Leptopteris_hymenophylloides	AM; no others	6	Loganiaceae
+Leptopteris	Leptopteris_hymenophylloides	AM; no others	6	Osmundaceae
 Leptorhynchos	Leptorhynchos_squamatus	EcM; no others	NA	Asteraceae
 Leptorhynchos	Leptorhynchos_squamatus	EcM,AM	NA	Asteraceae
 Leptorhynchos	Leptorhynchos_waitzia	EcM; no others	NA	Asteraceae
@@ -19411,7 +19411,7 @@ Lumnitzera	Lumnitzera_racemosa	non-mycorrhizal (checked for all types)	NA	Combre
 Lunaria	Lunaria_annua	non-mycorrhizal (checked for all types)	NA	Brassicaceae
 Lunaria	Lunaria_rediviva	NM	NA	Brassicaceae
 Lunaria	Lunaria_rediviva	NM	NA	Brassicaceae
-Lunularia	Lunularia_cruciata	AM; others not addressed	NA	Lunulariaceae
+Lunularia	Lunularia_cruciata	AM; others not addressed	NA	Ophioglossaceae
 Lupinus	Lupinus	non-EcM; others not addressed	4	Fabaceae
 Lupinus	Lupinus_arcticus	non-mycorrhizal (checked for all types)	NA	Fabaceae
 Lupinus	Lupinus_argenteus	NM	NA	Fabaceae
@@ -19544,7 +19544,7 @@ Lycopodiella	Lycopodiella_inundata	AM	NA	Lycopodiaceae
 Lycopodiella	Lycopodiella_inundata	AM; others not addressed	NA	Lycopodiaceae
 Lycopodiella	Lycopodiella_inundata	AM; others not addressed	NA	Lycopodiaceae
 Lycopodiella	Lycopodiella_lateralis	AM; no others	1	Lycopodiaceae
-Lycopodioides	Lycopodioides_apoda	AM; others not addressed	NA	Lycopodiaceae
+Lycopodioides	Lycopodioides_apoda	AM; others not addressed	NA	Selaginellaceae
 Lycopodium	Lycopodium	AM; no others	4	Lycopodiaceae
 Lycopodium	Lycopodium_alpinum	AM; no others	NA	Lycopodiaceae
 Lycopodium	Lycopodium_alpinum	AM; no others	NA	Lycopodiaceae
@@ -21462,22 +21462,22 @@ Nephelium	Nephelium_lappaceum	AM; no others	NA	Sapindaceae
 Nephelium	Nephelium_lappaceum	AM; no others	NA	Sapindaceae
 Nephelium	Nephelium_lappaceum	AM; others not addressed	NA	Sapindaceae
 Nephelium	Nephelium_topengii	AM; others not addressed	NA	Sapindaceae
-Nephrolepis	Nephrolepis	AM; no others	NA	Davalliaceae
-Nephrolepis	Nephrolepis_auriculata	AM; others not addressed	NA	Davalliaceae
-Nephrolepis	Nephrolepis_biserrata	AM; no others	NA	Davalliaceae
-Nephrolepis	Nephrolepis_cordifolia	AM; others not addressed	NA	Davalliaceae
-Nephrolepis	Nephrolepis_cordifolia	AM	5	Davalliaceae
-Nephrolepis	Nephrolepis_cordifolia	AM	NA	Davalliaceae
-Nephrolepis	Nephrolepis_cordifolia	AM; others not addressed	NA	Davalliaceae
-Nephrolepis	Nephrolepis_cordifolia	AM; others not addressed	NA	Davalliaceae
-Nephrolepis	Nephrolepis_cordifolia	AM	NA	Davalliaceae
-Nephrolepis	Nephrolepis_cordifolia	AM; no others	NA	Davalliaceae
-Nephrolepis	Nephrolepis_cordifolia	AM; no others	NA	Davalliaceae
-Nephrolepis	Nephrolepis_exaltata	AM; others not addressed	NA	Davalliaceae
-Nephrolepis	Nephrolepis_exaltata	AM; no others	NA	Davalliaceae
-Nephrolepis	Nephrolepis_falcata	AM; others not addressed	1	Davalliaceae
-Nephrolepis	Nephrolepis_falcata	AM; no others	NA	Davalliaceae
-Nephrolepis	Nephrolepis_multiflora	AM; others not addressed	NA	Davalliaceae
+Nephrolepis	Nephrolepis	AM; no others	NA	Oleandraceae
+Nephrolepis	Nephrolepis_auriculata	AM; others not addressed	NA	Oleandraceae
+Nephrolepis	Nephrolepis_biserrata	AM; no others	NA	Oleandraceae
+Nephrolepis	Nephrolepis_cordifolia	AM; others not addressed	NA	Oleandraceae
+Nephrolepis	Nephrolepis_cordifolia	AM	5	Oleandraceae
+Nephrolepis	Nephrolepis_cordifolia	AM	NA	Oleandraceae
+Nephrolepis	Nephrolepis_cordifolia	AM; others not addressed	NA	Oleandraceae
+Nephrolepis	Nephrolepis_cordifolia	AM; others not addressed	NA	Oleandraceae
+Nephrolepis	Nephrolepis_cordifolia	AM	NA	Oleandraceae
+Nephrolepis	Nephrolepis_cordifolia	AM; no others	NA	Oleandraceae
+Nephrolepis	Nephrolepis_cordifolia	AM; no others	NA	Oleandraceae
+Nephrolepis	Nephrolepis_exaltata	AM; others not addressed	NA	Oleandraceae
+Nephrolepis	Nephrolepis_exaltata	AM; no others	NA	Oleandraceae
+Nephrolepis	Nephrolepis_falcata	AM; others not addressed	1	Oleandraceae
+Nephrolepis	Nephrolepis_falcata	AM; no others	NA	Oleandraceae
+Nephrolepis	Nephrolepis_multiflora	AM; others not addressed	NA	Oleandraceae
 Neptunia	Neptunia_oleracea	non-AM; others not addressed	NA	Fabaceae
 Neptunia	Neptunia_oleracea	non-mycorrhizal (checked for all types)	NA	Fabaceae
 Nerisyrenia	Nerisyrenia_linearifolia	non-mycorrhizal (checked for all types)	NA	Brassicaceae
@@ -21846,12 +21846,12 @@ Onopordum	Onopordum_acanthium	AM	NA	Asteraceae
 Onosma	Onosma_arenaria	AM; no others	NA	Boraginaceae
 Onosma	Onosma_barsczewskii	AM; others not addressed	NA	Boraginaceae
 Onosma	Onosma_caucasica	non-mycorrhizal (checked for all types)	NA	Boraginaceae
-Onychium	Onychium_angustifrons	AM; others not addressed	2	Adiantaceae
-Onychium	Onychium_contiguum	AM; others not addressed	2	Adiantaceae
-Onychium	Onychium_japonicum	AM; others not addressed	NA	Adiantaceae
-Onychium	Onychium_japonicum_var._lucidum	AM; others not addressed	NA	Adiantaceae
-Onychium	Onychium_japonicum_var._lucidum	AM; others not addressed	2	Adiantaceae
-Onychium	Onychium_japonicum_var._lucidum	AM; others not addressed	2	Adiantaceae
+Onychium	Onychium_angustifrons	AM; others not addressed	2	Polypodiaceae
+Onychium	Onychium_contiguum	AM; others not addressed	2	Polypodiaceae
+Onychium	Onychium_japonicum	AM; others not addressed	NA	Polypodiaceae
+Onychium	Onychium_japonicum_var._lucidum	AM; others not addressed	NA	Polypodiaceae
+Onychium	Onychium_japonicum_var._lucidum	AM; others not addressed	2	Polypodiaceae
+Onychium	Onychium_japonicum_var._lucidum	AM; others not addressed	2	Polypodiaceae
 Opercularia	Opercularia_echinocephala	AM; no others	3	Rubiaceae
 Opercularia	Opercularia_echinocephala	AM; no others	1	Rubiaceae
 Opercularia	Opercularia_spermacocea	AM; no others	NA	Rubiaceae
@@ -23140,7 +23140,7 @@ Petalonyx	Petalonyx_thurberi	AM; others not addressed	NA	Loasaceae
 Petalostemon	Petalostemon_purpureum	AM; others not addressed	NA	Fabaceae
 Petalostemon	Petalostemon_purpureum	AM; others not addressed	NA	Fabaceae
 Petalostemon	Petalostemon_purpureum	AM; others not addressed	NA	Fabaceae
-Petalostemum	Petalostemum_candidum	AM; others not addressed	NA	Leguminosae
+Petalostemum	Petalostemum_candidum	AM; others not addressed	NA	Fabaceae
 Petalostigma	Petalostigma_quadriloculare	AM; no others	5	Picrodendraceae
 Petalostigma	Petalostigma_quadriloculare	AM; no others	2	Picrodendraceae
 Petasites	Petasites_albus	AM; others not addressed	NA	Asteraceae
@@ -25286,36 +25286,36 @@ Polymeria	Polymeria_ambigua	AM; no others	1	Convolvulaceae
 Polyphlebium	Polyphlebium_venosum	AM; no others	1	Hymenophyllaceae
 Polypodiodes	Polypodiodes_amoena	AM; others not addressed	1	Polypodiaceae
 Polypodiodes	Polypodiodes_amoena	AM; others not addressed	2	Polypodiaceae
-Polypodium	Polypodium	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_australe	AM; no others	NA	Dryopteridaceae
-Polypodium	Polypodium_fauriei	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_furfuraceum	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_glycyrrhiza	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_lachnopus	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_lepidotrichum	AM; no others	NA	Dryopteridaceae
-Polypodium	Polypodium_plebeium	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_pleurosorum	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_pleurosorum	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_polypodioides	non-mycorrhizal (checked for all types)	1	Dryopteridaceae
-Polypodium	Polypodium_subpetiolatum	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_virginianum	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	2	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Dryopteridaceae
-Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Dryopteridaceae
+Polypodium	Polypodium	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_australe	AM; no others	NA	Polypodiaceae
+Polypodium	Polypodium_fauriei	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_furfuraceum	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_glycyrrhiza	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_lachnopus	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_lepidotrichum	AM; no others	NA	Polypodiaceae
+Polypodium	Polypodium_plebeium	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_pleurosorum	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_pleurosorum	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_polypodioides	non-mycorrhizal (checked for all types)	1	Polypodiaceae
+Polypodium	Polypodium_subpetiolatum	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_virginianum	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	2	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	AM; others not addressed	NA	Polypodiaceae
+Polypodium	Polypodium_vulgare	non-mycorrhizal (checked for all types)	NA	Polypodiaceae
 Polypogon	Polypogon_fugax	AM; others not addressed	NA	Poaceae
 Polypogon	Polypogon_fugax	non-mycorrhizal (checked for all types)	NA	Poaceae
 Polypogon	Polypogon_monspeliensis	non-mycorrhizal (checked for all types)	NA	Poaceae
@@ -28541,7 +28541,7 @@ Scopolia	Scopolia_japonica	AM; others not addressed	NA	Brassicaceae
 Scorodophloeus	Scorodophloeus_fischeri	AM; no others	NA	Fabaceae
 Scorodophloeus	Scorodophloeus_zenkeri	AM; no others	NA	Fabaceae
 Scorodophloeus	Scorodophloeus_zenkeri	AM; others not addressed	NA	Fabaceae
-Scorpioides	Scorpioides	non-mycorrhizal (checked for all types)	NA	Boraginaceae
+Scorpioides	Scorpioides	non-mycorrhizal (checked for all types)	NA	Leguminosae
 Scorpiurus	Scorpiurus_muricatus	AM; no others	NA	Fabaceae
 Scorzonera	Scorzonera_acanthoclada	AM; others not addressed	NA	Asteraceae
 Scorzonera	Scorzonera_acanthoclada	AM; others not addressed	NA	Asteraceae
@@ -29947,7 +29947,7 @@ Sphaeranthus	Sphaeranthus_indicus	non-mycorrhizal (checked for all types)	NA	Ast
 Sphaeranthus	Sphaeranthus_indicus	non-mycorrhizal (checked for all types)	NA	Asteraceae
 Sphaeranthus	Sphaeranthus_indicus	AM; no others	NA	Asteraceae
 Sphaerophysa	Sphaerophysa_salsula	AM; others not addressed	3	Fabaceae
-Sphaeropteris	Sphaeropteris_brunoniana	AM; others not addressed	2	Cyatheaceae
+Sphaeropteris	Sphaeropteris_brunoniana	AM; others not addressed	2	Dryopteridaceae
 Sphaerostephanos	Sphaerostephanos_arbuscula	AM; others not addressed	NA	Thelypteridaceae
 Sphaerostephanos	Sphaerostephanos_unitus	AM; others not addressed	NA	Thelypteridaceae
 Sphaerostephanos	Sphaerostephanos_unitus	AM; others not addressed	NA	Thelypteridaceae
@@ -30501,7 +30501,7 @@ Striga	Striga_asiatica	non-AM; others not addressed	NA	Orobanchaceae
 Striga	Striga_asiatica	non-mycorrhizal (checked for all types)	NA	Orobanchaceae
 Striga	Striga_asiatica	NM	NA	Orobanchaceae
 Striga	Striga_curviflora	non-mycorrhizal (checked for all types)	2	Orobanchaceae
-Strobila	Strobila	AM; others not addressed	NA	Boraginaceae
+Strobila	Strobila	AM; others not addressed	NA	Incertae_sedis
 Strobilanthes	Strobilanthes	AM; others not addressed	16	Acanthaceae
 Strobilanthes	Strobilanthes	AM; others not addressed	16	Acanthaceae
 Strobilanthes	Strobilanthes_asperrimus	AM	5	Acanthaceae
@@ -31340,44 +31340,44 @@ Thelypodiopsis	Thelypodiopsis_ambigua	non-mycorrhizal (checked for all types)	NA
 Thelypodiopsis	Thelypodiopsis_elegans	non-mycorrhizal (checked for all types)	NA	Brassicaceae
 Thelypodium	Thelypodium_howellii	non-mycorrhizal (checked for all types)	NA	Brassicaceae
 Thelypodium	Thelypodium_integrifolium	non-mycorrhizal (checked for all types)	NA	Brassicaceae
-Thelypteris	Thelypteris_aurita	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_biformata	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_biformata	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_biformata	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_caucaensis	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_caucaensis	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_ciliata	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_confluens	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_confluens	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_confluens	AM	NA	Pteridaceae
-Thelypteris	Thelypteris_confluens	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_confluens	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_confluens	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_confluens	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_funckii	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_gardneriana	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_glandulosa	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_glandulosolanosa	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_macrophylla	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_macrophylla	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_multilineata	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_noveboracensis	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_noveboracensis	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_nudata	AM; others not addressed	2	Pteridaceae
-Thelypteris	Thelypteris_patens	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_pennigera	AM; no others	3	Pteridaceae
-Thelypteris	Thelypteris_phegopteris	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_phegopteris	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_phegopteris	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_phegopteris	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_pilosula	AM	NA	Pteridaceae
-Thelypteris	Thelypteris_rudis	AM; no others	NA	Pteridaceae
-Thelypteris	Thelypteris_serrata	AM	NA	Pteridaceae
-Thelypteris	Thelypteris_subochthodes	AM; others not addressed	2	Pteridaceae
-Thelypteris	Thelypteris_thelypterioides	AM	NA	Pteridaceae
-Thelypteris	Thelypteris_thelypterioides	AM	NA	Pteridaceae
-Thelypteris	Thelypteris_thelypterioides	AM; others not addressed	NA	Pteridaceae
-Thelypteris	Thelypteris_thelypterioides	AM	NA	Pteridaceae
+Thelypteris	Thelypteris_aurita	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_biformata	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_biformata	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_biformata	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_caucaensis	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_caucaensis	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_ciliata	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_confluens	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_confluens	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_confluens	AM	NA	Thelypteridaceae
+Thelypteris	Thelypteris_confluens	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_confluens	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_confluens	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_confluens	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_funckii	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_gardneriana	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_glandulosa	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_glandulosolanosa	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_macrophylla	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_macrophylla	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_multilineata	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_noveboracensis	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_noveboracensis	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_nudata	AM; others not addressed	2	Thelypteridaceae
+Thelypteris	Thelypteris_patens	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_pennigera	AM; no others	3	Thelypteridaceae
+Thelypteris	Thelypteris_phegopteris	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_phegopteris	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_phegopteris	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_phegopteris	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_pilosula	AM	NA	Thelypteridaceae
+Thelypteris	Thelypteris_rudis	AM; no others	NA	Thelypteridaceae
+Thelypteris	Thelypteris_serrata	AM	NA	Thelypteridaceae
+Thelypteris	Thelypteris_subochthodes	AM; others not addressed	2	Thelypteridaceae
+Thelypteris	Thelypteris_thelypterioides	AM	NA	Thelypteridaceae
+Thelypteris	Thelypteris_thelypterioides	AM	NA	Thelypteridaceae
+Thelypteris	Thelypteris_thelypterioides	AM; others not addressed	NA	Thelypteridaceae
+Thelypteris	Thelypteris_thelypterioides	AM	NA	Thelypteridaceae
 Themeda	Themeda	AM	NA	Poaceae
 Themeda	Themeda_caudata	AM; others not addressed	NA	Poaceae
 Themeda	Themeda_cymbaria	AM; others not addressed	NA	Poaceae
@@ -31829,12 +31829,12 @@ Trichodesma	Trichodesma_indicum	AM; others not addressed	NA	Boraginaceae
 Trichodesma	Trichodesma_zeylanicum	AM; others not addressed	NA	Boraginaceae
 Trichodesma	Trichodesma_zeylanicum	AM; others not addressed	NA	Boraginaceae
 Tricholepidium	Tricholepidium_maculosum	AM; others not addressed	1	Polypodiaceae
-Trichomanes	Trichomanes_colensoi	AM; no others	1	Adiantaceae
-Trichomanes	Trichomanes_elegans	AM; no others	NA	Adiantaceae
-Trichomanes	Trichomanes_pinnatum	AM; no others	NA	Adiantaceae
-Trichomanes	Trichomanes_plumosum	AM; no others	NA	Adiantaceae
-Trichomanes	Trichomanes_speciosum	AM	NA	Adiantaceae
-Trichomanes	Trichomanes_strictum	AM; no others	2	Adiantaceae
+Trichomanes	Trichomanes_colensoi	AM; no others	1	Aspleniaceae
+Trichomanes	Trichomanes_elegans	AM; no others	NA	Aspleniaceae
+Trichomanes	Trichomanes_pinnatum	AM; no others	NA	Aspleniaceae
+Trichomanes	Trichomanes_plumosum	AM; no others	NA	Aspleniaceae
+Trichomanes	Trichomanes_speciosum	AM	NA	Aspleniaceae
+Trichomanes	Trichomanes_strictum	AM; no others	2	Aspleniaceae
 Trichophorum	Trichophorum_alpinum	AM; no others	NA	Cyperaceae
 Trichophorum	Trichophorum_alpinum	non-mycorrhizal (checked for all types)	NA	Cyperaceae
 Trichophorum	Trichophorum_alpinum	non-mycorrhizal (checked for all types)	NA	Cyperaceae

@@ -11,6 +11,8 @@ library("doMC")
 library("reshape2")
 library("plyr")
 
+here::i_am("R/simulating_random_datasets.R")
+
 mico.classificator <- function(x, thresh = 0.5){
     if(any(sapply(x, is.nan))){
         return("UNK")
@@ -35,7 +37,7 @@ weigh.type <- function(x){data <- x
 
 nrep <- 10000
 
-genus.soudz <- read.csv("./data/richness_mico_genera_soudz_mujica.csv", stringsAsFactors = FALSE)[, 2:5]
+genus.soudz <- read.csv(here::here("data/richness_mico_genera_soudz_mujica.csv"), stringsAsFactors = FALSE)[, 2:5]
 
 genus.soudz <- genus.soudz[-which(genus.soudz$genus == "Thysanotus"),]
 
@@ -94,7 +96,7 @@ foo <- function(replica, data){
     family.data$type.80 <- apply(family.data[, 9:14], 1, mico.classificator, thresh = 0.8)
     family.data$type.100 <- apply(family.data[, 9:14], 1, mico.classificator, thresh = 0.99999999)
 
-    write.table(family.data, file = paste0("./output/simulated_datasets/random_data_", replica, ".csv"), quote = FALSE, row.names = FALSE, sep = ",")
+    write.table(family.data, file = paste0(here::here("output/simulated_datasets/random_data_", replica, ".csv")), quote = FALSE, row.names = FALSE, sep = ",")
 }
 
 registerDoMC(3)

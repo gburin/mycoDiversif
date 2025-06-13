@@ -58,20 +58,25 @@ random.analysis <- function(x, age, fulltree){
     data.aov <- data.aov[-which(is.na(data.aov$lambda)),]
     
     ## Thresholds
-### 50%
-    phyaov.lambda.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$lambda, data.aov$family))
-    phyaov.mu.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$mu, data.aov$family))
-    phyaov.netdiv.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$netdiv, data.aov$family))
+## ### 50%
+##     phyaov.lambda.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$lambda, data.aov$family))
+##     phyaov.mu.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$mu, data.aov$family))
+##     phyaov.netdiv.50 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.50, data.aov$family), y = setNames(data.aov$netdiv, data.aov$family))
 
-### 60%
-    phyaov.lambda.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$lambda, data.aov$family))
-    phyaov.mu.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$mu, data.aov$family))
-    phyaov.netdiv.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$netdiv, data.aov$family))
+## ### 60%
+##     phyaov.lambda.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$lambda, data.aov$family))
+##     phyaov.mu.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$mu, data.aov$family))
+##     phyaov.netdiv.60 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.60, data.aov$family), y = setNames(data.aov$netdiv, data.aov$family))
 
 ### 80%
     phyaov.lambda.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$lambda, data.aov$family))
     phyaov.mu.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$mu, data.aov$family))
     phyaov.netdiv.80 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.80, data.aov$family), y = setNames(data.aov$netdiv, data.aov$family))
+
+### 90%
+    phyaov.lambda.90 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.90, data.aov$family), y = setNames(data.aov$lambda, data.aov$family))
+    phyaov.mu.90 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.90, data.aov$family), y = setNames(data.aov$mu, data.aov$family))
+    phyaov.netdiv.90 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.90, data.aov$family), y = setNames(data.aov$netdiv, data.aov$family))
 
 ### 100%
     phyaov.lambda.100 <- phylANOVA(drop.tip(tree.pruned, tip = tree.pruned$tip.label[which(is.na(match(tree.pruned$tip.label, data.aov$family)))]), x = setNames(data.aov$type.100, data.aov$family), y = setNames(data.aov$lambda, data.aov$family))
@@ -80,20 +85,25 @@ random.analysis <- function(x, age, fulltree){
 
     ## ANOVA excluding families with != 100% MIX
     ## Thresholds
-### 50%
-    aov.lambda.50 <- aov(lambda ~ type.50, data = data.aov)
-    aov.mu.50 <- aov(mu ~ type.50, data = data.aov)
-    aov.netdiv.50 <- aov(netdiv ~ type.50, data = data.aov)
+## ### 50%
+##     aov.lambda.50 <- aov(lambda ~ type.50, data = data.aov)
+##     aov.mu.50 <- aov(mu ~ type.50, data = data.aov)
+##     aov.netdiv.50 <- aov(netdiv ~ type.50, data = data.aov)
 
-### 60%
-    aov.lambda.60 <- aov(lambda ~ type.60, data = data.aov)
-    aov.mu.60 <- aov(mu ~ type.60, data = data.aov)
-    aov.netdiv.60 <- aov(netdiv ~ type.60, data = data.aov)
+## ### 60%
+##     aov.lambda.60 <- aov(lambda ~ type.60, data = data.aov)
+##     aov.mu.60 <- aov(mu ~ type.60, data = data.aov)
+##     aov.netdiv.60 <- aov(netdiv ~ type.60, data = data.aov)
 
 ### 80%
     aov.lambda.80 <- aov(lambda ~ type.80, data = data.aov)
     aov.mu.80 <- aov(mu ~ type.80, data = data.aov)
     aov.netdiv.80 <- aov(netdiv ~ type.80, data = data.aov)
+
+### 90%
+    aov.lambda.90 <- aov(lambda ~ type.90, data = data.aov)
+    aov.mu.90 <- aov(mu ~ type.90, data = data.aov)
+    aov.netdiv.90 <- aov(netdiv ~ type.90, data = data.aov)
 
 ### 100%
     aov.lambda.100 <- aov(lambda ~ type.100, data = data.aov)
@@ -111,49 +121,55 @@ random.analysis <- function(x, age, fulltree){
                           pgls.slope.lambda = coef(mod.lambda)[2],
                           pgls.r2.lambda = summary(mod.lambda)$r.squared,
                           pgls.pvalue.lambda = summary(mod.lambda)$coefficients[2, 4],
-                          phyaov.pvalue.lambda.50 = phyaov.lambda.50$Pf,
-                          phyaov.pvalue.lambda.60 = phyaov.lambda.60$Pf,
+                          #phyaov.pvalue.lambda.50 = phyaov.lambda.50$Pf,
+                          #phyaov.pvalue.lambda.60 = phyaov.lambda.60$Pf,
                           phyaov.pvalue.lambda.80 = phyaov.lambda.80$Pf,
+                          phyaov.pvalue.lambda.90 = phyaov.lambda.90$Pf,
                           phyaov.pvalue.lambda.100 = phyaov.lambda.100$Pf,
                           lm.int.lambda = coef(lm.lambda)[1],
                           lm.slope.lambda = coef(lm.lambda)[2],
                           lm.r2.lambda = summary(lm.lambda)$r.squared,
                           lm.pvalue.lambda = summary(lm.lambda)$coefficients[2, 4],
                           aov.pvalue.lambda.50 = summary(aov.lambda.50)[[1]][1, 5],
-                          aov.pvalue.lambda.60 = summary(aov.lambda.60)[[1]][1, 5],
+                          #aov.pvalue.lambda.60 = summary(aov.lambda.60)[[1]][1, 5],
                           aov.pvalue.lambda.80 = summary(aov.lambda.80)[[1]][1, 5],
+                          aov.pvalue.lambda.90 = summary(aov.lambda.90)[[1]][1, 5],
                           aov.pvalue.lambda.100 = summary(aov.lambda.100)[[1]][1, 5],
                           pgls.int.mu = coef(mod.mu)[1],
                           pgls.slope.mu = coef(mod.mu)[2],
                           pgls.r2.mu = summary(mod.mu)$r.squared,
                           pgls.pvalue.mu = summary(mod.mu)$coefficients[2, 4],
-                          phyaov.pvalue.mu.50 = phyaov.mu.50$Pf,
-                          phyaov.pvalue.mu.60 = phyaov.mu.60$Pf,
+                          #phyaov.pvalue.mu.50 = phyaov.mu.50$Pf,
+                          #phyaov.pvalue.mu.60 = phyaov.mu.60$Pf,
                           phyaov.pvalue.mu.80 = phyaov.mu.80$Pf,
+                          phyaov.pvalue.mu.90 = phyaov.mu.90$Pf,
                           phyaov.pvalue.mu.100 = phyaov.mu.100$Pf,
                           lm.int.mu = coef(lm.mu)[1],
                           lm.slope.mu = coef(lm.mu)[2],
                           lm.r2.mu = summary(lm.mu)$r.squared,
                           lm.pvalue.mu = summary(lm.mu)$coefficients[2, 4],
-                          aov.pvalue.mu.50 = summary(aov.mu.50)[[1]][1, 5],
-                          aov.pvalue.mu.60 = summary(aov.mu.60)[[1]][1, 5],
+                          #aov.pvalue.mu.50 = summary(aov.mu.50)[[1]][1, 5],
+                          #aov.pvalue.mu.60 = summary(aov.mu.60)[[1]][1, 5],
                           aov.pvalue.mu.80 = summary(aov.mu.80)[[1]][1, 5],
+                          aov.pvalue.mu.90 = summary(aov.mu.90)[[1]][1, 5],
                           aov.pvalue.mu.100 = summary(aov.mu.100)[[1]][1, 5],
                           pgls.int.netdiv = coef(mod.netdiv)[1],
                           pgls.slope.netdiv = coef(mod.netdiv)[2],
                           pgls.r2.netdiv = summary(mod.netdiv)$r.squared,
                           pgls.pvalue.netdiv = summary(mod.netdiv)$coefficients[2, 4],
-                          phyaov.pvalue.netdiv.50 = phyaov.netdiv.50$Pf,
-                          phyaov.pvalue.netdiv.60 = phyaov.netdiv.60$Pf,
+                          #phyaov.pvalue.netdiv.50 = phyaov.netdiv.50$Pf,
+                          #phyaov.pvalue.netdiv.60 = phyaov.netdiv.60$Pf,
                           phyaov.pvalue.netdiv.80 = phyaov.netdiv.80$Pf,
+                          phyaov.pvalue.netdiv.90 = phyaov.netdiv.90$Pf,
                           phyaov.pvalue.netdiv.100 = phyaov.netdiv.100$Pf,
                           lm.int.netdiv = coef(lm.netdiv)[1],
                           lm.slope.netdiv = coef(lm.netdiv)[2],
                           lm.r2.netdiv = summary(lm.netdiv)$r.squared,
                           lm.pvalue.netdiv = summary(lm.netdiv)$coefficients[2, 4],
-                          aov.pvalue.netdiv.50 = summary(aov.netdiv.50)[[1]][1, 5],
-                          aov.pvalue.netdiv.60 = summary(aov.netdiv.60)[[1]][1, 5],
+                          #aov.pvalue.netdiv.50 = summary(aov.netdiv.50)[[1]][1, 5],
+                          #aov.pvalue.netdiv.60 = summary(aov.netdiv.60)[[1]][1, 5],
                           aov.pvalue.netdiv.80 = summary(aov.netdiv.80)[[1]][1, 5],
+                          aov.pvalue.netdiv.90 = summary(aov.netdiv.90)[[1]][1, 5],
                           aov.pvalue.netdiv.100 = summary(aov.netdiv.100)[[1]][1, 5],
                           #pgls.int.age.sh = coef(pgls.age.sh)[1],
                           #pgls.slope.age.sh = coef(pgls.age.sh)[2],
@@ -179,4 +195,4 @@ registerDoMC(50)
 
 random.results <- ldply(1:nrep, random.analysis, age = age.data, fulltree = fulltree, .parallel = TRUE)
 
-save(random.results, file = here::here("output/results_20perc_igeatanen_2023.RData"))
+save(random.results, file = here::here("output/results_20perc_igeatanen_2025.RData"))
